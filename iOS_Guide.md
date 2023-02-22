@@ -216,6 +216,7 @@ TnkSession.sharedInstance()?.queryPublishState() {
 }
 ```
 
+
 - func queryPublishState(target:NSObject, action:Selector)
 	- Parameters
 		- target: 결과를 받으면 이 객체의 action 메소드가 호출됩니다.
@@ -232,6 +233,7 @@ func didReceivedPublishState(_ state:NSNumber) {
     print("#### queryPublishState \(state)")
 }
 ```
+
 
 - 게시 상태 값
 	- 게시 상태 값은 아래와 같이 정의되어 있습니다.
