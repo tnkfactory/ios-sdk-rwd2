@@ -21,7 +21,7 @@
 
 작성 예시) 사용자에게 최적의 광고를 제공하기 위하여 광고활동 정보를 수집합니다.
  
-<이미지>
+![att_info_plist](./img/att_info_plist.png)
 
 아래의 API 를 호출하여 앱 추적 동의 창을 띄울 수 있습니다. [AppTrackingTransparency API 가이드 보기](https://developer.apple.com/documentation/apptrackingtransparency)
 
