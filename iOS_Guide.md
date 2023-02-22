@@ -52,13 +52,18 @@ TnkAlerts.showATTPopup(viewController,
                        })
 
 ```
-### 1.4 권한 설정
 
-오퍼월에 제공되는 광고 중에는 이미지 파일을 첨부를 필요로하는 광고들이 많이 있습니다. 이미지 파일 첨부를 위해서는 info.plist 파일에 포토 앨범 접근 권한 안내 문구(Privacy - Photo Library Usage Description)와 카메라 접근 권한 안내 문구(Privacy - Camera Usage Description) 설정이 필요합니다. 아래의 이미지를 참고하세요.
+![att_popup](./img/att_popup.jpg)
+
+### 1.4 권한 안내 문구 설정
+
+오퍼월에 제공되는 광고 중에는 이미지 파일을 첨부를 필요로하는 광고들이 많이 있습니다. 이미지 파일 첨부를 위해서는 info.plist 파일에 포토 앨범 접근 권한 안내 문구(Privacy - Photo Library Usage Description)와 카메라 접근 권한 안내 문구(Privacy - Camera Usage Description) 설정이 필요합니다. 
+
+아래의 이미지를 참고하여 설정해주세요.
 
 ![usage_info_plist](./img/usage_info_plist.jpg)
 
-### 1.4 Tnk 객체 초기화
+### 1.5 Tnk 객체 초기화
 
 SDK 사용을 위해서는 사전에 **APP-ID** 값을 발급 받으셔야합니다.  **APP-ID** 값은 [Tnk 사이트](https://tnkfactory.com) 에서 발급 받으 실 수 있습니다. **APP-ID** 값을 발급 받으셨다면 이 값을 사용하여 TnkSession 객체가 초기화되어야합니다. 이를 위해서는 2가지 방법이 존재합니다. 아래 2가지 방법 중 하나를 선택하시어 진행하시면 됩니다.
 
