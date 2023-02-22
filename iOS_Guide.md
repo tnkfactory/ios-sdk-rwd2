@@ -217,7 +217,7 @@ TnkSession.sharedInstance()?.queryPublishState() {
 ```
 
 
-- func queryPublishState(target:NSObject, action:Selector)
+- func **queryPublishState(target:NSObject, action:Selector)**
 	- Parameters
 		- target: 결과를 받으면 이 객체의 action 메소드가 호출됩니다.
 		- action: 결과를 받으면 호출되는 메소드입니다. 해당 메소드는 NSNumber 타입의 파라메터 1개를 가져야하며, 게시 상태 값이 전달됩니다.
