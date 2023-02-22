@@ -203,7 +203,7 @@ struct SwiftUIView: View {
 
 Tnk 사이트의 [게시정보]에서 광고 게시 중지를 하게 되면 이후에는 사용자가 광고 목록 창을 띄워도 광고들이 나타나지 않습니다. 그러므로 향후 광고 게시를 중지할 경우를 대비하여 화면에 충전소 버튼 자체를 보이지 않게 하는 기능을 갖추는 것이 바람직합니다. 이를 위하여 현재 게시앱의 광고게시 상태를 조회하는 기능을 제공합니다.
 
-- func queryPublishState(completion:@escaping (Int)->Void)
+- **func queryPublishState(completion:@escaping (Int)->Void)**
 	- Parameters
 		- completion: 결과를 받으면 호출됩니다. 파라메터로 게시 상태 값(Int)이 전달됩니다.
 	- 사용예시
