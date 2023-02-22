@@ -207,6 +207,7 @@ Tnk 사이트의 [게시정보]에서 광고 게시 중지를 하게 되면 이�
 	- func queryPublishState(completion:@escaping (Int)->Void)
 	- Parameters
 		- completion: 결과를 받으면 호출됩니다. 파라메터로 게시 상태 값이 전달됩니다.
+		
 	- func queryPublishState(target:NSObject, action:Selector)
 	- Parameters
 		- target: 결과를 받으면 이 객체의 action 메소드가 호출됩니다.
