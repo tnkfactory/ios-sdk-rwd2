@@ -69,7 +69,7 @@ TnkSession.initInstance(appId: "your-app-id-from-tnk-site")
 
 XCode 프로젝트의 info.plist 파일내에 아래와 같이 `tnkad_app_id` 항목을 추가하고 **APP-ID** 값을 설정합니다. 이곳에 설정해두면 TnkSession 객체가 처음 사용되는 시점에 해당 **APP-ID** 값을 사용하여 자동으로 초기화됩니다.
 
-<이미지>
+![app_id_info_plist](./img/app_id_info_plist.jpg)
 
 ## 2. 오퍼월 띄우기
 
