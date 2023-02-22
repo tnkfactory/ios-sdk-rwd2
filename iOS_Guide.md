@@ -110,7 +110,7 @@ func showOfferwall() {
 
 ```
 
-
+![default_offerwall](./img/default_offerwall.jpeg)
 
 ### 2.3 AdOfferwallView 
 
