@@ -109,7 +109,8 @@ func showOfferwall() {
 }
 
 ```
-<오퍼월 이미지>
+
+![default_offerwall](./img/default_offerwall.jpeg)
 
 ### 2.3 AdOfferwallView 
 
