@@ -205,38 +205,48 @@ Tnk 사이트의 [게시정보]에서 광고 게시 중지를 하게 되면 이�
 
 - func queryPublishState(completion:@escaping (Int)->Void)
 	- Parameters
-		- completion: 결과를 받으면 호출됩니다. 파라메터로 게시 상태 값이 전달됩니다.
+		- completion: 결과를 받으면 호출됩니다. 파라메터로 게시 상태 값(Int)이 전달됩니다.
 	- 사용예시
 
 ```swift
 // Swift 
-    TnkSession.sharedInstance()?.queryPublishState() {
-        (state) in
-        print("#### queryPublishState \(state)")
-    }
+TnkSession.sharedInstance()?.queryPublishState() {
+    (state) in
+    print("#### queryPublishState \(state)")
+}
 ```
 
 - func queryPublishState(target:NSObject, action:Selector)
 	- Parameters
 		- target: 결과를 받으면 이 객체의 action 메소드가 호출됩니다.
-		- action: 결과를 받으면 호출되는 메소드입니다. 해당 메소드는 Int 타입의 파라메터 1개를 가져야하며, 게시 상태 값이 전달됩니다.
+		- action: 결과를 받으면 호출되는 메소드입니다. 해당 메소드는 NSNumber 타입의 파라메터 1개를 가져야하며, 게시 상태 값이 전달됩니다.
 	- 사용예시
 
 ```swift
 // Swift 
-    TnkSession.sharedInstance()?.queryPublishState() {
-        (state) in
-        print("#### queryPublishState \(state)")
-    }
+
+TnkSession.sharedInstance()?.queryPublishState(target: self, action: #selector(didReceivedPublishState(_:)))
+
+@objc
+func didReceivedPublishState(_ state:NSNumber) {
+    print("#### queryPublishState \(state)")
+}
 ```
 
+- 게시 상태 값
+	- 게시 상태 값은 아래와 같이 정의되어 있습니다.
+
 ```swift
-    /// 오퍼월의 게시 상태를 조회한다.
-    /// - Parameters
-    ///  - target: 결과를 받으면 이 객체의 action 메소드가 호출됩니다.
-    ///  - action: 결과를 받으면 호출되는 메소드입니다. 해당 메소드는 Int 타입의 파라메터 1개를 가져야하며, 게시 상태 값이 전달됩니다.
-    func queryPublishState(target:NSObject, action:Selector)
-```
+// Swift 
+@objc
+public class PublisherState : NSObject {
+    static public let notFound:Int = 0
+    static public let normal:Int = 1
+    static public let testing:Int = 2
+    static public let verifying:Int = 3
+}
+```	
+
 
 
 
