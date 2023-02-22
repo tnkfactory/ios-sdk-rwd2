@@ -262,7 +262,7 @@ public class PublisherState : NSObject {
 // Swift 
 TnkSession.sharedInstance()?.queryAdvertiseCount() {
     (count, point) in
-    print("### \(count) \(point)")
+    print("### queryAdvertiseCount \(count) \(point)")
 }
 ```
 
@@ -275,11 +275,11 @@ TnkSession.sharedInstance()?.queryAdvertiseCount() {
 ```swift
 // Swift 
 
-TnkSession.sharedInstance()?.queryAdvertiseCount(target:self, action: #selector(didReceivedAdversieCount(_:_:)))
+TnkSession.sharedInstance()?.queryAdvertiseCount(target:self, action: #selector(didReceivedAdvertiseCount(_:_:)))
 
 @objc
-func didReceivedAdversieCount(_ count:NSNumber,  _ point:NSNumber) {
-    print("### \(count) \(point)")
+func didReceivedAdvertiseCount(_ count:NSNumber,  _ point:NSNumber) {
+    print("### queryAdvertiseCount \(count) \(point)")
 }
 ```
 
@@ -287,7 +287,7 @@ func didReceivedAdversieCount(_ count:NSNumber,  _ point:NSNumber) {
 
 사용자가 적립한 포인트는 해당 앱의 서버에서 관리하는 것이 원칙입니다. 다만 자체 서버가 없는 앱을 위하여 충전소 운영에 필요한 포인트 관리 기능을 Tnk 서버에서 제공합니다. 포인트를 Tnk 서버에서 관리하는 경우에 아래의 API 를 사용하여 사용자의 포인트 조회나 아이템 구매 등의 기능을 구현 하실 수 있습니다. 
 
-> 포인트 조회 - queryPoint
+#### 포인트 조회 - queryPoint
 
 Tnk서버에 적립되어 있는 사용자 포인트 값을 조회합니다.
 
@@ -321,7 +321,7 @@ func didReceivedPoint(_ point:NSNumber) {
 }
 ```
 
-> 포인트 사용 - purchaseItem
+#### 포인트 사용 - purchaseItem
 
 TnK 서버에서는 별도로 아이템 목록을 관리하는 기능을 제공하지는 않습니다. 다만 앱에서 제공하는 아이템을 사용자가 구매할 때 Tnk 서버에 해당 포인트 만큼을 차감 할 수 있습니다.
 
@@ -359,7 +359,7 @@ func didReceivedPurchaseReturn(_ remainPoint:NSNumber, _ trId:NSNumber) {
 }
 ```
 
-> 포인트 전체 인출
+#### 포인트 전체 인출
 
 Tnk 서버에서 관리되는 사용자 포인트 전체를 한번에 인출하는 기능입니다.
 
