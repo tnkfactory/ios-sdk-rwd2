@@ -286,13 +286,113 @@ func didReceivedAdversieCount(_ count:NSNumber,  _ point:NSNumber) {
 
 사용자가 적립한 포인트는 해당 앱의 서버에서 관리하는 것이 원칙입니다. 다만 자체 서버가 없는 앱을 위하여 충전소 운영에 필요한 포인트 관리 기능을 Tnk 서버에서 제공합니다. 포인트를 Tnk 서버에서 관리하는 경우에 아래의 API 를 사용하여 사용자의 포인트 조회나 아이템 구매 등의 기능을 구현 하실 수 있습니다. 
 
-#### 포인트 조회
+#### 포인트 조회 - queryPoint
 
-#### 포인트 사용
+Tnk서버에 적립되어 있는 사용자 포인트 값을 조회합니다.
 
+- func **queryPoint(completion:@escaping (Int)->Void)**
+	- Parameters
+		- completion: 결과를 받으면 호출됩니다. 사용자의 보유 포인트 값이 파라메터로 전달됩니다.
+	- 사용예시
+
+```swift
+// Swift 
+TnkSession.sharedInstance()?.queryPoint() {
+    (point) in
+    print("#### queryPoint \(point)")
+}
+```
+
+- func **queryPoint(target:NSObject, action:Selector)**
+	- Parameters
+		- target: 결과를 받으면 이 객체의 action 메소드가 호출됩니다.
+		- action: 결과를 받으면 호출되는 메소드입니다. 해당 메소드는 NSNumber 타입의 파라메터 1개를 가져야하며, 사용자의 보유 포인트 값이 전달됩니다.
+	- 사용예시
+
+```swift
+// Swift 
+
+TnkSession.sharedInstance()?.queryPoint(target:self, action: #selector(didReceivedPoint(_:)))
+
+@objc
+func didReceivedPoint(_ point:NSNumber) {
+    print("### queryPoint \(point)")
+}
+```
+
+#### 포인트 사용 - purchaseItem
+
+TnK 서버에서는 별도로 아이템 목록을 관리하는 기능을 제공하지는 않습니다. 다만 앱에서 제공하는 아이템을 사용자가 구매할 때 Tnk 서버에 해당 포인트 만큼을 차감 할 수 있습니다.
+
+- func **purchaseItem(_ itemId:String, cost:Int, completion:@escaping (Int,Int)->Void)**
+	- Parameters
+		- itemId: 구매하는 아이템의 ID 값으로 앱에서 부여합니다. Tnk 사이트에서 제공하는 구매 리스트 화면에서 함께 보여줍니다.
+		- cost: 차감할 포인트입니다.
+		- completion: 결과를 받으면 호출됩니다. 차감 후 잔여 포인트(Int)와 고유한 거래 ID 값(Int)이 파라메터로 전달됩니다. 포인트 부족 또는 네트워크/시스템 오류로 인해 구매가 수행되지 못한 경우에는 두번째 파라메터 값으로 음수가 전달됩니다.
+	- 사용예시
+
+```swift
+// Swift 
+TnkSession.sharedInstance()?.purchaseItem("광고제거", cost: 1000) {
+    (remainPoint, trId) in
+    print("#### purchaseItem \(remainPoint) \(trId)")
+}
+```
+
+- func **purchaseItem(_ itemId:String, cost:Int, target:NSObject, action:Selector)**
+	- Parameters
+		-  itemId: 구매하는 아이템의 ID 값으로 앱에서 부여합니다. Tnk 사이트에서 제공하는 구매 리스트 화면에서 함께 보여줍니다.
+		- cost: 차감할 포인트입니다.
+		- target: 결과를 받으면 이 객체의 action 메소드가 호출됩니다.
+		- action: 결과를 받으면 호출되는 메소드입니다. 해당 메소드는 NSNumber 타입의 파라메터 2개를 가져야하며, 차감 후 잔여 포인트(Int)와 고유한 거래 ID 값(Int)이 파라메터로 전달됩니다. 포인트 부족 또는 네트워크/시스템 오류로 인해 구매가 수행되지 못한 경우에는 두번째 파라메터 값으로 음수가 전달됩니다.
+	- 사용예시
+
+```swift
+// Swift 
+
+TnkSession.sharedInstance()?.purchaseItem("광고제거", cost: 1000, target: self,
+                                           action: #selector(didReceivedPurchaseReturn(_:_:)))
+@objc
+func didReceivedPurchaseReturn(_ remainPoint:NSNumber, _ trId:NSNumber) {
+    print("### purchaseItem \(remainPoint) \(trId)")
+}
+```
 
 #### 포인트 전체 인출
 
+Tnk 서버에서 관리되는 사용자 포인트 전체를 한번에 인출하는 기능입니다.
+
+- func **withdrawPoints(_ desc:String, completion:@escaping (Int,Int)->Void)**
+	- Parameters
+		- desc: 인출과 관련된 설명 등을 넣어줍니다. Tnk 사이트의 보고서 페이지에서 함께 보여줍니다.
+		- completion: 결과를 받으면 호출됩니다. 인출된 포인트(Int)와 고유한 거래 ID 값(Int)이 파라메터로 전달됩니다.
+	- 사용예시
+
+```swift
+// Swift 
+TnkSession.sharedInstance()?.withdrawPoints("전체인출") {
+    (point, trId) in
+    print("#### withdrawPoints \(point) \(trId)")
+}
+```
+
+- func **withdrawPoints(_ desc:String, target:NSObject, action:Selector)**
+	- Parameters
+		- desc: 인출과 관련된 설명 등을 넣어줍니다. Tnk 사이트의 보고서 페이지에서 함께 보여줍니다.
+		- target: 결과를 받으면 이 객체의 action 메소드가 호출됩니다.
+		- action: 결과를 받으면 호출되는 메소드입니다. 해당 메소드는 NSNumber 타입의 파라메터 2개를 가져야하며, 인출된 포인트(Int)와 고유한 거래 ID 값(Int)이 파라메터로 전달됩니다.
+	- 사용예시
+
+```swift
+// Swift 
+
+TnkSession.sharedInstance()?.withdrawPoints("전체인출", target:self, action: #selector(didReceivedWithdrawPoints(_:_:)))
+
+@objc
+func didReceivedWithdrawPoints(_ point:NSNumber, _ trId:NSNumber) {
+    print("### withdrawPoints \(point) \(trId)")
+}
+```
 
 ### 3.4 Callback URL 설정하기
 
