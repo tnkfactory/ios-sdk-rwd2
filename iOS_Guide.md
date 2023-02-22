@@ -199,11 +199,12 @@ struct SwiftUIView: View {
 ```
 
 ## 3. Publisher API
-### 광고 상태 조회 - QueryPublishState
+
+### 3.1 광고 상태 조회 - QueryPublishState
 
 Tnk 사이트의 [게시정보]에서 광고 게시 중지를 하게 되면 이후에는 사용자가 광고 목록 창을 띄워도 광고들이 나타나지 않습니다. 그러므로 향후 광고 게시를 중지할 경우를 대비하여 화면에 충전소 버튼 자체를 보이지 않게 하는 기능을 갖추는 것이 바람직합니다. 이를 위하여 현재 게시앱의 광고게시 상태를 조회하는 기능을 제공합니다.
 
-- **func queryPublishState(completion:@escaping (Int)->Void)**
+- func **queryPublishState(completion:@escaping (Int)->Void)**
 	- Parameters
 		- completion: 결과를 받으면 호출됩니다. 파라메터로 게시 상태 값(Int)이 전달됩니다.
 	- 사용예시
@@ -215,7 +216,6 @@ TnkSession.sharedInstance()?.queryPublishState() {
     print("#### queryPublishState \(state)")
 }
 ```
-
 
 - func **queryPublishState(target:NSObject, action:Selector)**
 	- Parameters
@@ -234,9 +234,8 @@ func didReceivedPublishState(_ state:NSNumber) {
 }
 ```
 
-
 - 게시 상태 값
-	- 게시 상태 값은 아래와 같이 정의되어 있습니다.
+	- 게시 상태 값은 아래와 같이 정의되어 있습니다. 정상 게시 상태는 1, 테스트 상태는 2이며 그외 값은 게시 중이 아닌 경우입니다.
 
 ```swift
 // Swift 
@@ -249,12 +248,96 @@ public class PublisherState : NSObject {
 }
 ```	
 
+### 3.2 적립가능한 포인트 조회 - queryAdvertiseCount
+
+광고 게시 상태를 확인하여 충전소 버튼을 보이게하거나 안보이게 하는 것으로도 충분히 좋지만 현재 총 적립 가능한 포인트 등을 미리 노출한 다면 보다 많은 사용자의 관심을 끌 수 있습니다. 이를 위하여 현재 적립가능한 광고 정보를 확인하는 기능을 아래와 같이 제공합니다.
+
+### 3.3 포인트 조회 및 인출
+
+사용자가 적립한 포인트는 해당 앱의 서버에서 관리하는 것이 원칙입니다. 다만 자체 서버가 없는 앱을 위하여 충전소 운영에 필요한 포인트 관리 기능을 Tnk 서버에서 제공합니다. 포인트를 Tnk 서버에서 관리하는 경우에 아래의 API 를 사용하여 사용자의 포인트 조회나 아이템 구매 등의 기능을 구현 하실 수 있습니다. 
+
+#### 포인트 조회
+
+#### 포인트 사용
+
+
+#### 포인트 전체 인출
+
+
+### 3.4 Callback URL 설정하기
+
+사용자가 적립한 포인트를 해당 앱의 서버에서 관리하는 경우 적립 포인트는 Tnk 사이트에 설정된 callback URL 을 통하여 전달됩니다. 앱의 개발사측에서는 아래의 내용을 참고하시어 포인트 적립 내역을 받을 수 있는 서버 API 를 개발하고 이를 Tnk 사이트에 등록하셔야합니다. 등록하는 절차는 아래와 같습니다.
+
+- 매체 관리의 기본설정 화면에서 `포인트 관리` 항목을 `자체서버에서 관리`로 선택합니다.
+- URL 항목에 포인트 적립 정보를 받을 서버 API 주소를 입력합니다.
+ 
+서버 API에 전달되는 파라메터는 아래와 같습니다.
+
+##### 호출방식
+
+HTTP POST
+
+##### Parameters
+
+| 파라메터   | 상세 내용                                                    | 최대길이 |
+| ---------- | ------------------------------------------------------------ |---- |
+| seq_id     | 포인트 지급에 대한 고유한 ID 값이다. URL이 반복적으로 호출되더라도 이 값을 사용하여 중복지급여부를 확인할 수 있다. | string(50) |
+| pay_pnt    | 사용자에게 지급되어야 할 포인트 값이다.                      | long |
+| md_user_nm | 게시앱에서 사용자 식별을 하기 위하여 전달되는 값이다. 이 값을 받기 위해서는 매체앱내에서 setUserName() API를 사용하여 사용자 식별 값을 설정하여야 한다. | string(256) |
+| md_chk     | 전달된 값이 유효한지 여부를 판단하기 위하여 제공된다. 이 값은 app_key + md_user_nm + seq_id 의 MD5 Hash 값이다. app_key 값은 앱 등록시 부여된 값으로 Tnk 사이트에서 확인할 수 있다. | string(32) |
+| app_id     | 사용자가 참여한 광고앱의 고유 ID 값이다.                     | long |
+| pay_dt     | 포인트 지급시각이다. (System milliseconds) 예) 1577343412017 | long |
+| app_nm     | 참여한 광고명 이다.                                          |  string(120) |
+|pay\_amt|정산되는 금액.|long|
+|actn\_id|<p>- 0 : 설치형</p><p>- 1 : 실행형</p><p>- 2 : 액션형</p><p>- 5 : 구매형</p>|int|
+
+##### 리턴값 처리
+
+Tnk 서버에서는 위 URL을 호출하고 HTTP 리턴코드로 200이 리턴되면 정상적으로 처리되었다고 판단합니다. 
+만약 200이 아닌 값이 리턴된다면 Tnk 서버는 비정상처리로 판단하고 이후에는 5분 단위 및 1시간 단위로 최대 24시간 동안 반복적으로 호출합니다.
+- 중요! 동일한 Request가 반복적으로 호출될 수 있으므로 seq_id 값을 사용하시어 반드시 중복체크를 하셔야합니다.
 
 
 
-### 적립가능한 포인트 조회
-### 포인트 조회 및 인출
-### Callback URL 설정하기
+##### Callback URL 구현 예시 (Java)
+
+```java
+// 해당 사용자에게 지급되는 포인트
+int payPoint = Integer.parseInt(request.getParameter("pay_pnt"));
+
+// tnk 내부에서 생성한 고유 번호로 이 거래에 대한 Id이다.
+String seqId = request.getParameter("seq_id");
+
+// 전달된 파라메터가 유효한지 여부를 판단하기 위하여 사용한다. (아래 코딩 참고)
+String checkCode = request.getParameter("md_chk");
+
+// 게시앱에서 사용자 구분을 위하여 사용하는 값(전화번호나 로그인 ID 등)을 앱에서 TnkSession.setUserName()으로 설정한 후 받도록한다.
+String mdUserName = request.getParameter("md_user_nm");
+
+// 앱 등록시 부여된 app_key (tnk 사이트에서 확인가능)
+String appKey = "d2bbd...........19c86c8b021";
+
+// 유효성을 검증하기 위하여 아래와 같이 verifyCode를 생성한다. DigestUtils는 Apache의 commons-codec.jar 이 필요하다. 다른 md5 해시함수가 있다면 그것을 사용해도 무방하다.
+String verifyCode = DigestUtils.md5Hex(appKey + mdUserName + seqId);
+
+// 생성한 verifyCode와 chk_cd 파라메터 값이 일치하지 않으면 잘못된 요청이다.
+if (checkCode == null || !checkCode.equals(verifyCode)) {
+
+    // 오류
+    log.error("tnkad() check error : " + verifyCode + " != " + checkCode);
+
+} 
+else {
+
+    // 정상
+    log.debug("tnkad() : " + mdUserName + ", " + seqId);
+
+    // 포인트 부여하는 로직수행 (예시)
+    purchaseManager.getPointByAd(mdUserName, payPoint, seqId);
+
+}
+```
+
 
 ## 4. 디자인 커스터마이징
 ### 큐레이션
