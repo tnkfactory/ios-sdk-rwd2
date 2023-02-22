@@ -173,7 +173,7 @@ public protocol OfferwallEventListener : NSObjectProtocol {
 ```
 
 
-### SwiftUI 에서 사용하기
+### 2.4 SwiftUI 에서 사용하기
 
 SwiftUI 에서 오퍼월을 사용하실 수 있습니다. 아래의 예시 코드를 참고해주세요.
 
@@ -199,7 +199,46 @@ struct SwiftUIView: View {
 ```
 
 ## 3. Publisher API
-### 광고 상태 조회
+### 광고 상태 조회 - QueryPublishState
+
+Tnk 사이트의 [게시정보]에서 광고 게시 중지를 하게 되면 이후에는 사용자가 광고 목록 창을 띄워도 광고들이 나타나지 않습니다. 그러므로 향후 광고 게시를 중지할 경우를 대비하여 화면에 충전소 버튼 자체를 보이지 않게 하는 기능을 갖추는 것이 바람직합니다. 이를 위하여 현재 게시앱의 광고게시 상태를 조회하는 기능을 제공합니다.
+
+- Method
+	- func queryPublishState(completion:@escaping (Int)->Void)
+	- Parameters
+		- completion: 결과를 받으면 호출됩니다. 파라메터로 게시 상태 값이 전달됩니다.
+	- func queryPublishState(target:NSObject, action:Selector)
+	- Parameters
+		- target: 결과를 받으면 이 객체의 action 메소드가 호출됩니다.
+		- action: 결과를 받으면 호출되는 메소드입니다. 해당 메소드는 Int 타입의 파라메터 1개를 가져야하며, 게시 상태 값이 전달됩니다.
+
+```swift
+    /// 오퍼월의 게시 상태를 조회한다.
+    /// - Parameters
+    ///  - completion: 결과를 받으면 호출됩니다. 파라메터로 게시 상태 값이 전달됩니다.
+    func queryPublishState(completion:@escaping (Int)->Void)
+```
+  
+사용예시
+
+```swift
+// Swift 
+    TnkSession.sharedInstance()?.queryPublishState() {
+        (state) in
+        print("#### queryPublishState \(state)")
+    }
+```
+
+```swift
+    /// 오퍼월의 게시 상태를 조회한다.
+    /// - Parameters
+    ///  - target: 결과를 받으면 이 객체의 action 메소드가 호출됩니다.
+    ///  - action: 결과를 받으면 호출되는 메소드입니다. 해당 메소드는 Int 타입의 파라메터 1개를 가져야하며, 게시 상태 값이 전달됩니다.
+    func queryPublishState(target:NSObject, action:Selector)
+```
+
+
+
 ### 적립가능한 포인트 조회
 ### 포인트 조회 및 인출
 ### Callback URL 설정하기
