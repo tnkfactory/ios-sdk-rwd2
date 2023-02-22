@@ -1,3 +1,5 @@
+신규오퍼월 개발자 가이드
+
 ## 1. SDK 설정하기
 
 ### 라이브러리 다운로드
@@ -70,11 +72,12 @@ XCode 프로젝트의 info.plist 파일내에 아래와 같이 `tnkad_app_id` �
 <이미지>
 
 ## 2. 오퍼월 띄우기
-### 유저 식별값 설정
+
+### 2.1 유저 식별값 설정
 
 오퍼월을 띄우기 위해서는 우선 앱내에서 사용자를 식별할 수 있는 값을 SDK 에 설정하여야합니다. 사용자 식별값은 일반적으로 로그인 ID 와 같은 값이 사용됩니다. 만약 사용자 식별값이 전화번호나 이메일등 개인 정보에 해당된다면 SHA256 과 같은 해쉬함수나 암호화 함수를 사용하여 주실것을 권장합니다.
 
-사용자 식별값을 설정하지 않는 경우에는 오퍼월에는 광고가 출력되지 않습니다. 또한 사용자가 포인트 적립시 개발사의 서버로 호출하는 callback 내에 사용자 식별값이 같이 전달되므로 반드시 사용자 식별값을 설정하셔야합니다.
+사용자 식별값을 설정하지 않는 경우에는 오퍼월에는 광고가 출력되지 않습니다. 또한 사용자가 포인트 적립시 개발사의 서버로 호출되는 callback 내에 사용자 식별값이 같이 전달되므로 반드시 사용자 식별값을 설정하셔야합니다.
 
 아래와 같이 호출하시어 사용자 식별값을 설정해주세요.
 
@@ -86,9 +89,9 @@ TnkSession.sharedInstance()?.setUserName("<사용자 식별값>")
 
 ```
 
-### AdOfferwallViewController 
+### 2.2 AdOfferwallViewController 
 
-오퍼월을 띄우는 가장 쉬운 방법은 **AdOfferwallViewController** 를 사용하는 것입니다.  AdOfferwallViewController 는 일반적인 UIViewController 와 동일한 방법으로 사용하실 수 있습니다. 아래의 예시는 AdOfferwallViewController 를 UINavigationController 에 추가하여 Modal 형태로 띄우는 예시입니다.
+오퍼월을 띄우는 가장 쉬운 방법은 **AdOfferwallViewController** 를 사용하는 것입니다.  AdOfferwallViewController 는 일반적인 UIViewController 와 동일한 방법으로 사용하실 수 있습니다. 아래의 예시는 AdOfferwallViewController 를 UINavigationController 와 함께 Modal 형태로 띄우는 예시입니다.
 
 ```swift
 // Swift
@@ -107,3 +110,104 @@ func showOfferwall() {
 
 ```
 <오퍼월 이미지>
+
+### 2.3 AdOfferwallView 
+
+오퍼월을 UIView 형태로 사용하고싶다면 **AdOfferwallView** 를 사용할 수 있습니다.  AdOfferwallView 는 UIView 동일한 방식으로 사용하실 수 있습니다. 다만 광고 목록을 불러오기 위해서는 명시적으로 loadData() 함수를 호출해야합니다. 아래의 예시는 UIViewController 내에 AdOfferwallView 를 추가하고 광고 목록을 불러오는 예시입니다.
+
+```swift
+// Swift
+import TnkRwdSdk2
+
+func loadOfferwall() {
+        
+    let offerwallView = AdOfferwallView(frame:view.frame, viewController: self)
+    // offerwallView.offerwallListener = self  // 아래 OfferwallEventListener 참고
+    
+    view.addSubview(offerwallView)
+        
+    offerwallView.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+        offerwallView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+        offerwallView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        offerwallView.topAnchor.constraint(equalTo: view.topAnchor),
+        offerwallView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+    ])
+        
+    offerwallView.loadData()        
+
+}
+
+```
+
+#### OfferwallEventListener
+
+오퍼월에 광고가 로드되는 시점이나 메뉴가 클릭될 때 그 이벤트를 받아서 처리할 수 있도록 OfferwallEventListener protocol 을 제공합니다. 아래는 protocol 규약입니다.
+
+```swift
+
+/// 오퍼월 내의 특정 이벤트들을 받아서처리 하기 위하여 사용됩니다.
+/// AdOfferwallView 객체의 offerwallListener 에 설정합니다.
+public protocol OfferwallEventListener : NSObjectProtocol {
+
+    /// AdOfferwallView 에 광고가 로딩되는 시점에 호출됩니다.
+    ///
+    /// - Parameters:
+    ///   - headerMessage: Tnk 사이트에서 상단 메시지를 설정할 수 있습니다. 설정된 메시지가 전달됩니다.
+    ///   - totalPoint: 적립 가능한 총 포인트가 전달됩니다.
+    ///   - totalCount : 적립 가능한 총 광고 수가 전달됩니다.
+    ///   - multiRewardPoint: 사용자가 참여중인 멀티 리워드 캠페인이 있는 경우 적립 받을 수 있는 잔여 포인트가 전달됩니다.
+    ///   - multiRewardCount: 사용자가 참여중인 멀티 리워드 캠페인이 있는 경우 참여 중인 멀티 리워드 캠페인 수가 전달됩니다.
+    ///
+    func didAdDataLoaded(headerMessage:String?,
+                         totalPoint:Int, totalCount:Int,
+                         multiRewardPoint:Int, multiRewardCount:Int)
+    
+    /// AdOfferwallView 의 메뉴 또는 필터를 클릭하는 경우 호출됩니다.
+    ///
+    /// - Parameters:
+    ///   - menuId: 클릭한 메뉴의 ID
+    ///   - filterId: 클릭한 필터의 ID
+    ///
+    func didMenuSelected(menuId:Int, filterId:Int)
+}
+
+```
+
+
+### SwiftUI 에서 사용하기
+
+SwiftUI 에서 오퍼월을 사용하실 수 있습니다. 아래의 예시 코드를 참고해주세요.
+
+```swift
+// SwiftUI
+
+struct OfferwallViewController : UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> AdOfferwallViewController {
+        AdOfferwallViewController()
+    }
+    
+    func updateUIViewController(_ uiViewController: AdOfferwallViewController, context: Context) {
+        uiViewController.loadOfferwall()
+    }
+}
+
+struct SwiftUIView: View {    
+    var body: some View {
+        OfferwallViewController()
+    }
+}
+
+```
+
+## 3. Publisher API
+### 광고 상태 조회
+### 적립가능한 포인트 조회
+### 포인트 조회 및 인출
+### Callback URL 설정하기
+
+## 4. 디자인 커스터마이징
+### 큐레이션
+### TnkLayout 
+### TnkStyle
+
