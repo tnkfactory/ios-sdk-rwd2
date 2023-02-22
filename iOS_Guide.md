@@ -52,11 +52,11 @@ TnkAlerts.showATTPopup(viewController,
 
 ### Tnk 객체 초기화
 
-SDK 사용을 위해서는 사전에 APP-ID 값을 발급 받으셔야합니다.  APP-ID 값은 [Tnk 사이트](https://tnkfactory.com) 에서 발급 받으 실 수 있습니다. APP-ID 값을 발급 받으셨다면 이 값을 사용하여 TnkSession 객체가 초기화되어야합니다. 이를 위해서는 2가지 방법이 존재합니다. 아래 2가지 방법 중 하나를 선택하시어 진행하시면 됩니다.
+SDK 사용을 위해서는 사전에 **APP-ID** 값을 발급 받으셔야합니다.  **APP-ID** 값은 [Tnk 사이트](https://tnkfactory.com) 에서 발급 받으 실 수 있습니다. **APP-ID** 값을 발급 받으셨다면 이 값을 사용하여 TnkSession 객체가 초기화되어야합니다. 이를 위해서는 2가지 방법이 존재합니다. 아래 2가지 방법 중 하나를 선택하시어 진행하시면 됩니다.
 
 #### 초기화 API 호출하기
 
-SDK 가 사용되기 전에 (일반적으로는 Application Delegate 의 applicationDidFinishLaunchingWithOption 메소드 내) 아래와 같이 초기화 로직을 넣습니다. 실제 APP-ID 값을 아래 로직의 your-app-id-from-tnk-site 부분에 넣어주어야합니다.
+SDK 가 사용되기 전에 (일반적으로는 Application Delegate 의 applicationDidFinishLaunchingWithOption 메소드 내) 아래와 같이 초기화 로직을 넣습니다. 실제 **APP-ID** 값을 아래 로직의 **your-app-id-from-tnk-site** 부분에 넣어주어야합니다.
 
 ```swift
 // Swift
@@ -67,7 +67,7 @@ TnkSession.initInstance(appId: "your-app-id-from-tnk-site")
 ```
 #### info.plist 파일에 등록하기
 
-XCode 프로젝트의 info.plist 파일내에 아래와 같이 `tnkad_app_id` 항목을 추가하고 APP-ID 값을 설정합니다. 이곳에 설정해두면 TnkSession 객체가 처음 사용되는 시점에 해당 APP-ID 값을 사용하여 자동으로 초기화됩니다.
+XCode 프로젝트의 info.plist 파일내에 아래와 같이 `tnkad_app_id` 항목을 추가하고 **APP-ID** 값을 설정합니다. 이곳에 설정해두면 TnkSession 객체가 처음 사용되는 시점에 해당 **APP-ID** 값을 사용하여 자동으로 초기화됩니다.
 
 <이미지>
 
@@ -140,13 +140,13 @@ func loadOfferwall() {
 
 ```
 
-#### OfferwallEventListener
+> OfferwallEventListener
 
 오퍼월에 광고가 로드되는 시점이나 메뉴가 클릭될 때 그 이벤트를 받아서 처리할 수 있도록 OfferwallEventListener protocol 을 제공합니다. 아래는 protocol 규약입니다.
 
 ```swift
 
-/// 오퍼월 내의 특정 이벤트들을 받아서처리 하기 위하여 사용됩니다.
+/// 오퍼월 내의 특정 이벤트들을 받아서 처리하기 위하여 사용됩니다.
 /// AdOfferwallView 객체의 offerwallListener 에 설정합니다.
 public protocol OfferwallEventListener : NSObjectProtocol {
 
@@ -158,7 +158,6 @@ public protocol OfferwallEventListener : NSObjectProtocol {
     ///   - totalCount : 적립 가능한 총 광고 수가 전달됩니다.
     ///   - multiRewardPoint: 사용자가 참여중인 멀티 리워드 캠페인이 있는 경우 적립 받을 수 있는 잔여 포인트가 전달됩니다.
     ///   - multiRewardCount: 사용자가 참여중인 멀티 리워드 캠페인이 있는 경우 참여 중인 멀티 리워드 캠페인 수가 전달됩니다.
-    ///
     func didAdDataLoaded(headerMessage:String?,
                          totalPoint:Int, totalCount:Int,
                          multiRewardPoint:Int, multiRewardCount:Int)
@@ -166,9 +165,8 @@ public protocol OfferwallEventListener : NSObjectProtocol {
     /// AdOfferwallView 의 메뉴 또는 필터를 클릭하는 경우 호출됩니다.
     ///
     /// - Parameters:
-    ///   - menuId: 클릭한 메뉴의 ID
+    ///   - menuId: 클릭한 메뉴의 ID 또는 필터가 속한 메뉴의 ID
     ///   - filterId: 클릭한 필터의 ID
-    ///
     func didMenuSelected(menuId:Int, filterId:Int)
 }
 
@@ -210,4 +208,3 @@ struct SwiftUIView: View {
 ### 큐레이션
 ### TnkLayout 
 ### TnkStyle
-
