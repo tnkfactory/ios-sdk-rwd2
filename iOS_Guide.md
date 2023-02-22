@@ -140,7 +140,7 @@ func loadOfferwall() {
 
 ```
 
-> OfferwallEventListener
+#### OfferwallEventListener
 
 오퍼월에 광고가 로드되는 시점이나 메뉴가 클릭될 때 그 이벤트를 받아서 처리할 수 있도록 OfferwallEventListener protocol 을 제공합니다. 아래는 protocol 규약입니다.
 
@@ -202,7 +202,7 @@ struct SwiftUIView: View {
 
 ### 3.1 광고 상태 조회 - QueryPublishState
 
-Tnk 사이트의 [게시정보]에서 광고 게시 중지를 하게 되면 이후에는 사용자가 광고 목록 창을 띄워도 광고들이 나타나지 않습니다. 그러므로 향후 광고 게시를 중지할 경우를 대비하여 화면에 충전소 버튼 자체를 보이지 않게 하는 기능을 갖추는 것이 바람직합니다. 이를 위하여 현재 게시앱의 광고게시 상태를 조회하는 기능을 제공합니다.
+Tnk 사이트의 [게시정보]에서 광고 게시 중지를 하게 되면 이후에는 사용자가 오퍼월 창을 띄워도 광고들이 나타나지 않습니다. 그러므로 향후 광고 게시를 중지할 경우를 대비하여 화면에 충전소 버튼 자체를 보이지 않게 하는 기능을 갖추는 것이 바람직합니다. 이를 위하여 현재 게시앱의 광고게시 상태를 조회하는 기능을 제공합니다.
 
 - func **queryPublishState(completion:@escaping (Int)->Void)**
 	- Parameters
@@ -235,7 +235,7 @@ func didReceivedPublishState(_ state:NSNumber) {
 ```
 
 - 게시 상태 값
-	- 게시 상태 값은 아래와 같이 정의되어 있습니다. 정상 게시 상태는 1, 테스트 상태는 2이며 그외 값은 게시 중이 아닌 경우입니다.
+	- 게시 상태 값은 아래와 같이 정의되어 있습니다. 정상 게시 상태는 1, 테스트 상태는 2이며 그 외 값은 게시 중이 아닌 경우입니다.
 
 ```swift
 // Swift 
@@ -250,7 +250,37 @@ public class PublisherState : NSObject {
 
 ### 3.2 적립가능한 포인트 조회 - queryAdvertiseCount
 
-광고 게시 상태를 확인하여 충전소 버튼을 보이게하거나 안보이게 하는 것으로도 충분히 좋지만 현재 총 적립 가능한 포인트 등을 미리 노출한 다면 보다 많은 사용자의 관심을 끌 수 있습니다. 이를 위하여 현재 적립가능한 광고 정보를 확인하는 기능을 아래와 같이 제공합니다.
+광고 게시 상태를 확인하여 충전소 버튼을 보이게하거나 안보이게 하는 것으로도 충분히 좋지만 현재 총 적립 가능한 포인트 등을 미리 노출한다면 보다 많은 사용자의 관심을 끌 수 있습니다. 이를 위하여 현재 적립가능한 광고 정보를 확인하는 기능을 아래와 같이 제공합니다.
+
+- func **queryAdvertiseCount(completion:@escaping (Int,Int)->Void)**
+	- Parameters
+		- completion: 결과를 받으면 호출됩니다. 적립 가능한 광고 수(Int)와 포인트 합계(Int)가 파라메터로 전달됩니다.
+	- 사용예시
+
+```swift
+// Swift 
+TnkSession.sharedInstance()?.queryAdvertiseCount() {
+    (count, point) in
+    print("### \(count) \(point)")
+}
+```
+
+- func **queryAdvertiseCount(target:NSObject, action:Selector)**
+	- Parameters
+		- target: 결과를 받으면 이 객체의 action 메소드가 호출됩니다.
+		- action: 결과를 받으면 호출되는 메소드입니다. 해당 메소드는 NSNumber 타입의 파라메터 2개를 가져야하며, 적립 가능한 광고수와 포인트 합계가 전달됩니다.
+	- 사용예시
+
+```swift
+// Swift 
+
+TnkSession.sharedInstance()?.queryAdvertiseCount(target:self, action: #selector(didReceivedAdversieCount(_:_:)))
+
+@objc
+func didReceivedAdversieCount(_ count:NSNumber,  _ point:NSNumber) {
+    print("### \(count) \(point)")
+}
+```
 
 ### 3.3 포인트 조회 및 인출
 
