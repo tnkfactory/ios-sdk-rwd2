@@ -2,9 +2,9 @@
 
 ## 1. SDK 설정하기
 
-### 라이브러리 다운로드
+### 1.1 라이브러리 다운로드
 
-### 라이브러리 등록
+### 1.2 라이브러리 등록
 
 다운로드 받은 SDK 압축파일을 풀면 TnkRwdSdk2.xcframework 폴더가 생성됩니다. TnkRwdSdk2.xcframework 폴더를 XCode 내에 마우스로 드래그합니다. 이후 XCode -> Target -> General -> Frameworks, Libraries, and Embedded Content 항목에 TnkRwdSdk2.xcframework 가 있는 것을 확인하시고 Embed 설정을 Embed & Sign 으로 변경합니다.
 
@@ -12,7 +12,7 @@
 
 ![framework_embed](./img/framework_embed.jpg)
 
-### 앱 추적 동의
+### 1.3 앱 추적 동의
 
 앱 광고의 경우 유저들의 광고 참여여부를 확인하기 위해서는 사전에 앱추적동의를 받아야합니다.  앱추적동의는 iOS 14부터 제공되는 기능으로 기기의 IDFA 값 수집을 위하여 필요합니다. 앱 추적 동의 창은 가급적이면 개발하시는 앱이 시작되는 시점에 띄우는 것을 권고드립니다.  [앱 추적동의에 대하여 더 알아보기](https://developer.apple.com/kr/app-store/user-privacy-and-data-use/)
 
@@ -24,7 +24,7 @@
 
 작성 예시) 사용자에게 최적의 광고를 제공하기 위하여 광고활동 정보를 수집합니다.
  
-![att_info_plist](./img/att_info_plist.png)
+![att_info_plist](./img/att_info_plist.jpg)
 
 아래의 API 를 호출하여 앱 추적 동의 창을 띄울 수 있습니다. [AppTrackingTransparency API 가이드 보기](https://developer.apple.com/documentation/apptrackingtransparency)
 
@@ -52,8 +52,13 @@ TnkAlerts.showATTPopup(viewController,
                        })
 
 ```
+### 1.4 권한 설정
 
-### Tnk 객체 초기화
+오퍼월에 제공되는 광고 중에는 이미지 파일을 첨부를 필요로하는 광고들이 많이 있습니다. 이미지 파일 첨부를 위해서는 info.plist 파일에 포토 앨범 접근 권한 안내 문구(Privacy - Photo Library Usage Description)와 카메라 접근 권한 안내 문구(Privacy - Camera Usage Description) 설정이 필요합니다. 아래의 이미지를 참고하세요.
+
+![usage_info_plist](./img/usage_info_plist.jpg)
+
+### 1.4 Tnk 객체 초기화
 
 SDK 사용을 위해서는 사전에 **APP-ID** 값을 발급 받으셔야합니다.  **APP-ID** 값은 [Tnk 사이트](https://tnkfactory.com) 에서 발급 받으 실 수 있습니다. **APP-ID** 값을 발급 받으셨다면 이 값을 사용하여 TnkSession 객체가 초기화되어야합니다. 이를 위해서는 2가지 방법이 존재합니다. 아래 2가지 방법 중 하나를 선택하시어 진행하시면 됩니다.
 
