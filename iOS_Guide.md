@@ -1,8 +1,8 @@
 신규오퍼월 개발자 가이드
 
-## 1. SDK 설정하기
+# 1. SDK 설정하기
 
-### 1.1 라이브러리 다운로드
+## 1.1 라이브러리 다운로드
 
 **[[iOS Reward SDK2 Download v5.01](./sdk/TnkRwdSdk2.v5.01.zip)]**
 
