@@ -1,12 +1,12 @@
 신규오퍼월 개발자 가이드
 
-# 1. SDK 설정하기
+## 1. SDK 설정하기
 
-## 1.1 라이브러리 다운로드
+### 1.1 라이브러리 다운로드
 
 **[[iOS Reward SDK2 Download v5.01](./sdk/TnkRwdSdk2.v5.01.zip)]**
 
-## 1.2 라이브러리 등록
+### 1.2 라이브러리 등록
 
 다운로드 받은 SDK 압축파일을 풀면 TnkRwdSdk2.xcframework 폴더가 생성됩니다. TnkRwdSdk2.xcframework 폴더를 XCode 내에 마우스로 드래그합니다. 이후 XCode -> Target -> General -> Frameworks, Libraries, and Embedded Content 항목에 TnkRwdSdk2.xcframework 가 있는 것을 확인하시고 Embed 설정을 Embed & Sign 으로 변경합니다.
 
@@ -14,13 +14,13 @@
 
 ![framework_embed](./img/framework_embed.jpg)
 
-## 1.3 앱 추적 동의
+### 1.3 앱 추적 동의
 
 앱 광고의 경우 유저들의 광고 참여여부를 확인하기 위해서는 사전에 앱추적동의를 받아야합니다.  앱추적동의는 iOS 14부터 제공되는 기능으로 기기의 IDFA 값 수집을 위하여 필요합니다. 앱 추적 동의 창은 가급적이면 개발하시는 앱이 시작되는 시점에 띄우는 것을 권고드립니다.  [앱 추적동의에 대하여 더 알아보기](https://developer.apple.com/kr/app-store/user-privacy-and-data-use/)
 
 앱 추적 동의에 거부한 유저에게는 광고가 제한적으로 노출됩니다.
 
-### 앱 추적 동의 창 띄우기
+#### 앱 추적 동의 창 띄우기
 
 앱 추적동의 창을 띄우기 위해서는 우선 info.plist 파일에 아래와 같이 "Privacy - Tracking Usage Description" 문구를 추가합니다.  추가한 문구는 앱 추적 동의 팝업 창에 노출됩니다.
 
@@ -57,7 +57,7 @@ TnkAlerts.showATTPopup(viewController,
 
 ![att_popup](./img/att_popup.jpg)
 
-## 1.4 권한 안내 문구 설정
+### 1.4 권한 안내 문구 설정
 
 오퍼월에 제공되는 광고 중에는 이미지 파일을 첨부를 필요로하는 광고들이 많이 있습니다. 이미지 파일 첨부를 위해서는 info.plist 파일에 포토 앨범 접근 권한 안내 문구(Privacy - Photo Library Usage Description)와 카메라 접근 권한 안내 문구(Privacy - Camera Usage Description) 설정이 필요합니다. 
 
@@ -65,11 +65,11 @@ TnkAlerts.showATTPopup(viewController,
 
 ![usage_info_plist](./img/usage_info_plist.jpg)
 
-## 1.5 Tnk 객체 초기화
+### 1.5 Tnk 객체 초기화
 
 SDK 사용을 위해서는 사전에 **APP-ID** 값을 발급 받으셔야합니다.  **APP-ID** 값은 [Tnk 사이트](https://tnkfactory.com) 에서 발급 받으 실 수 있습니다. **APP-ID** 값을 발급 받으셨다면 이 값을 사용하여 TnkSession 객체가 초기화되어야합니다. 이를 위해서는 2가지 방법이 존재합니다. 아래 2가지 방법 중 하나를 선택하시어 진행하시면 됩니다.
 
-### 초기화 API 호출하기
+#### 초기화 API 호출하기
 
 SDK 가 사용되기 전에 (일반적으로는 Application Delegate 의 applicationDidFinishLaunchingWithOption 메소드 내) 아래와 같이 초기화 로직을 넣습니다. 실제 **APP-ID** 값을 아래 로직의 **your-app-id-from-tnk-site** 부분에 넣어주어야합니다.
 
@@ -87,15 +87,15 @@ TnkSession.initInstance(appId: "your-app-id-from-tnk-site")
 [TnkSession initInstanceWithAppId:@"your-app-id-from-tnk-site"];
 ```
 
-### info.plist 파일에 등록하기
+#### info.plist 파일에 등록하기
 
 XCode 프로젝트의 info.plist 파일내에 아래와 같이 `tnkad_app_id` 항목을 추가하고 **APP-ID** 값을 설정합니다. 이곳에 설정해두면 TnkSession 객체가 처음 사용되는 시점에 해당 **APP-ID** 값을 사용하여 자동으로 초기화됩니다.
 
 ![appid_info_plist](./img/appid_info_plist.jpg)
 
-# 2. 오퍼월 띄우기
+## 2. 오퍼월 띄우기
 
-## 2.1 사용자 식별값 설정
+### 2.1 사용자 식별값 설정
 
 오퍼월을 띄우기 위해서는 우선 앱내에서 사용자를 식별할 수 있는 값을 SDK 에 설정하여야합니다. 사용자 식별값은 일반적으로 로그인 ID 와 같은 값이 사용됩니다. 만약 사용자 식별값이 전화번호나 이메일 등 개인 정보에 해당된다면 SHA256 과 같은 해쉬함수나 암호화 함수를 사용하여 주실것을 권장합니다.
 
@@ -117,7 +117,7 @@ TnkSession.sharedInstance()?.setUserName("<사용자 식별값>")
 [[TnkSession sharedInstance] setUserName:@"<사용자 식별값>"];
 ```
 
-## 2.2 AdOfferwallViewController 
+### 2.2 AdOfferwallViewController 
 
 오퍼월을 띄우는 가장 쉬운 방법은 **AdOfferwallViewController** 를 사용하는 것입니다.  AdOfferwallViewController 는 일반적인 UIViewController 와 동일한 방법으로 사용하실 수 있습니다. 아래의 예시는 AdOfferwallViewController 를 UINavigationController 와 함께 Modal 형태로 띄우는 예시입니다.
 
@@ -155,7 +155,7 @@ func showOfferwall() {
 
 ![default_offerwall](./img/default_offerwall.jpeg)
 
-## 2.3 AdOfferwallView 
+### 2.3 AdOfferwallView 
 
 오퍼월을 UIView 형태로 사용하고싶다면 **AdOfferwallView** 를 사용할 수 있습니다.  AdOfferwallView 는 UIView 동일한 방식으로 사용하실 수 있습니다. 다만 광고 목록을 불러오기 위해서는 명시적으로 loadData() 함수를 호출해야합니다. 아래의 예시는 UIViewController 내에 AdOfferwallView 를 추가하고 광고 목록을 불러오는 예시입니다.
 
@@ -205,7 +205,7 @@ func loadOfferwall() {
 }
 ```
 
-### OfferwallEventListener
+#### OfferwallEventListener
 
 오퍼월에 광고가 로드되는 시점이나 메뉴가 클릭될 때 그 이벤트를 받아서 처리할 수 있도록 OfferwallEventListener protocol 을 제공합니다. 아래는 protocol 규약입니다.
 
@@ -303,7 +303,7 @@ class ViewController: UIViewController, OfferwallEventListener {
 }
 ```
 
-## 2.4 SwiftUI 에서 사용하기
+### 2.4 SwiftUI 에서 사용하기
 
 SwiftUI 에서 오퍼월을 사용하실 수 있습니다. 아래의 예시 코드를 참고해주세요.
 
@@ -328,9 +328,9 @@ struct SwiftUIView: View {
 
 ```
 
-# 3. Publisher API
+## 3. Publisher API
 
-## 3.1 광고 상태 조회 - QueryPublishState
+### 3.1 광고 상태 조회 - QueryPublishState
 
 Tnk 사이트의 [게시정보]에서 광고 게시 중지를 하게 되면 이후에는 사용자가 오퍼월 창을 띄워도 광고들이 나타나지 않습니다. 그러므로 향후 광고 게시를 중지할 경우를 대비하여 화면에 충전소 버튼 자체를 보이지 않게 하는 기능을 갖추는 것이 바람직합니다. 이를 위하여 현재 게시앱의 광고게시 상태를 조회하는 기능을 제공합니다.
 
@@ -388,7 +388,7 @@ public class PublisherState : NSObject {
 }
 ```	
 
-## 3.2 적립가능한 포인트 조회 - queryAdvertiseCount
+### 3.2 적립가능한 포인트 조회 - queryAdvertiseCount
 
 광고 게시 상태를 확인하여 충전소 버튼을 보이게하거나 안보이게 하는 것으로도 충분히 좋지만 현재 총 적립 가능한 포인트 등을 미리 노출한다면 보다 많은 사용자의 관심을 끌 수 있습니다. 이를 위하여 현재 적립가능한 광고 정보를 확인하는 기능을 아래와 같이 제공합니다.
 
@@ -432,11 +432,11 @@ func didReceivedAdvertiseCount(_ count:NSNumber,  _ point:NSNumber) {
 }
 ```
 
-## 3.3 포인트 조회 및 인출
+### 3.3 포인트 조회 및 인출
 
 사용자가 적립한 포인트는 해당 앱의 서버에서 관리하는 것이 원칙입니다. 다만 자체 서버가 없는 앱을 위하여 충전소 운영에 필요한 포인트 관리 기능을 Tnk 서버에서 제공합니다. 포인트를 Tnk 서버에서 관리하는 경우에 아래의 API 를 사용하여 사용자의 포인트 조회나 아이템 구매 등의 기능을 구현 하실 수 있습니다. 
 
-### 포인트 조회 - queryPoint
+#### 포인트 조회 - queryPoint
 
 Tnk서버에 적립되어 있는 사용자 포인트 값을 조회합니다.
 
