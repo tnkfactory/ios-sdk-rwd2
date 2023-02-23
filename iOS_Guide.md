@@ -124,7 +124,22 @@ func showOfferwall() {
 
     self.present(navController, animated: true)
 }
+```
 
+```objective-c
+// Objective-C
+#import <TnkRwdSdk2/TnkRwdSdk2.h>
+
+- (void)showOfferwall {
+    UIViewController *vc = [[AdOfferwallViewController alloc] init];
+    vc.title = @"TEST Offerwall";
+    
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:vc];
+    navController.modalPresentationStyle = UIModalPresentationFullScreen;
+    navController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: UIColor.blackColor };
+    
+    [self presentViewController:navController animated:YES completion:nil];
+}
 ```
 
 ![default_offerwall](./img/default_offerwall.jpeg)
