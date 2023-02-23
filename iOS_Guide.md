@@ -245,9 +245,9 @@ class ViewController: UIViewController, OfferwallEventListener {
     func loadOfferwall() {
         
         let offerwallView = AdOfferwallView(frame:view.frame, viewController: self)
-        offerwallView.offerwallListener = self  // 아래 OfferwallEventListener 참고
+        offerwallView.offerwallListener = self  // Listener 설정
     
-        // ..
+        // ...
         
         offerwallView.loadData()        
     }
@@ -279,7 +279,7 @@ class ViewController: UIViewController, OfferwallEventListener {
 
 - (void)loadOfferwall {
     AdOfferwallView *offerwallView = [[AdOfferwallView alloc] initWithFrame:self.view.frame viewController:self];
-    offerwallView.offerwallListener = self;  // 리스너 설정
+    offerwallView.offerwallListener = self;  // Listener 설정
     
     // ...
     
@@ -362,6 +362,16 @@ func didReceivedPublishState(_ state:NSNumber) {
 }
 ```
 
+```objective-c
+// Objective-C
+
+[[TnkSession sharedInstance] queryPublishStateWithTarget:self action:@selector(didReceivedPublishState:)];
+
+- (void)didReceivedPublishState:(NSNumber*) state {
+    NSLog(@"#### queryPublishState %@", state);
+}
+```
+
 - 게시 상태 값
 	- 게시 상태 값은 아래와 같이 정의되어 있습니다. 정상 게시 상태는 1, 테스트 상태는 2이며 그 외 값은 게시 중이 아닌 경우입니다.
 
@@ -410,6 +420,16 @@ func didReceivedAdvertiseCount(_ count:NSNumber,  _ point:NSNumber) {
 }
 ```
 
+```objective-c
+// Objective-C
+
+[[TnkSession sharedInstance] queryAdvertiseCountWithTarget:self action:@selector(didReceivedAdvertiseCount:point:)];
+
+- (void)didReceivedAdvertiseCount:(NSNumber*)count point:(NSNumber *)point {
+    NSLog(@"### queryAdvertiseCount %@ %@", count, point);
+}
+```
+
 ### 3.3 포인트 조회 및 인출
 
 사용자가 적립한 포인트는 해당 앱의 서버에서 관리하는 것이 원칙입니다. 다만 자체 서버가 없는 앱을 위하여 충전소 운영에 필요한 포인트 관리 기능을 Tnk 서버에서 제공합니다. 포인트를 Tnk 서버에서 관리하는 경우에 아래의 API 를 사용하여 사용자의 포인트 조회나 아이템 구매 등의 기능을 구현 하실 수 있습니다. 
@@ -445,6 +465,16 @@ TnkSession.sharedInstance()?.queryPoint(target:self, action: #selector(didReceiv
 @objc
 func didReceivedPoint(_ point:NSNumber) {
     print("### queryPoint \(point)")
+}
+```
+
+```objective-c
+// Objective-C
+
+[[TnkSession sharedInstance] queryPointWithTarget:self action:@selector(didReceivedPoint:)];
+
+- (void)didReceivedPoint:(NSNumber*) point {
+    NSLog(@"### queryPoint %@", point);
 }
 ```
 
@@ -486,6 +516,16 @@ func didReceivedPurchaseReturn(_ remainPoint:NSNumber, _ trId:NSNumber) {
 }
 ```
 
+```objective-c
+// Objective-C
+
+[[TnkSession sharedInstance] purchaseItem:@"광고제거" cost:1000 target:self action:@selector(didReceivedPurchaseReturn:trId:)];
+
+- (void)didReceivedPurchaseReturn:(NSNumber*)remainPoint trId:(NSNumber *)trId {
+    NSLog(@"### purchaseItem %@ %@", remainPoint, trId);
+}
+```
+
 #### 포인트 전체 인출
 
 Tnk 서버에서 관리되는 사용자 포인트 전체를 한번에 인출하는 기능입니다.
@@ -519,6 +559,16 @@ TnkSession.sharedInstance()?.withdrawPoints("전체인출", target:self, action:
 @objc
 func didReceivedWithdrawPoints(_ point:NSNumber, _ trId:NSNumber) {
     print("### withdrawPoints \(point) \(trId)")
+}
+```
+
+```objective-c
+// Objective-C
+
+[[TnkSession sharedInstance] withdrawPoints:@"전체인출" target:self action:@selector(didReceivedWithdrawPoints:trId:)];
+
+- (void)didReceivedWithdrawPoints:(NSNumber*)point trId:(NSNumber *)trId {
+    NSLog(@"### withdrawPoints %@ %@", point, trId);
 }
 ```
 
