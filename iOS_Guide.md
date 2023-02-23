@@ -4,6 +4,8 @@
 
 ### 1.1 라이브러리 다운로드
 
+**[[iOS Reward SDK2 Download v5.01](./sdk/TnkRwdSdk2.v5.01.zip)]**
+
 ### 1.2 라이브러리 등록
 
 다운로드 받은 SDK 압축파일을 풀면 TnkRwdSdk2.xcframework 폴더가 생성됩니다. TnkRwdSdk2.xcframework 폴더를 XCode 내에 마우스로 드래그합니다. 이후 XCode -> Target -> General -> Frameworks, Libraries, and Embedded Content 항목에 TnkRwdSdk2.xcframework 가 있는 것을 확인하시고 Embed 설정을 Embed & Sign 으로 변경합니다.
