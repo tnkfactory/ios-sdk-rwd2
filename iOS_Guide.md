@@ -76,8 +76,15 @@ SDK 가 사용되기 전에 (일반적으로는 Application Delegate 의 applica
 import TnkRwdSdk2
 
 TnkSession.initInstance(appId: "your-app-id-from-tnk-site")
-
 ```
+
+```objective-c
+// Objective-C
+#import <TnkRwdSdk2/TnkRwdSdk2.h>
+
+[TnkSession initInstanceWithAppId:@"your-app-id-from-tnk-site"];
+```
+
 #### info.plist 파일에 등록하기
 
 XCode 프로젝트의 info.plist 파일내에 아래와 같이 `tnkad_app_id` 항목을 추가하고 **APP-ID** 값을 설정합니다. 이곳에 설정해두면 TnkSession 객체가 처음 사용되는 시점에 해당 **APP-ID** 값을 사용하여 자동으로 초기화됩니다.
@@ -103,6 +110,8 @@ TnkSession.sharedInstance()?.setUserName("<사용자 식별값>")
 
 ```objective-c
 // Objective-C
+#import <TnkRwdSdk2/TnkRwdSdk2.h>
+
 [[TnkSession sharedInstance] setUserName:@"<사용자 식별값"];
 ```
 
@@ -136,7 +145,7 @@ func showOfferwall() {
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:vc];
     navController.modalPresentationStyle = UIModalPresentationFullScreen;
-    navController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: UIColor.blackColor };
+    navController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: UIColor.blackColor};
     
     [self presentViewController:navController animated:YES completion:nil];
 }
@@ -155,7 +164,7 @@ import TnkRwdSdk2
 func loadOfferwall() {
         
     let offerwallView = AdOfferwallView(frame:view.frame, viewController: self)
-    // offerwallView.offerwallListener = self  // 아래 OfferwallEventListener 참고
+    //offerwallView.offerwallListener = self  // 아래 OfferwallEventListener 참고
     
     view.addSubview(offerwallView)
         
@@ -170,7 +179,28 @@ func loadOfferwall() {
     offerwallView.loadData()        
 
 }
+```
 
+```objective-c
+// Objective-C
+#import <TnkRwdSdk2/TnkRwdSdk2.h>
+
+- (void)loadOfferwall {
+    AdOfferwallView *offerwallView = [[AdOfferwallView alloc] initWithFrame:self.view.frame viewController:self];
+    //offerwallView.offerwallListener = self;  // 아래 OfferwallEventListener 참고
+    
+    [self.view addSubview:offerwallView];
+    
+    offerwallView.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [offerwallView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+        [offerwallView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+        [offerwallView.topAnchor constraintEqualToAnchor:self.view.topAnchor],
+        [offerwallView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor],
+    ]];
+    
+    [offerwallView loadData];
+}
 ```
 
 #### OfferwallEventListener
@@ -202,9 +232,74 @@ public protocol OfferwallEventListener : NSObjectProtocol {
     ///   - filterId: 클릭한 필터의 ID
     func didMenuSelected(menuId:Int, filterId:Int)
 }
-
 ```
 
+사용 방법은 아래 내용을 참고하세요.
+
+```swift
+// Swift
+import TnkRwdSdk2
+
+class ViewController: UIViewController, OfferwallEventListener {
+
+    func loadOfferwall() {
+        
+        let offerwallView = AdOfferwallView(frame:view.frame, viewController: self)
+        offerwallView.offerwallListener = self  // 아래 OfferwallEventListener 참고
+    
+        // ..
+        
+        offerwallView.loadData()        
+    }
+
+    // MARK: OfferwallEventListener
+    
+    func didAdDataLoaded(headerMessage: String?,
+                         totalPoint: Int,
+                         totalCount: Int,
+                         multiRewardPoint: Int,
+                         multiRewardCount: Int) {
+        print("### message = \(headerMessage)")
+    }
+    
+    func didMenuSelected(menuId: Int, filterId: Int) {
+        print("### menuId: \(menuId), filterId: \(filterId)")
+    }
+```
+
+```objective-c
+// Objective-C
+#import <TnkRwdSdk2/TnkRwdSdk2.h>
+
+@interface ViewController : UIViewController <OfferwallEventListener>
+// ...
+@end
+
+@implementation ViewController
+
+- (void)loadOfferwall {
+    AdOfferwallView *offerwallView = [[AdOfferwallView alloc] initWithFrame:self.view.frame viewController:self];
+    offerwallView.offerwallListener = self;  // 리스너 설정
+    
+    // ...
+    
+    [offerwallView loadData];
+}
+
+#pragma mark OfferwallEventListener
+
+- (void)didAdDataLoadedWithHeaderMessage:(NSString *)headerMessage
+                              totalPoint:(NSInteger)totalPoint
+                              totalCount:(NSInteger)totalCount
+                        multiRewardPoint:(NSInteger)multiRewardPoint
+                        multiRewardCount:(NSInteger)multiRewardCount {
+    NSLog(@"### message = %@", headerMessage);
+}
+
+- (void)didMenuSelectedWithMenuId:(NSInteger)menuId filterId:(NSInteger)filterId {
+    NSLog(@"### menuId: %ld, filterId: %ld", menuId, filterId);
+}
+```
 
 ### 2.4 SwiftUI 에서 사용하기
 
