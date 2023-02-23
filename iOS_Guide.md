@@ -99,7 +99,11 @@ XCode 프로젝트의 info.plist 파일내에 아래와 같이 `tnkad_app_id` �
 import TnkRwdSdk2
 
 TnkSession.sharedInstance()?.setUserName("<사용자 식별값>")
+```
 
+```objective-c
+// Objective-C
+[[TnkSession sharedInstance] setUserName:@"<사용자 식별값"];
 ```
 
 ### 2.2 AdOfferwallViewController 
