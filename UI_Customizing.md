@@ -26,6 +26,8 @@ AdListItemViewLayout 은 AdListItemView 내의 구성요소들의 크기, 색상
 
 iconImage 와 pointIconImage 는 UIImageView 가 사용되며 아래와 같은 속성을 가지고 있습니다. 추가로 AdListItemView 가 피드형태로 표시되는 경우에는 feedImage 추가로 사용됩니다.
 
+##### ImageAttribute
+
 ```swift
 class ImageAttribute  {
     var width:CGFloat = 10                 // 이미지의 가로 크기
@@ -43,6 +45,8 @@ class ImageAttribute  {
 ```
 
 titleLabel, descLabel, descPointLabel, pointAmountLabel, pointUnitLabel 은 UILabel 이 사용되며 아래와 같은 속성을 가지고 있습니다. 참고로 descPointLabel 은 descLabel 과 같은 UILabel 객체를 사용하며 2배 이벤트를 진행할 때 원래 지급 포인트를 표시하기 위하여 사용되는 속성입니다.
+
+##### LabelAttribute
 
 ```swift
 class LabelAttribute {
@@ -169,7 +173,8 @@ func onClickOfferwall1() {
     viewLayout.dividerTrailingSpace = 10
     
     // RightIconAdListView 를 기본 광고 목록으로 설정
-    TnkLayout.shared.registerItemViewLayout(type: .normal, viewClass: RightIconAdListItemView.self, viewLayout: viewLayout)
+    TnkLayout.shared.registerItemViewLayout(type: .normal, viewClass: RightIconAdListItemView.self, 
+                                            viewLayout: viewLayout)
      
     showOfferwall()        
 }
@@ -177,7 +182,8 @@ func onClickOfferwall1() {
 @IBAction
 func onClickOfferwall2() {
     // FeedAdListItemView 를 기본 광고 목록으로 설정
-    TnkLayout.shared.registerItemViewLayout(type: .normal, viewClass: FeedAdListItemView.self, viewLayout: FeedAdItemLargeViewLayout())
+    TnkLayout.shared.registerItemViewLayout(type: .normal, viewClass: FeedAdListItemView.self, 
+                                            viewLayout: FeedAdItemLargeViewLayout())
 
     showOfferwall()
 }
@@ -187,7 +193,7 @@ func onClickOfferwall2() {
 
 목록의 스크롤 방향을 가로 방향으로 하고 싶은 경우 AdListItemViewLayout 클래스를 상속받아 itemColumns() 함수를 override 합니다. 그리고 orthogonalScrolling 값과 itemDirection 값을 아래와 예시와 같이 설정합니다. 
 
-itemColumns() 함수는 길이가 2인 Int 배열을 반환하는데 첫번째 값으로 표시할 컬럼 수를 반환합니다. 횡스크롤인 경우에는 Row 수를 의미합니다. 두번째 값은 페이징 처리에서 사용되는 값이며 페이징이 아닌 경우에는 0으로 설정하면 됩니다. itemColumns() 함수의 파라메터로 numberOfItems 값이 전달되는 데 이 값은 표시되는 광고 갯수이므로 이 갯수에 따라서 컬럼수를 조절하여 반환하실 수 있습니다.
+itemColumns() 함수는 길이가 2인 Int 배열을 반환하는데 첫번째 값으로 표시할 컬럼 수를 반환합니다. 횡스크롤인 경우에는 Row 수를 의미합니다. 두번째 값은 페이징 처리에서 사용되는 값이며 페이징이 아닌 경우에는 0으로 설정하면 됩니다. itemColumns() 함수의 파라메터로 numberOfItems 값이 전달되는 데 이 값은 표시되는 광고 갯수이므로 이 갯수에 따라서 컬럼 수를 조절하여 반환하실 수 있습니다.
 
 ```swift
 class FeedAdItemScrollViewLayout: AdListItemViewLayout {
@@ -235,9 +241,17 @@ TnkLayout.shared.registerItemViewLayout(type: .normal, viewClass: FeedAdListItem
 TnkLayout.shared.registerItemViewLayout(type: .newapps, viewClass: RightIconAdListItemView.self, viewLayout: RoundAdItemPageViewLayout())
 ```
 
-SDK 가 제공하는 AdListItemView 와 AdListItemViewLayout 클래스의 전체 목록은 여기를 참고하세요. &rightarrow; [Laytout 클래스 목록](./Layout_Classes.md)
+SDK 가 제공하는 AdListItemView 와 AdListItemViewLayout 클래스의 전체 목록과 기본 설정값은 여기를 참고하세요. &rightarrow; [Laytout 클래스 목록](./Layout_Classes.md)
 
 ## 2. 구매형 광고 목록
+
+### CpsBoxItemView
+
+구매형 광고 목록을 위하여 CpsBoxItemView 가 기본적으로 사용됩니다. CpsBoxItemView 는 아래와 같은 배치를 가지고 있으며 productPricelLabel, discountRateLabel, favoriteButton 의 추가적인 구성요소를 가지고 있습니다.
+
+![cps_adlistitemview](./img/cps_adlistitemview.jpg)
+
+productPriceLabel 과 discountRateLabel 은 UILabel 이 사용되며 [LabelAttribute](#LabelAttribute) 속성을 가지고 있습니다.
 
 ## 3. TnkStyle
 
