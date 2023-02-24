@@ -153,7 +153,7 @@ func onClickOfferwall() {
 
 기본 광고 목록 표시를 위하여 SDK 제공하는 AdListItemView 의 구현 클래스에는 RightIconAdListItemView 와 FeedAdListItemView 가 있습니다. RightIconAdListItemView 는 아이콘이 오른쪽에 배치되는 형태의 View 이며 FeedAdListItemView 는 피드 형태로 표시하기위한 View 입니다.  각각은 아래와 같은 배치를 가지고 있습니다.
 
-![more_adlistitemview](./img/more_adlistitemview.jpg)
+![more_adlistItemview](./img/more_adlistItemview.jpg)
 
 RightIconAdListItemView 를 기본 광고 목록으로 지정하는 예시와 FeedAdListItemView 를 기본 광고 목록으로 지정하는 예시 코드를 참고하세요.
 
