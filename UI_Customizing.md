@@ -506,14 +506,15 @@ import TnkRwdSdk2
 class CustomAdListItemViewLayout : AdListItemViewLayout {
     
     override func viewSize(_ parentSize:CGSize) -> CGSize {
+        // 아이템 view 의 너비는 화면 너비에서 양쪽 inset 빼기
         let width = parentSize.width - sectionInset.left - sectionInset.right
         
-        // 화면 너비에서 IB 의 feedImage 양쪽에 설정한 여백 빼기
+        // 아이템 view의 너비에서 IB 의 feedImage 양쪽에 설정한 여백 빼기
         let feedWidth = width - 16 - 16
         
         // 피드 이미지 비율 320:167
         let feedHeight = feedWidth * 167 / 320
-        let viewHeight = feedHeight + 12 + 72 + 10 + 12 // IB 에서 여백 + icon 높이
+        let viewHeight = feedHeight + 12 + 72 + 10 + 12 // IB 에서 여백 + icon 높이 더하기
         
         return CGSize(width: width, height:viewHeight)
     }
