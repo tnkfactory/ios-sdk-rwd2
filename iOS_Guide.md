@@ -16,7 +16,7 @@
    * 2.4 [SwiftUI 에서 사용하기](#24-SwiftUI-에서-사용하기)
 3. [Publisher API](#3-Publisher-API)
    * 3.1 [광고 상태 조회 - QueryPublishState](#31-광고-상태-조회---QueryPublishState)
-   * 3.2 [적립가능한 포인트 조회 - queryAdvertiseCount](#32-적립가능한-포인트 조회---queryAdvertiseCount)
+   * 3.2 [적립가능한 포인트 조회 - queryAdvertiseCount](#32-적립가능한-포인트-조회---queryAdvertiseCount)
    * 3.3 [포인트 조회 및 인출](#33-포인트-조회-및-인출)
 	  *  [포인트 조회 - queryPoint](#포인트-조회---queryPoint) 
 	  *  [포인트 사용 - purchaseItem](#포인트-사용---purchaseItem)
