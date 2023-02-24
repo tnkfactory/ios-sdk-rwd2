@@ -16,6 +16,7 @@
    * 2.4 [SwiftUI 에서 사용하기](#24-SwiftUI-에서-사용하기)
        
 3. [Publisher API](#3-Publisher-API)
+   * 3.1 [광고 상태 조회 - QueryPublishState](#31-광고-상태-조회---QueryPublishState)
 
 ## 1. SDK 설정하기
 
