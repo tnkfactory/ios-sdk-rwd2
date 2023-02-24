@@ -15,12 +15,12 @@
 ## 목차
 
 1. [기본 광고 목록](#1-기본-광고-목록)
-  * [DefaultAdListItemView](#DefaultAdListItemView)
-  * [AdListItemViewLayout](#AdListItemViewLayout)
-  * [레이아웃 등록하기](#레이아웃-등록하기)
-  * [RightIconAdListItemView, FeedAdListItemView](#RightIconAdListItemView,-FeedAdListItemView)
-  * [횡 스크롤 설정하기](#횡-스크롤-설정하기)
-  * [큐레이션 Layout 설정](#큐레이션-Layout-설정)
+   * [DefaultAdListItemView](#DefaultAdListItemView)
+   * [AdListItemViewLayout](#AdListItemViewLayout)
+   * [레이아웃 등록하기](#레이아웃-등록하기)
+   * [RightIconAdListItemView, FeedAdListItemView](#RightIconAdListItemView,-FeedAdListItemView)
+   * [횡 스크롤 설정하기](#횡-스크롤-설정하기)
+   * [큐레이션 Layout 설정](#큐레이션-Layout-설정)
  2. [구매형 광고 목록](#2-구매형-광고-목록)
    * [CpsBoxItemView](#CpsBoxItemView)
  3. [TnkStyles 및 기타 설정](#TnkStyles-및-기타-설정)
