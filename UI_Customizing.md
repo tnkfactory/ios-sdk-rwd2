@@ -348,7 +348,7 @@ TnkLayout.shared.alertControl = DefaultAlertControl()
 ```
 ### LoadingIndicator
 
-광고 로딩 등의 작업이 진행 될 때 화면에 표시하는 loading indicator 를 커스터마이지 할 수 있습니다. 아래의 LoadingIndicator Protocol 을 구현한 클래스를 작성하시고 이 클래스의 객체를 생성하는 LoadingIndicatorFactory 클래스를 작성합니다. 작성된 LoadingIndicatorFactory 를 TnkLayout.loadingIndicatorFactory 에 지정합니다.
+광고 로딩 등의 작업이 진행 될 때 화면에 표시하는 loading indicator 를 커스터마이징 할 수 있습니다. 아래의 LoadingIndicator Protocol 을 구현한 클래스를 작성하시고 이 클래스의 객체를 생성하는 LoadingIndicatorFactory 클래스를 작성합니다. 작성된 LoadingIndicatorFactory 를 TnkLayout.loadingIndicatorFactory 에 지정합니다.
 
 ```swift
 public protocol LoadingIndicator : NSObjectProtocol {
@@ -369,6 +369,168 @@ TnkLayout.shared.loadingIndicatorFactory = ImageLoadingIndicatorFactory()
 
 SDK 가 제공하는 형태의 AdListItemView 가 아닌 새로운 형태의 UI 를 원하는 경우 아래의 AdListItemView 클래스를 상속받아서 직접 구현하 실 수 있습니다.  AdListItemView 의 상세 정의는 여기를 참고하세요. [AdListItemView](./AdListItemView_Swift.md)
 
-아래와 같은 형태의 UI 를 직접 구현하면서 설명드리겠습니다.
+아래와 같은 형태의 UI 를 직접 구현하면서 설명드리겠습니다. 전체 XCode 프로젝트는 여기에서 다운받으실 수 있습니다. [샘플 프로젝트 다운받기](./sdk/TnkOfferwallUISample.zip)
 
-작성 중
+![offerwall_ui_test3](./img/offerwall_ui_test3)
+
+AdListItemView 의 커스텀 UI 를 작성할 XIB 파일을 생성합니다. 여기에서는 CustomItemView.xib 파일을 생성하였습니다. Interface Builder 를 사용하여 원하는 형태의 UI 를 디자인합니다. 
+
+![offerwall_ui_ib](./img/offerwall_ui_ib)
+
+XIB 를 load 할 커스텀 UIView 를 생성하고 이를 사용하여 CustomAdListItemView 를 구현합니다.
+
+```swift
+import UIKit
+import TnkRwdSdk2
+
+class CustomAdListItemView : AdListItemView {
+    var itemView:CustomItemView?
+    
+    override init(frame:CGRect) {
+        super.init(frame:frame)
+        
+        itemView = loadView()
+        
+        if let view = itemView {
+            contentView.addSubview(view)
+            NSLayoutConstraint.activate([
+                view.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+                view.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+                view.topAnchor.constraint(equalTo: contentView.topAnchor),
+                view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            ])
+            
+            view.feedImageView.layer.cornerRadius = 16
+            view.feedImageView.layer.borderWidth = 1
+            view.feedImageView.layer.borderColor = UIColor.lightGray.cgColor
+            
+            view.iconImageView.layer.cornerRadius = 8
+            view.iconImageView.layer.borderWidth = 1
+            view.iconImageView.layer.borderColor = UIColor.lightGray.cgColor
+        }
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func loadView() -> CustomItemView {
+        let bundleName = Bundle(for: type(of: self))
+        let nib = UINib(nibName: "CustomItemView", bundle: bundleName)
+        let view = nib.instantiate(withOwner: nil, options: nil).first as! CustomItemView
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
+    }
+    
+    override func getFeedImageView() -> UIImageView? {
+        return itemView?.feedImageView
+    }
+    
+    override func getIconImageView() -> UIImageView? {
+        return itemView?.iconImageView
+    }
+    
+    override func useImageFeed() -> Bool {
+        return true
+    }
+    
+    override func useImageIcon() -> Bool {
+        return true
+    }
+    
+    override func setData(_ adItem: AdItem?, row: Int, itemsPerPage: Int, itemIndex: Int, numberOfItems: Int) {
+        if let adItem = adItem as? AdListItem {
+            itemView?.titleLabel.text = adItem.appName
+            itemView?.pointUnitLabel.text = adItem.pointUnit
+            
+            if adItem.state == .confirm {
+                itemView?.descLabel.text = ""
+                itemView?.pointAmountLabel.text = "설치확인 후 리워드가 지급됩니다."
+                itemView?.pointUnitLabel.isHidden = true
+            }
+            else if adItem.state == .paid {
+                itemView?.descLabel.text = ""
+                itemView?.pointAmountLabel.text = "이미 지급된 광고입니다."
+                itemView?.pointUnitLabel.isHidden = true
+            }
+            else if adItem.state == .disabled || adItem.state == .ended {
+                itemView?.descLabel.text = ""
+                itemView?.pointAmountLabel.text = "종료된 광고입니다."
+                itemView?.pointUnitLabel.isHidden = true
+            }
+            else {
+                itemView?.descLabel.text = adItem.cmpnDesc
+                itemView?.pointAmountLabel.text = adItem.pointText
+                itemView?.pointUnitLabel.isHidden = false
+            }
+        }
+    }
+}
+
+class CustomItemView : UIView {
+    @IBOutlet var feedImageView:UIImageView!
+    @IBOutlet var iconImageView:UIImageView!
+    @IBOutlet var titleLabel:UILabel!
+    @IBOutlet var descLabel:UILabel!
+    @IBOutlet var pointAmountLabel:UILabel!
+    @IBOutlet var pointUnitLabel:UILabel!
+}
+```
+
+CustomAdListItemView 에서 사용할 CustomAdListItemViewLayout 클래스를 생성합니다. 여기에서는 디자인 요소는 모두 IB 를 사용하여 반영하였으므로 ItemView 의 크기를 계산하는 viewSize() 함수만 override 해줍니다. 
+
+```swift
+import UIKit
+import TnkRwdSdk2
+
+class CustomAdListItemViewLayout : AdListItemViewLayout {
+    
+    override func viewSize(_ parentSize:CGSize) -> CGSize {
+        let width = parentSize.width - sectionInset.left - sectionInset.right
+        
+        // 화면 너비에서 IB 의 feedImage 양쪽에 설정한 여백 빼기
+        let feedWidth = width - 16 - 16
+        
+        // 피드 이미지 비율 320:167
+        let feedHeight = feedWidth * 167 / 320
+        let viewHeight = feedHeight + 12 + 72 + 10 + 12 // IB 에서 여백 + icon 높이
+        
+        return CGSize(width: width, height:viewHeight)
+    }
+}
+```
+
+마지막으로 생성한 CustomAdListItemView 와 CustomAdListItemViewLayout 클래스를 TnkLayout 객체에 등록하고 오퍼월을 띄웁니다.
+
+```swift
+import UIKit
+import TnkRwdSdk2
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view.
+        
+        TnkSession.initInstance(appId: "c01060e0-XXXX-XXXX-XXXX-1d070e050302")
+        TnkSession.sharedInstance()?.setUserName("testUser")
+        
+        TnkLayout.shared.registerItemViewLayout(type: .normal, viewClass: CustomAdListItemView.self, 
+                          viewLayout: CustomAdListItemViewLayout())
+    }
+
+
+    @IBAction
+    func showOfferwall() {
+        let vc = AdOfferwallViewController()
+        vc.title = "TEST Offerwall"
+        
+        let navController = UINavigationController(rootViewController: vc)
+        navController.modalPresentationStyle = .fullScreen
+        navController.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
+        self.present(navController, animated: true)
+    }
+}
+```
