@@ -2,6 +2,9 @@
 
 새로운 보상형 SDK는 사용자에게 적절한 광고를 보다 효과적으로 제공하기 위하여 기본 광고 목록외에 추가로 다양한 큐레이션 UI 를 제공합니다. 큐레이션은 사용자가 참여 중인 멀티리워드 광고, 새로 등록된 광고, 사용자 추천 광고 등을 페이징 방식, 횡스크롤 방식 등으로 기본 광고 목록과 구별되는 방식으로 제공함으로써 사용자의 주목도를 높일 수 있습니다.
 
+![offerwall_ui_app](./img/offerwall_ui_app.jpg)
+![offerwall_ui_cps](./img/offerwall_ui_cps.jpg)
+
 신규 SDK에는 여러 종류의 큐레이션 UI 를 쉽게 커스터마이징 할 수 있는 다수의 View 와 Layout 들이 만들어져 있으며, 개발사가 원할 경우 완전히 다른 형태의 UI 도 구현될 수 있도록 기능을 제공하고 있습니다.
 
 ## 1. 기본 광고 목록
@@ -13,3 +16,5 @@ AdListItemViewLayout 은 AdListItemView 내의 구성요소들의 크기, 색상
 ### DefaultAdListItemView
 
 아래의 이미지와 같은 형태의 배치를 가지고 있으며 기본 광고 목록을 표시하기 위하여 사용됩니다. 
+
+![default_adlistitemview](./img/default_adlistitemview.jpg)
