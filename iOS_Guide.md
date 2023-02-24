@@ -2,9 +2,9 @@
 
 새로운 보상형 SDK는 기존의 보상형 SDK 를 대치하기 위하여 Swift 기반으로 완전히 새롭게 개발되었습니다. 기존 SDK가 단순히 광고 목록만 제공하였다면 새로운 SDK 는 단순 광고 목록 외에 추가로 다양한 광고 큐레이션을 제공하며 멀티리워드 캠페인 기능이 추가되었습니다. 멀티 리워드 캠페인은 1회성으로 리워드가 지급되는 기존 광고와는 다르게 사용자의 지속적인 참여를 유도할 수 있도록 개발된 광고 기능입니다. 
 
-기존의 보상형 SDK 가이드 문서가 필요하시다면 여기를 참고하세요. [구 보상형 SDK 가이드](https://github.com/tnkfactory/ios-sdk-rwd/blob/master/iOS_Guide.md)
+기존의 보상형 SDK 가이드 문서가 필요하시다면 여기를 참고하세요. &rightarrow; [구 보상형 SDK 가이드](https://github.com/tnkfactory/ios-sdk-rwd/blob/master/iOS_Guide.md)
 
-새로운 SDK 의 UI 기능을 확인하시려면 여기를 참고하세요. [UI 커스터마이징 가이드](./UI_Customizing.md)
+새로운 SDK 의 UI 기능을 확인하시려면 여기를 참고하세요. &rightarrow; [UI 커스터마이징 가이드](./UI_Customizing.md)
 
 ## 목차
 
