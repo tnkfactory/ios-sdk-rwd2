@@ -395,7 +395,7 @@ AdListItemView 의 커스텀 UI 를 작성할 XIB 파일을 생성합니다. 여
 
 ![offerwall_ui_ib](./img/offerwall_ui_ib.jpg)
 
-XIB 를 load 할 커스텀 UIView 를 생성하고 이를 사용하여 CustomAdListItemView 를 구현합니다.
+XIB 를 load 할 커스텀 UIView 를 생성하고 이를 사용하여 CustomAdListItemView 를 구현합니다. setData() 함수에서 광고 데이터를 화면에 표시하도록 구현합니다. 이때 광고 정보는 AdItem 객체를 통하여 전달됩니다. AdItem 내의 항목들은 여기를 참고하세요. [AdItem 항목 보기](./AdItem_Swift.md)
 
 ```swift
 import UIKit
