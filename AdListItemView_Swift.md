@@ -1,6 +1,8 @@
 ## AdListItemView
 
 ```swift
+import UIKit
+
 // AdListItemView 내에서 발생하는 버튼 이벤트를 처리하기 위한 용도이다.
 protocol AdItemDelegate : NSObjectProtocol {
     func didFavoriteItemSelected(_ appId:Int, isSelected:Bool) -> Bool  // 처리 성공여부
