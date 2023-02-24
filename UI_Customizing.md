@@ -371,11 +371,11 @@ SDK 가 제공하는 형태의 AdListItemView 가 아닌 새로운 형태의 UI 
 
 아래와 같은 형태의 UI 를 직접 구현하면서 설명드리겠습니다. 전체 XCode 프로젝트는 여기에서 다운받으실 수 있습니다. [샘플 프로젝트 다운받기](./sdk/TnkOfferwallUISample.zip)
 
-![offerwall_ui_test3](./img/offerwall_ui_test3)
+![offerwall_ui_test3](./img/offerwall_ui_test3.jpg)
 
 AdListItemView 의 커스텀 UI 를 작성할 XIB 파일을 생성합니다. 여기에서는 CustomItemView.xib 파일을 생성하였습니다. Interface Builder 를 사용하여 원하는 형태의 UI 를 디자인합니다. 
 
-![offerwall_ui_ib](./img/offerwall_ui_ib)
+![offerwall_ui_ib](./img/offerwall_ui_ib.jpg)
 
 XIB 를 load 할 커스텀 UIView 를 생성하고 이를 사용하여 CustomAdListItemView 를 구현합니다.
 
