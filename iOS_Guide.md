@@ -20,7 +20,7 @@
    * 3.3 [포인트 조회 및 인출](#33-포인트-조회-및-인출)
 	  *  [포인트 조회 - queryPoint](#포인트-조회---queryPoint) 
 	  *  [포인트 사용 - purchaseItem](#포인트-사용---purchaseItem)
-	  *  [포인트 전체 인출](#포인트-전체-인출---withdrawPoints)
+	  *  [포인트 전체 인출 - withdrawPoints](#포인트-전체-인출---withdrawPoints)
    * 3.4 [Callback URL 설정하기](#34-Callback-URL-설정하기)
 4. [디자인 커스터마이징](#4-디자인-커스터마이징)
 
@@ -673,6 +673,5 @@ else {
 
 
 ## 4. 디자인 커스터마이징
-### 큐레이션
-### TnkLayout 
-### TnkStyle
+
+[UI 커스터마이징 가이드](./UI_Customizing.md)
