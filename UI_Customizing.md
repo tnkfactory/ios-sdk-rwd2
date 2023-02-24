@@ -518,7 +518,7 @@ class ViewController: UIViewController {
         TnkSession.sharedInstance()?.setUserName("testUser")
         
         TnkLayout.shared.registerItemViewLayout(type: .normal, viewClass: CustomAdListItemView.self, 
-                          viewLayout: CustomAdListItemViewLayout())
+                                                viewLayout: CustomAdListItemViewLayout())
     }
 
 
