@@ -8,12 +8,14 @@
 	* 1.3 [앱 추적 동의](#13-앱-추적-동의)
 	* 1.4 [권한 안내 문구 설정](#14-권한-안내-문구-설정)
 	* 1.5 [Tnk 객체 초기화](#15-Tnk-객체-초기화)
+	
 2. [오퍼월 띄우기](#2-오퍼월-띄우기)
        * 2.1 [사용자 식별값 설정](#21-사용자-식별값-설정)
        * 2.2 [AdOfferwallViewController](#22-AdOfferwallViewController)
        * 2.3 [AdOfferwallView](#23-AdOfferwallVew)
 	       * [OfferwallEventListener](#OfferwallEventListener)
        * 2.4 [SwiftUI 에서 사용하기](#24-SwiftUI-에서-사용하기)
+       
 3. [Publisher API](#3-Publisher-API)
 
 ## 1. SDK 설정하기
