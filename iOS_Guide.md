@@ -14,9 +14,15 @@
    * 2.3 [AdOfferwallView](#23-AdOfferwallVew)
       * [OfferwallEventListener](#OfferwallEventListener)
    * 2.4 [SwiftUI 에서 사용하기](#24-SwiftUI-에서-사용하기)
-       
 3. [Publisher API](#3-Publisher-API)
    * 3.1 [광고 상태 조회 - QueryPublishState](#31-광고-상태-조회---QueryPublishState)
+   * 3.2 [적립가능한 포인트 조회 - queryAdvertiseCount](#32-적립가능한-포인트 조회---queryAdvertiseCount)
+   * 3.3 [포인트 조회 및 인출](#33-포인트-조회-및-인출)
+	  *  [포인트 조회 - queryPoint](#포인트-조회---queryPoint) 
+	  *  [포인트 사용 - purchaseItem](#포인트-사용---purchaseItem)
+	  *  [포인트 전체 인출](#포인트-전체-인출---withdrawPoints)
+   * 3.4 [Callback URL 설정하기](#34-Callback-URL-설정하기)
+4. [디자인 커스터마이징](#4-디자인-커스터마이징)
 
 ## 1. SDK 설정하기
 
@@ -546,7 +552,7 @@ func didReceivedPurchaseReturn(_ remainPoint:NSNumber, _ trId:NSNumber) {
 }
 ```
 
-#### 포인트 전체 인출
+#### 포인트 전체 인출 - withdrawPoints
 
 Tnk 서버에서 관리되는 사용자 포인트 전체를 한번에 인출하는 기능입니다.
 
