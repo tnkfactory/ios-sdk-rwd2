@@ -1,4 +1,4 @@
-## AdIem
+## AdItem
 
 서버에서 받은 광고 정보는 AdItem 객체에 담겨져있다. AdItem 객체는 AdListItemView 클래스의 setData() 함수로 전달되어 화면에 광고 내용을 출력하게 된다.
 광고 목록 표시를 위하여 사용되는 AdItem 객체는 실제로는 AdListItem 객체이며 따라서 setData() 내에서는 전달 받은 AdItem 객체를 AdListItem 객체로 캐스팅하여 사용하여야한다.
