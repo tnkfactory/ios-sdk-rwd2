@@ -238,7 +238,8 @@ TnkLayout.shared.registerItemViewLayout(type: .normal, viewClass: FeedAdListItem
 아래의 예시는 신규 광고 큐레이션을 RightIconAdListItemView 를 사용하여 페이징으로 표시하도록 설정하는 예시입니다.
 
 ```swift
-TnkLayout.shared.registerItemViewLayout(type: .newapps, viewClass: RightIconAdListItemView.self, viewLayout: RoundAdItemPageViewLayout())
+TnkLayout.shared.registerItemViewLayout(type: .newapps, viewClass: RightIconAdListItemView.self, 
+                                        viewLayout: RoundAdItemPageViewLayout())
 ```
 
 SDK 가 제공하는 AdListItemView 와 AdListItemViewLayout 클래스의 전체 목록과 기본 설정값은 여기를 참고하세요. &rightarrow; [Laytout 클래스 목록](./Layout_Classes.md)
@@ -251,10 +252,122 @@ SDK 가 제공하는 AdListItemView 와 AdListItemViewLayout 클래스의 전체
 
 ![cps_adlistitemview](./img/cps_adlistitemview.jpg)
 
-productPriceLabel 과 discountRateLabel 은 UILabel 이 사용되며 [LabelAttribute](#LabelAttribute) 속성을 가지고 있습니다.
+productPriceLabel 과 discountRateLabel 은 UILabel 이 사용되며 [LabelAttribute](#LabelAttribute) 속성을 가지고 있습니다. favoriteButton 은 UIButton 이 사용되며 아래와 같은 속성을 가지고 있습니다.
 
-## 3. TnkStyle
+##### ButtonAttribute
+
+```swift
+class ButtonAttribute {
+    var width:CGFloat = 10             // 버튼의 너비
+    var height:CGFloat = 10            // 버튼의 높이
+    var font:UIFont = TnkFonts.getFont(ofSize: 15) // 버튼 title 에 사용되는 폰트
+    var colorNormal:UIColor = .blue                // 버튼 title 에 사용되는 색상
+    var colorHighlighted:UIColor = .black          // highlighted 상태에서의 title 색상
+    var colorSelected:UIColor = .black             // selected 상태에서의 title 색상
+    var cornerRadius:CGFloat = 0                   // 버튼의 코너 라운드 처리를 위한 반지름 값
+    var strokeColor:UIColor = .clear               // 버튼의 테두리 색상
+    var strokeWidth:CGFloat = 0                    // 버튼의 테두리 두께
+    var interSpace:CGFloat = 0                     // 위에 있는 구성 요소와의 간격
+    var leadingSpace:CGFloat = 0                   // 앞에 있는 구성 요소와의 간격
+    var backgroundNormal:Any? = nil                // 배경색 또는 배경 이미지
+    var backgroundHighlighted:Any? = nil           // highlighted 상태에서의 배경색 또는 이미지
+    var backgroundSelected:Any? = nil              // selected 상태애서의 배경색 또는 이미지
+    var inset:UIEdgeInsets = UIEdgeInsets.zero     // 버튼 내부 inset
+    var iconImage:UIImage? = nil                   // 버튼 아이콘
+}
+```
+
+구매형 광고 목록의 Layout 설정은 앞서 설명드린 일반광고의 Layout 설정과 동일합니다. TnkLayout 의 registerViewLayout 의 첫번째 파라메터로 구매형 기본 목록 (.cpslist) 이나 구매형 큐레이션의 LayoutType 을 지정하면 됩니다. [LayoutType 보기](./Layout_Type.md)
+
+SDK 가 기본적으로 제공하는 구매형 광고 표시용 AdListItemView 의 구현 클래스에는 CpsBoxItemView, CpsListItemView, CpsFeedItemView 가 있으며 이를 사용하는 AdListItemViewLayout 역시 다수 제공하고 있습니다. 전체 클래스 목록과 기본 설정값은 여기를 참고하세요. &rightarrow; [Laytout 클래스 목록](./Layout_Classes.md)
+
+## 3. TnkStyles 및 기타 설정
+
+### TnkStyles
+
+앞서 설명드린 AdListItemViewLayout 의 속성 값을 변경함으로써 원하는 형태의 UI 를 설정할 수 있습니다. 하지만 전체적으로 타이틀 색상이나 폰트를 변경하고자 한다면 모든 큐레이션에 설정된 Layout 을 다 수정해야하는 번거로움이 있습니다. 
+이를 위하여 일괄적으로 UI 스타일을 변경할 수 있도록 ThkStyles 클래스를 제공합니다.
+
+TnkStyles 에서 제공하는 스타일 설정 값은 아래와 같으며 AdListItemViewLayout 에서 사용되는 속성값과 의미는 일치합니다. 스타일 변경은 Layout 을 설정하기 이전에 선행되어야 합니다.
+
+- titleLabel:LabelAttribute
+- descLabel:LabelAttribute
+- pointAmountLabel:LabelAttribute
+- pointUnitLabel:LabelAttribute
+- pointIconImage:ImageAttribute
+- pointUnitVisible:Bool
+- pointAmountDisabledColor:UIColor
+- pointAmountConfirmColor:UIColor
+- favoriteButton:ButtonAttribute
+- productPriceLabel:LabelAttribute
+- discountRateLabel:LabelAttribute
+ 
+아래는 전체적으로 title 색상을 변경하는 예시 코드입니다.
+
+```swift
+TnkStyles.shared.adListItem.titleLabel.color = .red
+```
+
+### TnkLayout
+
+TnkLayout 은 앞서 설명드린바와 같이 layout 설정을 위한 registerItemViewLayout() 함수를 제공합니다. 추가로 아래와 같은 설정 기능을 제공합니다.
+
+- leftBarButtonItem : AdOfferwallViewController 를 UINavigationController 와 함께 사용할 때 왼쪽의 BarButton 을 지정합니다. .none, .close, .help 의 값을 가질 수 있습니다. (기본값 .close)
+- rightBarButtonItem : 오른쪽의 BarButton 을 지정합니다. (기본값 .none)
+- closeBarButtonImage : BarButton 이 닫기일 때 사용할 UIImage 를 지정합니다. (기본값 nil)
+- closeBarButtonTitle: BarButton 이 닫기일 때 사용할 String 을 지정합니다. (기본값 '닫기')
+- helpBarButtonNormalImage : BarButton 이 help 일 때 사용할 UIImage 를 지정합니다.
+- helpBarButtonBadgeImage: help 버튼에 badge 표시를 할 때 사용할 UIImage 를 지정합니다.
+- helpBarButtonTitle: help 버튼에 표시할 String 지정합니다. (기본값 '문의하기')
+- menuPinToVisibleBounds : 상단의 메뉴와 필터의 스크롤 고정여부를 지정합니다. .all, .menu, .filter, .none 의 값을 가질 수 있습니다. (기본값 .all)
+- listViewTopMargin : 광고 목록 상단의 여백 높이를 지정합니다. (기본값 8)
+- listViewBottomMargin : 광고 목록 하단의 여백 높이를 지정합니다. (기본값 16)
+- listViewMaxWidth : 광고 목록의 최대 너비를 지정합니다. 기기가 테블릿이나 가로 상태일때에 적용됩니다. (기본값 440)
+- listViewBackgroundColor : 광고 목록의 배경색을 지정합니다. (기본값 UIColor.white)
+- listViewTopButtonImage : 광고 목록 하단에 상단으로 스크롤시키는 버튼(TopButton)이 나타납니다. 이 버튼의 이미지를 설정합니다. nil 로 설정하면 버튼은 나타나지 않습니다.
+- listViewTopButtonSize : TopButton 의 크기(CGSize)를 지정합니다. 기본값 CGSize(width: 50, height: 50)
+
+### AlertControl
+
+에러나 안내 표시를 위한 Alert 창의 UI 를 커스터마이징 할 수 있습니다. 아래의 AlertControl Protocol 을 구현한 클래스를 TnkLayout.shared.alertControl 에 지정합니다.
+
+```swift
+public protocol AlertControl : NSObjectProtocol {
+    func showAlert(_ viewController:UIViewController?,
+                   title:String?,
+                   message:String,
+                   agree:String,
+                   reject:String?,
+                   agreeAction:(()->Void)?,
+                   rejectAction:(()->Void)?)
+}
+
+// 설정 예시
+TnkLayout.shared.alertControl = DefaultAlertControl()
+```
+### LoadingIndicator
+
+광고 로딩 등의 작업이 진행 될 때 화면에 표시하는 loading indicator 를 커스터마이지 할 수 있습니다. 아래의 LoadingIndicator Protocol 을 구현한 클래스를 작성하시고 이 클래스의 객체를 생성하는 LoadingIndicatorFactory 클래스를 작성합니다. 작성된 LoadingIndicatorFactory 를 TnkLayout.loadingIndicatorFactory 에 지정합니다.
+
+```swift
+public protocol LoadingIndicator : NSObjectProtocol {
+    func startAnimating()
+    func stopAnimating()
+    func indicatorView() -> UIView
+}
+
+public protocol LoadingIndicatorFactory : NSObjectProtocol {
+    func loadingIndicator() -> LoadingIndicator
+}
+
+// 설정 예시
+TnkLayout.shared.loadingIndicatorFactory = ImageLoadingIndicatorFactory()
+```
 
 ## 4. 새로운 Layout 구현하기
 
-작성 중...
+SDK 가 제공하는 형태의 AdListItemView 가 아닌 새로운 형태의 UI 를 원하는 경우 아래의 AdListItemView 클래스를 상속받아서 직접 구현하 실 수 있습니다.  AdListItemView 의 상세 정의는 여기를 참고하세요. [AdListItemView](./AdListItemView_Swift.md)
+
+아래와 같은 형태의 UI 를 직접 구현하면서 설명드리겠습니다.
+
+작성 중
