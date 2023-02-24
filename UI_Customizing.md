@@ -109,7 +109,8 @@ class AdListItemViewLayout  {
 // func registerItemViewLayout(type:LayoutType, viewClass: AnyClass, viewLayout:AdListItemViewLayout)
 
 // 사용예시
-TnkLayout.shared.registerItemViewLayout(type: .normal, viewClass: DefaultAdListItemView.self, viewLayout: AdListItemViewLayout())
+TnkLayout.shared.registerItemViewLayout(type: .normal, viewClass: DefaultAdListItemView.self, 
+                                        viewLayout: AdListItemViewLayout())
 ```
 LayoutType 은 일반 광고 목록이나 큐레이션 등의 종류를 정의하고 있습니다. [LayoutType 보기](./Layout_Type.md)
 
