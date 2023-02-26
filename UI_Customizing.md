@@ -479,7 +479,7 @@ class CustomAdListItemView : AdListItemView {
                 itemView?.pointUnitLabel.isHidden = true
             }
             else {
-                itemView?.descLabel.text = adItem.cmpnDesc
+                itemView?.descLabel.text = adItem.cmpnDesc.trimmingCharacters(in: .whitespaces)
                 itemView?.pointAmountLabel.text = adItem.pointText
                 itemView?.pointUnitLabel.isHidden = false
             }
