@@ -457,7 +457,7 @@ TnkLayout.shared.loadingIndicatorFactory = ImageLoadingIndicatorFactory()
 
 SDK 가 제공하는 형태의 AdListItemView 가 아닌 새로운 형태의 UI 를 원하는 경우 아래의 AdListItemView 클래스를 상속받아서 직접 구현하실 수 있습니다.  AdListItemView 의 상세 정의는 여기를 참고하세요. &rightarrow; [AdListItemView](./AdListItemView_Swift.md)
 
-아래와 같은 형태의 UI 를 직접 구현하면서 설명드리겠습니다. 전체 XCode 프로젝트는 여기에서 다운받으실 수 있습니다. [샘플 프로젝트 다운받기](./sdk/TnkOfferwallUISample.zip)
+아래와 같은 형태의 UI 를 직접 구현하면서 설명드리겠습니다. 전체 XCode 프로젝트는 여기에서 다운받으실 수 있습니다. [샘플 프로젝트 다운받기](./sdk/TnkOfferwallUISample_20230227.zip)
 
 ![offerwall_ui_test3](./img/offerwall_ui_test3.jpg)
 
