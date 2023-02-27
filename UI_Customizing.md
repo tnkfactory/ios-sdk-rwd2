@@ -408,12 +408,12 @@ class AdListFilterViewLayout : AdListMenuViewLayout {
 
 ```swift
 // Filter 메뉴 UI 변경
-        let filterMenuLayout = AdListFilterViewLayout()
-        filterMenuLayout.itemButton.backgroundSelected = UIColor.black
-        filterMenuLayout.itemButton.backgroundHighlighted = UIColor.black
+let filterMenuLayout = AdListFilterViewLayout()
+filterMenuLayout.itemButton.backgroundSelected = UIColor.black
+filterMenuLayout.itemButton.backgroundHighlighted = UIColor.black
         
-        TnkLayout.shared.registerMenuViewLayout(type: .filter, viewClass: DefaultAdListMenuView.self, 
-                                                viewLayout: filterMenuLayout)
+TnkLayout.shared.registerMenuViewLayout(type: .filter, viewClass: DefaultAdListMenuView.self, 
+                                        viewLayout: filterMenuLayout)
 ```
 
 ### AlertControl
