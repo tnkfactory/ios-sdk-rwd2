@@ -567,7 +567,7 @@ class CustomItemView : UIView {
 }
 ```
 
-CustomAdListItemView 에서 사용할 CustomAdListItemViewLayout 클래스를 생성합니다. 여기에서는 디자인 요소는 모두 IB 를 사용하여 반영하였으므로 ItemView 의 크기를 계산하는 viewSize() 함수만 override 해줍니다. 
+CustomAdListItemView 에서 사용할 CustomAdListItemViewLayout 클래스를 생성합니다. 여기에서는 디자인 요소들이 모두 IB 를 사용하여 반영되었으므로 ItemView 의 크기를 계산하는 viewSize() 함수만 override 해줍니다. 
 
 ```swift
 import UIKit
