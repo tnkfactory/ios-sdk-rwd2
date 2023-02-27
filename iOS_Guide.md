@@ -551,7 +551,8 @@ func didReceivedPurchaseReturn(_ remainPoint:NSNumber, _ trId:NSNumber) {
 ```objective-c
 // Objective-C
 
-[[TnkSession sharedInstance] purchaseItem:@"광고제거" cost:1000 target:self action:@selector(didReceivedPurchaseReturn:trId:)];
+[[TnkSession sharedInstance] purchaseItem:@"광고제거" cost:1000 target:self 
+                                   action:@selector(didReceivedPurchaseReturn:trId:)];
 
 - (void)didReceivedPurchaseReturn:(NSNumber*)remainPoint trId:(NSNumber *)trId {
     NSLog(@"### purchaseItem %@ %@", remainPoint, trId);
