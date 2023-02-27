@@ -18,7 +18,7 @@
    * [DefaultAdListItemView](#DefaultAdListItemView)
    * [AdListItemViewLayout](#AdListItemViewLayout)
    * [레이아웃 등록하기](#레이아웃-등록하기)
-   * [RightIconAdListItemView, FeedAdListItemView](#RightIconAdListItemView,-FeedAdListItemView)
+   * [RightIconAdListItemView, FeedAdListItemView](#righticonadlistitemview-feedadlistitemview)
    * [횡 스크롤 설정하기](#횡-스크롤-설정하기)
    * [큐레이션 Layout 설정](#큐레이션-Layout-설정)
  2. [구매형 광고 목록](#2-구매형-광고-목록)
