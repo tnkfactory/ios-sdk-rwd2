@@ -598,7 +598,7 @@ class CustomAdListItemViewLayout : AdListItemViewLayout {
 }
 ```
 
-마지막으로 생성한 CustomAdListItemView 와 CustomAdListItemViewLayout 클래스를 TnkLayout 객체에 등록하고 오퍼월을 띄웁니다.
+마지막으로 CustomAdListItemView 와 CustomAdListItemViewLayout 클래스를 TnkLayout 객체에 등록하고 오퍼월을 띄웁니다.
 
 ```swift
 import UIKit
