@@ -272,7 +272,7 @@ SDK 가 제공하는 AdListItemView 와 AdListItemViewLayout 클래스의 전체
 
 ![cps_adlistitemview](./img/cps_adlistitemview.jpg)
 
-productPriceLabel 과 discountRateLabel 은 UILabel 이 사용되며 [LabelAttribute](#LabelAttribute) 속성을 가지고 있습니다. favoriteButton 은 UIButton 이 사용되며 아래와 같은 속성을 가지고 있습니다.
+productPriceLabel 과 discountRateLabel 은 UILabel 이 사용되며 [LabelAttribute](#LabelAttribute) 속성을 가지고 있습니다. favoriteButton 은 UIButton 이 사용되며 ButtonAttribute 속성을 가지고 있습니다.
 
 ##### ButtonAttribute
 
