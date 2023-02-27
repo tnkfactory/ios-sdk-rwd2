@@ -358,18 +358,18 @@ class AdListMenuViewLayout {
     var menuInset:UIEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10) // 메뉴뷰의 inset
 
     var itemButton = ButtonAttribute(width: TnkLayout.wrapContent,
-                                            height: 45,
-                                            font: TnkFonts.getBoldFont(ofSize: 18),
-                                            colorNormal: UIColor(argb: 0xffaaaaaa),
-                                            colorHighlighted: .black,
-                                            colorSelected: .black,
-                                            cornerRadius: 0,
-                                            strokeColor: .clear,
-                                            strokeWidth: 0,
-                                            backgroundNormal: UIColor.clear,
-                                            backgroundHighlighted: UIColor.clear,
-                                            backgroundSelected: UIColor.clear,
-                                            inset: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
+                                     height: 45,
+                                     font: TnkFonts.getBoldFont(ofSize: 18),
+                                     colorNormal: UIColor(argb: 0xffaaaaaa),
+                                     colorHighlighted: .black,
+                                     colorSelected: .black,
+                                     cornerRadius: 0,
+                                     strokeColor: .clear,
+                                     strokeWidth: 0,
+                                     backgroundNormal: UIColor.clear,
+                                     backgroundHighlighted: UIColor.clear,
+                                     backgroundSelected: UIColor.clear,
+                                     inset: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
         
     var itemSpace:CGFloat = 0  // 메뉴 아이템 사이 간격
 
@@ -398,6 +398,7 @@ class AdListFilterViewLayout : AdListMenuViewLayout {
                                           inset: UIEdgeInsets(top: 7, left: 12, bottom: 7, right: 12))
         
         self.itemSpace = 4  // 메뉴 아이템 사이 간격
+        
         \\ ...
     }
 }
