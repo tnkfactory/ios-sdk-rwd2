@@ -23,7 +23,7 @@
    * [큐레이션 Layout 설정](#큐레이션-Layout-설정)
  2. [구매형 광고 목록](#2-구매형-광고-목록)
     * [CpsBoxItemView](#CpsBoxItemView)
- 3. [TnkStyles 및 기타 UI](#TnkStyles-및-기타-ui)
+ 3. [TnkStyles 및 기타 UI](#tnkstyles-및-기타-ui)
     * [TnkStyles](#TnkStyles)
     * [TnkLayout](#TnkLayout)
     * [Menu 와 Filter](#Menu-와-Filter)
