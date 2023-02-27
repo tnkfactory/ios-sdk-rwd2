@@ -6,7 +6,12 @@
 아래는 AdItem 객체의 속성들이다.
 
 ```swift
-
+public class BaseAdItem {
+    public let appId:Int     // 광고 고유 ID
+    public let actionId:Int  // 0: CPI, 1:CPE, 2: CPA, 3:CPV, 4:CPC, 5:CPS
+    
+    // ...
+}
 
 // AdInfoItem, AdBannerItem 의 공통 속성이다. 화면에 표시할 이미지 정보를 가지고 있다.
 public class AdItem : BaseAdItem {
