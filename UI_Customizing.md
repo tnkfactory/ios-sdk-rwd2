@@ -69,7 +69,7 @@ titleLabel, descLabel, descPointLabel, pointAmountLabel, pointUnitLabel 은 UILa
 
 ```swift
 class LabelAttribute {
-    var width:CGFloat = -2          // 라벨의 너비, 음수로 지정하면 text 에 맞추진다.
+    var width:CGFloat = -2          // 라벨의 너비, 음수로 지정하면 text 에 맞춰진다.
     var height:CGFloat = 10                            // 라벨의 높이
     var font:UIFont = TnkFonts.getFont(ofSize: 14)     // 라벨의 text 에 사용되는 폰트
     var color:UIColor = .clear                         // 라벨의 text 에 사용되는 색상
