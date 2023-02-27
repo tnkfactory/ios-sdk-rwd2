@@ -8,6 +8,7 @@
 ```swift
 public class BaseAdItem {
     public let appId:Int     // 광고 고유 ID
+    
     public let actionId:Int  // 0: CPI, 1:CPE, 2: CPA, 3:CPV, 4:CPC, 5:CPS
     
     // ...
