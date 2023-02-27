@@ -23,7 +23,7 @@
    * [큐레이션 Layout 설정](#큐레이션-Layout-설정)
  2. [구매형 광고 목록](#2-구매형-광고-목록)
     * [CpsBoxItemView](#CpsBoxItemView)
- 3. [TnkStyles 및 기타 설정](#TnkStyles-및-기타-설정)
+ 3. [TnkStyles 및 기타 UI](#TnkStyles-및-기타-UI)
     * [TnkStyles](#TnkStyles)
     * [TnkLayout](#TnkLayout)
     * [Menu 와 Filter](#Menu-와-Filter)
@@ -301,7 +301,7 @@ class ButtonAttribute {
 
 SDK 가 기본적으로 제공하는 구매형 광고 표시용 AdListItemView 의 구현 클래스에는 CpsBoxItemView, CpsListItemView, CpsFeedItemView 가 있으며 이를 사용하는 AdListItemViewLayout 역시 다수 제공하고 있습니다. 전체 클래스 목록과 기본 설정값은 여기를 참고하세요. &rightarrow; [Laytout 클래스 목록](./Layout_Classes.md)
 
-## 3. TnkStyles 및 기타 설정
+## 3. TnkStyles 및 기타 UI
 
 ### TnkStyles
 
