@@ -440,7 +440,7 @@ TnkLayout.shared.alertControl = DefaultAlertControl()
 
 ### LoadingIndicator
 
-광고 로딩 등의 작업이 진행 될 때 화면에 표시하는 loading indicator 를 커스터마이징 할 수 있습니다. 아래의 LoadingIndicator Protocol 을 구현한 클래스를 작성하시고 이 클래스의 객체를 생성하는 LoadingIndicatorFactory 클래스를 작성합니다. 작성된 LoadingIndicatorFactory 를 TnkLayout.loadingIndicatorFactory 에 지정합니다.
+광고 로딩 등의 작업이 진행 될 때 화면에 표시하는 loading indicator 를 커스터마이징 할 수 있습니다. 아래의 LoadingIndicator Protocol 을 구현한 클래스를 작성하시고 이 클래스의 객체를 생성하는 LoadingIndicatorFactory 클래스를 작성합니다. 작성된 LoadingIndicatorFactory 를 TnkLayout.shared.loadingIndicatorFactory 에 지정합니다.
 
 ```swift
 public protocol LoadingIndicator : NSObjectProtocol {
