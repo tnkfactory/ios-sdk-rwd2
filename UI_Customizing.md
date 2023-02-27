@@ -164,7 +164,9 @@ func onClickOfferwall() {
     viewLayout.dividerTrailingSpace = 0
         
     // Layout 등록
-    TnkLayout.shared.registerItemViewLayout(type: .normal, viewClass: DefaultAdListItemView.self, viewLayout: viewLayout)
+    TnkLayout.shared.registerItemViewLayout(type: .normal, 
+                                            viewClass: DefaultAdListItemView.self, 
+                                            viewLayout: viewLayout)
              
     showOfferwall()
         
