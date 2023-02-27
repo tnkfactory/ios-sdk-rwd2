@@ -26,6 +26,7 @@
  3. [TnkStyles 및 기타 설정](#TnkStyles-및-기타-설정)
     * [TnkStyles](#TnkStyles)
     * [TnkLayout](#TnkLayout)
+    * [Menu 와 Filter](#Menu-와-Filter)
     * [AlertControl](#AlertControl)
     * [LoadingIndicator](#LoadingIndicator)
  4. [새로운 Layout 구현하기](#4-새로운-Layout-구현하기)
@@ -345,6 +346,74 @@ TnkLayout 은 앞서 설명드린바와 같이 layout 설정을 위한 registerI
 - listViewBackgroundColor : 광고 목록의 배경색을 지정합니다. (기본값 UIColor.white)
 - listViewTopButtonImage : 광고 목록 하단에 상단으로 스크롤시키는 버튼(TopButton)이 나타납니다. 이 버튼의 이미지를 설정합니다. nil 로 설정하면 버튼은 나타나지 않습니다.
 - listViewTopButtonSize : TopButton 의 크기(CGSize)를 지정합니다. 기본값 CGSize(width: 50, height: 50)
+
+### Menu 와 Filter
+
+오퍼월 내의 메뉴와 필터의 UI 를 커스터마이징 할 수 있습니다. 각각 AdListMenuViewLayout 과 AdListFilterViewLayout 객체를 사용하며 다음과 같은 속성과 기본값을 가지고 있습니다.
+
+```swift
+class AdListMenuViewLayout {
+
+    var menuBackgroundColor:UIColor = .white
+    var menuInset:UIEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10) // 메뉴뷰의 inset
+
+    var itemButton = ButtonAttribute(width: TnkLayout.wrapContent,
+                                            height: 45,
+                                            font: TnkFonts.getBoldFont(ofSize: 18),
+                                            colorNormal: UIColor(argb: 0xffaaaaaa),
+                                            colorHighlighted: .black,
+                                            colorSelected: .black,
+                                            cornerRadius: 0,
+                                            strokeColor: .clear,
+                                            strokeWidth: 0,
+                                            backgroundNormal: UIColor.clear,
+                                            backgroundHighlighted: UIColor.clear,
+                                            backgroundSelected: UIColor.clear,
+                                            inset: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
+        
+    var itemSpace:CGFloat = 0  // 메뉴 아이템 사이 간격
+
+    \\ ...
+}
+
+class AdListFilterViewLayout : AdListMenuViewLayout {
+ 
+    override public init() {
+        super.init()
+        
+        self.menuInset = UIEdgeInsets(top: 6, left: 20, bottom: 6, right: 20) // 메뉴뷰의 inset
+        
+        self.itemButton = ButtonAttribute(width: TnkLayout.wrapContent,
+                                          height: 36,
+                                          font: TnkFonts.getBoldFont(ofSize: 14),
+                                          colorNormal: UIColor(argb: 0xff505050),
+                                          colorHighlighted: .white,
+                                          colorSelected: .white,
+                                          cornerRadius: 18,
+                                          strokeColor: UIColor(argb: 0x90e0e0e0),
+                                          strokeWidth: 1,
+                                          backgroundNormal: UIColor.white,
+                                          backgroundHighlighted: UIColor(argb: 0xff4572ef),
+                                          backgroundSelected: UIColor(argb: 0xff4572ef),
+                                          inset: UIEdgeInsets(top: 7, left: 12, bottom: 7, right: 12))
+        
+        self.itemSpace = 4  // 메뉴 아이템 사이 간격
+        \\ ...
+    }
+}
+```
+
+커스터마이징을 위해서 해당 객체를 생성하고 필요한 부분의 속성값을 변경한 후에 TnkLayout 의 registerMenuViewLayout() 함수를 이용해 등록합니다. 아래의 예시는 필터 메뉴에서 선택된 메뉴 항목의 배경색을 검은색으로 변경합니다.
+
+```swift
+// Filter 메뉴 UI 변경
+        let filterMenuLayout = AdListFilterViewLayout()
+        filterMenuLayout.itemButton.backgroundSelected = UIColor.black
+        filterMenuLayout.itemButton.backgroundHighlighted = UIColor.black
+        
+        TnkLayout.shared.registerMenuViewLayout(type: .filter, viewClass: DefaultAdListMenuView.self, 
+                                                viewLayout: filterMenuLayout)
+```
 
 ### AlertControl
 
