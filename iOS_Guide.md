@@ -260,13 +260,25 @@ public protocol OfferwallEventListener : NSObjectProtocol {
     /// AdOfferwallView 의 메뉴 또는 필터를 클릭하는 경우 호출됩니다.
     ///
     /// - Parameters:
-    ///   - menuId: 클릭한 메뉴의 ID 또는 필터가 속한 메뉴의 ID
+    ///   - menuId: 클릭한 메뉴의 ID
+    ///   - menuName : 클릭한 메뉴의 이름
     ///   - filterId: 클릭한 필터의 ID
-    func didMenuSelected(menuId:Int, filterId:Int)
+    ///   - filterName: 클릭한 필터의 이름
+    func didMenuSelected(menuId:Int, menuName:String, filterId:Int, filterName:String)
+    
+    /// AdOfferwallView 의 광고를 클릭하면 호출됩니다.
+    ///
+    /// - Parameters:
+    ///   - appId : 클릭한 광고의 appId
+    ///   - appName : 클릭한 광고의 명칭
+    func didAdItemClicked(appId:Int, appName:String)
+    
+    /// AdOfferwallView 가 닫히는 경우 호출됩니다.
+    func didOfferwallRemoved()
 }
 ```
 
-사용 방법은 아래 내용을 참고하세요.
+AdOfferwallView.offerwallListener 또는 AdOfferwallViewController.offerwallListener 에 설정하실 수 있습니다. 사용 방법은 아래 내용을 참고하세요.
 
 ```swift
 // Swift
@@ -294,8 +306,16 @@ class ViewController: UIViewController, OfferwallEventListener {
         print("### message = \(headerMessage)")
     }
     
-    func didMenuSelected(menuId: Int, filterId: Int) {
-        print("### menuId: \(menuId), filterId: \(filterId)")
+    func didMenuSelected(menuId: Int, menuName:String, filterId: Int, filterName:String) {
+        print("### menuId: \(menuId) \(menuName), filterId: \(filterId) \(filterName)")
+    }
+    
+    func didAdItemClicked(appId: Int, appName: String) {
+        print("### adItem: \(appId) \(appName)")
+    }
+    
+    func didOfferwallRemoved() {
+        print("### offerwall removed")
     }
 ```
 
@@ -328,8 +348,17 @@ class ViewController: UIViewController, OfferwallEventListener {
     NSLog(@"### message = %@", headerMessage);
 }
 
-- (void)didMenuSelectedWithMenuId:(NSInteger)menuId filterId:(NSInteger)filterId {
-    NSLog(@"### menuId: %ld, filterId: %ld", menuId, filterId);
+- (void)didMenuSelectedWithMenuId:(NSInteger)menuId menuName:(NSString *)menuName
+                         filterId:(NSInteger)filterId filterName:(NSString *)filterName {
+    NSLog(@"### menuId: %ld %@, filterId: %ld %@", menuId, menuName, filterId, filterName);
+}
+
+- (void)didAdItemClickedWithAppId:(NSInteger)appId appName:(NSString *)appName {
+    NSLog(@"### adItem: %ld %@", appId, appName);
+}
+
+- (void)didOfferwallRemoved {
+    NSLog(@"### offerwall removed");
 }
 ```
 
