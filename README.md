@@ -9,6 +9,12 @@
 
 ### Update Notice
 
+* v.6.09 - 2023.05.09
+  * 뉴스광고 적립 방식 변경
+  * 머무르기 광고 상품 기능 추가
+  * 개인정보수집 동의 창 off 기능 추가 : TnkSession.sharedInstance()?.setAgreePrivacyPolicy()
+  * 다크모드 색상 적용 : 다크모드 적용시 TnkColor.enableDarkMode = true
+  * AdPlacementView 기능 추가 (가이드 참고) 
 * v.5.06 - 2023.02.28
   * OfferwallListener 수정
 * v.5.05 - 2023.02.27
