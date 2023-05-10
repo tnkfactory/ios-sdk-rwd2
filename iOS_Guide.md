@@ -29,6 +29,7 @@
 	  *  [포인트 전체 인출 - withdrawPoints](#포인트-전체-인출---withdrawPoints)
    * 3.4 [Callback URL 설정하기](#34-Callback-URL-설정하기)
 4. [디자인 커스터마이징](#4-디자인-커스터마이징)
+5. [플레이스먼트 뷰](#5-플레이스먼트-뷰)
 
 ## 1. SDK 설정하기
 
@@ -711,3 +712,7 @@ else {
 ## 4. 디자인 커스터마이징
 
 [UI 커스터마이징 가이드](./UI_Customizing.md)
+
+## 5. 플레이스먼트 뷰
+
+[플레이스먼트 뷰 가이드](./AdPlacementView.md)
