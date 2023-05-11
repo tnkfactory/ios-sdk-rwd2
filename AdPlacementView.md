@@ -54,6 +54,7 @@ AdPlacementView 의 loadData() 를 호출하면 전달된 placement_id 에 설�
 /// AdPlacementView 내의 특정 이벤트들을 받아서처리 하기 위하여 사용됩니다.
 /// AdPlacementView 객체의 placementListener 에 설정합니다.
 public protocol PlacementEventListener : NSObjectProtocol {
+
     /// AdPlacementView 에 광고가 로딩되는 시점에 호출됩니다. 여기에 광고를 표시하는 로직을 구현합니다.
     ///
     /// - Parameters:
