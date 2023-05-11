@@ -54,7 +54,7 @@ AdPlacementView 의 loadData() 를 호출하면 전달된 placement_id 에 설�
 /// AdPlacementView 내의 특정 이벤트들을 받아서처리 하기 위하여 사용됩니다.
 /// AdPlacementView 객체의 placementListener 에 설정합니다.
 public protocol PlacementEventListener : NSObjectProtocol {
-    /// AdPlacementView 에 광고가 로딩되는 시점에 호출됩니다.
+    /// AdPlacementView 에 광고가 로딩되는 시점에 호출됩니다. 여기에 광고를 표시하는 로직을 구현합니다.
     ///
     /// - Parameters:
     ///    - placementId: 광고 로딩을 요청한 placement Id 값
@@ -74,15 +74,26 @@ public protocol PlacementEventListener : NSObjectProtocol {
     ///   - appName : 클릭한 광고의 명칭
     func didAdItemClicked(appId:Int, appName:String)
     
-    /// 더보기 링크를 클릭하면 호출됩니다.
+    /// 더보기 링크를 클릭하면 호출됩니다. 여기에 오퍼월을 띄우도록 구현합니다.
     func didMoreLinkClicked()
 }
 ```
 
 AdPlacementView 의 loadData() 를 호출하고 광고가 정상적으로 로딩되면 설정한 리스너의 didAdDataLoaded() 가 호출됩니다. 여기에서 해당 AdPlacementView 을 표시하도록 구현합니다. 그리고 플레이스먼트의 ID 와 해당 플레이스먼트에 설정된 customData 가 같이 전달되는데 이를 이용하면 customData 설정에 따라서 UI 를 다르게 표시하도록 구현할 수 있습니다.
 
-아래의 예시는 didAdDataLoaded() 의 구현 예시입니다. 서버에 설정된 customData 값에 따라서 다르게 UI 를 설정하였습니다.
+아래의 예시는 didAdDataLoaded() 의 구현 예시입니다. 
 로딩된 광고를 화면에 표시하기 위해서는 AdPlacementView 의 showAdList() 를 호출합니다. showAdList() 는 광고를 화면에 표시하고 표시되는 광고가 차지하는 화면의 크기를 CGSize 객체로 반환합니다.
+
+```swift
+func didAdDataLoaded(placementId: String, customData:String?) {
+    let viewSize = adPlacementView?.showAdList()
+    print("### placementId \(placementId) ad data loaded and show with size \(String(describing: viewSize))")
+}
+```
+
+### customData 활용하기
+
+서버에 설정된 customData 값에 따라서 다르게 UI 를 표시할 수 있습니다.
 
 ```swift
 func didAdDataLoaded(placementId: String, customData:String?) {
