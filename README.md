@@ -9,6 +9,9 @@
 
 ### Update Notice
 
+* v.6.10 - 2023.05.15
+  * TnkAlerts.showATTPopup() iOS13 미만에서 오류 수정
+  * OfferwallEventListener, PlacementEventListener 함수들 optional 로 변경
 * v.6.09 - 2023.05.09
   * 뉴스광고 적립 방식 변경
   * 머무르기 광고 상품 기능 추가
