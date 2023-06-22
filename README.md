@@ -8,6 +8,10 @@
 [UI 커스터마이징 가이드](./UI_Customizing.md)
 
 ### Update Notice
+* v.5.16 - 2023.06.22
+  * 메뉴 스크롤 방식 변경
+  * CPS 검색화면에서 결제 오류 수정
+  * UI 커스터마이징을 위한 내부 기능 수정
 * v.5.15 - 2023.06.15
   * FontManager 기능 추가
   * darkmode 누락된 부분 추가
