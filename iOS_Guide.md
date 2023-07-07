@@ -35,7 +35,7 @@
 
 ### 1.1 라이브러리 다운로드
 
-**[[iOS Reward SDK2 Download v5.17](./sdk/TnkRwdSdk2.v5.17.zip)]**
+**[[iOS Reward SDK2 Download v5.18](./sdk/TnkRwdSdk2.v5.18.zip)]**
 
 ### 1.2 라이브러리 등록
 
