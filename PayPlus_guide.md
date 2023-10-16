@@ -24,7 +24,7 @@
 import TnkRwdSdk2
 
 let kakaoPlus = KaKaoTnkRwdPlus.initSession(appId: "your-app-id-from-tnk-site")
-                                .setUrlScheme("OFFERWALLTEST")
+                                .setUrlScheme("{{PayPlusCustomScheme}}")
 ```
 
 ### 1.3 스키마 콜백 함수 연동
@@ -65,13 +65,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 ### 1.4 오퍼월 화면 호출
 
-위 1.3 과정까지 모두 진행하셨다면 오퍼월 호출함수를 통해 광고 화면을 노출할 수 있습니다.
+위 1.3 과정까지 모두 진행하셨다면 [1.2](#12-페이플러스-인스턴스-초기화)의 과정을 통해 만든 인스턴스의 showOfferWall함수를 호출하시면 광고 화면을 노출할 수 있습니다.
 
 ```swift
 import TnkRwdSdk2
 
 let kakaoPlus = KaKaoTnkRwdPlus.initSession(appId: "your-app-id-from-tnk-site")
-                                .setUrlScheme("OFFERWALLTEST")
+                                .setUrlScheme("{{PayPlusCustomScheme}}")
 kakaoPlus.showOfferwall(self)
 
 ```
