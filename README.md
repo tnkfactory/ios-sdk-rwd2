@@ -7,7 +7,7 @@
 
 [UI 커스터마이징 가이드](./UI_Customizing.md)
 
-[페이플러스 연동 가이드](./PayPlus_guide.md)
+[혜택플러스 연동 가이드](./PayPlus_guide.md)
 
 ### Update Notice
 * v.5.28 - 2023.10.16
