@@ -1,18 +1,18 @@
 # offerwall sdk guide (iOS)
 
-## 1. SDK integration
+## 1. SDK Get Stared
 
 ### 1.1 sdk download
 
 **[[iOS Reward SDK2 Download v5.28](./sdk/TnkRewardSDK2_v5.28.zip)]**
 
-### 1.2 sdk integration
+### 1.2 Add SDK to Project
 
-downloaded sdk file extract and add to your project. 
-TnkRwdSdk2.xcframework folder drag to XCode.
-XCode -> Target -> General -> Frameworks, Libraries, and Embedded Content check TnkRwdSdk2.xcframework and change Embed setting to Embed & Sign.
+When you unpack the downloaded SDK file, the TnkRwdSdk.2xcframework folder is created. Move the folder to the XCode project folder you want to apply.
 
-see below image.
+TnkRwdSDK if you moved the folder. Drag the xcframework folder into the XCode. After that verify that TnkRwdSdk2.xcframework is present in the XCode -> Target -> General -> Frames, Libraries, and Embedded Content entries, and change the Embedded setting to Embedded & Sign.
+
+Please refer to the image below.
 
 ![framework_embed](./img/framework_embed.jpg)
 
@@ -60,7 +60,7 @@ TnkAlerts.showATTPopup(viewController,
 
 ![att_popup](./img/att_popup.jpg)
 
-### 1.4 add usage description
+### 1.4 add usage description for permission
 
 many of offerwall ads require to attach image file. to attach image file, you need to add usage description for photo library and camera to info.plist file.
 
@@ -68,13 +68,13 @@ see below image.
 
 ![usage_info_plist](./img/usage_info_plist.jpg)
 
-### 1.5 initialize TnkSession
+### 1.5 initialize TnkSession object
 
 you need to get **APP-ID** value from [Tnk site](https://tnkfactory.com) to use sdk. **APP-ID** value is used to initialize TnkSession object. there are 2 ways to initialize TnkSession object. you can choose one of below ways.
 
 #### call initialize api
 
-add below code to your project. usually add this code to applicationDidFinishLaunchingWithOption method in Application Delegate. replace **your-app-id-from-tnk-site** to your **APP-ID** value.
+Initialize the TnkSession object before adding the TnkAd SDK. usually add this code to applicationDidFinishLaunchingWithOption method in Application Delegate. replace **your-app-id-from-tnk-site** to your **APP-ID** value.
 
 ```swift
 // Swift
@@ -98,9 +98,13 @@ add `tnkad_app_id` item to info.plist file. set your **APP-ID** value to this it
 
 ## 2. show offerwall
 
-### 2.1 set user name
+### 2.1 Setup user identification
 
-you need to set user name to identify user. usually user name is login id. if user name is phone number or email, we recommend to use hash function or encryption function.
+To show offerwall, you need to set user name to SDK. user name is usually user's login id. if user name is phone number or email, we recommend to use hash function like SHA256.
+
+You must set user name. if you don't set user name, offerwall will not be shown. and user name is passed to callback url when user earns point. 
+
+```swift
 
 add below code to set user name.
 
@@ -361,7 +365,7 @@ struct SwiftUIView: View {
 
 ## 3. Publisher API
 
-### 3.1 query publish state - QueryPublishState 
+### 3.1 QueryPublishState 
 
 If you stop posting ads in [Post Information] on the Tnk site, the ads will not appear even if the user displays the ads list window.
 Therefore, it is recommended that the charging station button itself is not visible on the screen in case you stop posting ads in the future.
@@ -379,12 +383,6 @@ TnkSession.sharedInstance()?.queryPublishState() {
     print("#### queryPublishState \(state)")
 }
 ```
-
-- func **queryPublishState(target:NSObject, action:Selector)**
-    - Parameters
-        - target: 결과를 받으면 이 객체의 action 메소드가 호출됩니다.
-        - action: 결과를 받으면 호출되는 메소드입니다. 해당 메소드는 NSNumber 타입의 파라메터 1개를 가져야하며, 게시 상태 값이 전달됩니다.
-    - 사용예시
 
 - func **queryPublishState(target:NSObject, action:Selector)**
     - Parameters
@@ -429,7 +427,7 @@ public class PublisherState : NSObject {
 }
 ```
 
-### 3.2 query earn point - queryAdvertiseCount
+### 3.2 queryAdvertiseCount
 
 you can check publish state and hide offerwall button if you stop publishing ads. but if you show how many ads user can earn and how many points user can earn, it will attract more users. you can query this information using below api.
 
@@ -477,7 +475,7 @@ func didReceivedAdvertiseCount(_ count:NSNumber,  _ point:NSNumber) {
 Points acquired by users through ads participation can be managed by the TNK server or by the app's yours server.
 If the points are managed by the TNK server, you can use the following point check and withdrawal API to implement the required item purchase method.
 
-#### 포인트 조회 - queryPoint
+#### queryPoint
 
 query user point from Tnk server.
 
@@ -521,7 +519,7 @@ func didReceivedPoint(_ point:NSNumber) {
 }
 ```
 
-#### use point - purchaseItem
+#### purchaseItem
 
 The TnK server does not provide the ability to manage the list of items.
 However, when a user purchases an item provided by the posting app, you can deduct the corresponding point to the Tnk server.
@@ -530,7 +528,7 @@ However, when a user purchases an item provided by the posting app, you can dedu
 - func **purchaseItem(_ itemId:String, cost:Int, completion:@escaping (Int,Int)->Void)**
     - Parameters
         - itemId: id of item to purchase. you can set any value to this parameter. this value is shown in purchase list page of Tnk site.
-        - cost: cost of item.
+        - cost: Points to be deducted
         - completion: call back function. this function is called when purchase is finished. remaining point and transaction id are passed to this function. if purchase is failed, remaining point is negative value.
     - example
 
@@ -544,11 +542,11 @@ TnkSession.sharedInstance()?.purchaseItem("광고제거", cost: 1000) {
 
 - func **purchaseItem(_ itemId:String, cost:Int, target:NSObject, action:Selector)**
     - Parameters
-        -  itemId: 구매하는 아이템의 ID 값으로 앱에서 부여합니다. Tnk 사이트에서 제공하는 구매 리스트 화면에서 함께 보여줍니다.
-        - cost: 차감할 포인트입니다.
-        - target: 결과를 받으면 이 객체의 action 메소드가 호출됩니다.
-        - action: 결과를 받으면 호출되는 메소드입니다. 해당 메소드는 NSNumber 타입의 파라메터 2개를 가져야하며, 차감 후 잔여 포인트(Int)와 고유한 거래 ID 값(Int)이 파라메터로 전달됩니다. 포인트 부족 또는 네트워크/시스템 오류로 인해 구매가 수행되지 못한 경우에는 두번째 파라메터 값으로 음수가 전달됩니다.
-    - 사용예시
+        - itemId: id of item to purchase. you can set any value to this parameter. this value is shown in purchase list page of Tnk site.
+        - cost: Points to be deducted
+        - target: call action method of this object when purchase is finished.
+        - action: Specifies the method to be called when the result is received. Two NSNumber objects are received as parameters, and the remaining point values after deduction are delivered to the first parameter, and the unique transaction Id value is delivered to the second parameter. If the purchase is not performed due to a lack of points or a network/system error, a negative number is transmitted to the second parameter value.
+    - example
 
 ```swift
 // Swift 
