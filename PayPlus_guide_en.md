@@ -1,6 +1,6 @@
-# payplus guide(iOS)
+# Payplus guide(iOS)
 
-The reward type offerwall function linked with Kakao Pay Point has been developed. The reward ad screen can be exposed through custom scheme application and simple SDK function call.
+PayPlus is the reward type offerwall function linked with Kakao Pay Point. The reward ad screen can be exposed through custom scheme application and simple SDK function call.
 
 ## 1. SDK Get Started
 
