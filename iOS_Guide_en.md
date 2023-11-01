@@ -534,7 +534,7 @@ However, when a user purchases an item provided by the posting app, you can dedu
 
 ```swift
 // Swift 
-TnkSession.sharedInstance()?.purchaseItem("광고제거", cost: 1000) {
+TnkSession.sharedInstance()?.purchaseItem("remove ad", cost: 1000) {
     (remainPoint, trId) in
     print("#### purchaseItem \(remainPoint) \(trId)")
 }
@@ -551,7 +551,7 @@ TnkSession.sharedInstance()?.purchaseItem("광고제거", cost: 1000) {
 ```swift
 // Swift 
 
-TnkSession.sharedInstance()?.purchaseItem("광고제거", cost: 1000, target: self,
+TnkSession.sharedInstance()?.purchaseItem("remove ad", cost: 1000, target: self,
                                            action: #selector(didReceivedPurchaseReturn(_:_:)))
 @objc
 func didReceivedPurchaseReturn(_ remainPoint:NSNumber, _ trId:NSNumber) {
@@ -562,7 +562,7 @@ func didReceivedPurchaseReturn(_ remainPoint:NSNumber, _ trId:NSNumber) {
 ```objective-c
 // Objective-C
 
-[[TnkSession sharedInstance] purchaseItem:@"광고제거" cost:1000 target:self 
+[[TnkSession sharedInstance] purchaseItem:@"remove ad" cost:1000 target:self 
                                    action:@selector(didReceivedPurchaseReturn:trId:)];
 
 - (void)didReceivedPurchaseReturn:(NSNumber*)remainPoint trId:(NSNumber *)trId {
@@ -594,11 +594,11 @@ TnkSession.sharedInstance()?.withdrawPoints("전체인출") {
         - desc: description of withdrawal. this value is shown in report page of Tnk site.
         - target: call action method of this object when withdrawal is finished.
         - action: when withdrawal is finished, this method is called. this method should have 2 parameters of NSNumber type. withdrawn point and transaction id are passed to these parameters.
-
+    - example
 ```swift
 // Swift 
 
-TnkSession.sharedInstance()?.withdrawPoints("전체인출", target:self, action: #selector(didReceivedWithdrawPoints(_:_:)))
+TnkSession.sharedInstance()?.withdrawPoints("withdrawPoints", target:self, action: #selector(didReceivedWithdrawPoints(_:_:)))
 
 @objc
 func didReceivedWithdrawPoints(_ point:NSNumber, _ trId:NSNumber) {
@@ -609,7 +609,7 @@ func didReceivedWithdrawPoints(_ point:NSNumber, _ trId:NSNumber) {
 ```objective-c
 // Objective-C
 
-[[TnkSession sharedInstance] withdrawPoints:@"전체인출" target:self action:@selector(didReceivedWithdrawPoints:trId:)];
+[[TnkSession sharedInstance] withdrawPoints:@"withdrawPoints" target:self action:@selector(didReceivedWithdrawPoints:trId:)];
 
 - (void)didReceivedWithdrawPoints:(NSNumber*)point trId:(NSNumber *)trId {
     NSLog(@"### withdrawPoints %@ %@", point, trId);
