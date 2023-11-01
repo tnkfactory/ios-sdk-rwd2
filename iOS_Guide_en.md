@@ -51,13 +51,13 @@ If user denies ATT popup, ad will be limited.
 
 #### show ATT popup
 
-add "Privacy - Tracking Usage Description" to info.plist file. this description will be shown in ATT popup.
+Add "Privacy - Tracking Usage Description" to info.plist file. This description will be shown in ATT popup.
 
 example) We collect ad activity information to provide user with optimized ads.
 
 ![att_info_plist](./img/att_info_plist.jpg)
 
-call below api to show ATT popup. [Learn more about AppTrackingTransparency API](https://developer.apple.com/documentation/apptrackingtransparency)
+Call below api to show ATT popup. [Learn more about AppTrackingTransparency API](https://developer.apple.com/documentation/apptrackingtransparency)
 
 ```swift
 import AppTrackingTransparency
@@ -88,19 +88,19 @@ TnkAlerts.showATTPopup(viewController,
 
 ### 1.4 add usage description for permission
 
-many of offerwall ads require to attach image file. to attach image file, you need to add usage description for photo library and camera to info.plist file.
+Some ads require to attach image file. To attach image file, you need to add usage description for photo library and camera to info.plist file.
 
-see below image.
+See below image.
 
 ![usage_info_plist](./img/usage_info_plist.jpg)
 
 ### 1.5 initialize TnkSession object
 
-you need to get **APP-ID** value from [Tnk site](https://tnkfactory.com) to use sdk. **APP-ID** value is used to initialize TnkSession object. there are 2 ways to initialize TnkSession object. you can choose one of below ways.
+You need to get **APP-ID** value from [Tnk site](https://tnkfactory.com) to use sdk. **APP-ID** value is used to initialize TnkSession object. There are 2 ways to initialize TnkSession object. You can choose one of them.
 
 #### call initialize api
 
-Initialize the TnkSession object before adding the TnkAd SDK. usually add this code to applicationDidFinishLaunchingWithOption method in Application Delegate. replace **your-app-id-from-tnk-site** to your **APP-ID** value.
+Initialize the TnkSession object before adding the TnkAd SDK. Usually add this code to applicationDidFinishLaunchingWithOption method in Application Delegate. Replace **your-app-id-from-tnk-site** to your **APP-ID** value.
 
 ```swift
 // Swift
@@ -126,13 +126,10 @@ add `tnkad_app_id` item to info.plist file. set your **APP-ID** value to this it
 
 ### 2.1 Setup user identification
 
-To show offerwall, you need to set user name to SDK. user name is usually user's login id. if user name is phone number or email, we recommend to use hash function like SHA256.
+To show offerwall, you need to set user name to SDK. User name is usually user's login id. If user name is phone number or email, we recommend to use a hash function like SHA256.
 
-You must set user name. if you don't set user name, offerwall will not be shown. and user name is passed to callback url when user earns point. 
-
-```swift
-
-add below code to set user name.
+You must set user name. If you don't set user name, offerwall will not be shown. User name is passed to callback url when user earns point. 
+Add below code to set user name.
 
 ```swift
 // Swift
@@ -150,7 +147,7 @@ TnkSession.sharedInstance()?.setUserName("<user name>")
 
 ### 2.2 AdOfferwallViewController
 
-easiest way to show offerwall is using **AdOfferwallViewController**. AdOfferwallViewController can be used like UIViewController. below example is how to show AdOfferwallViewController with UINavigationController as modal.
+Easiest way to show offerwall is using **AdOfferwallViewController**. AdOfferwallViewController can be used like UIViewController. Below example is how to show AdOfferwallViewController with UINavigationController as modal.
 
 ```swift
 // Swift
@@ -188,7 +185,7 @@ func showOfferwall() {
 
 ### 2.3 AdOfferwallView
 
-if you want to use offerwall as UIView, you can use **AdOfferwallView**. AdOfferwallView can be used like UIView. you need to call loadData() function to load ad list. below example is how to add AdOfferwallView to UIViewController and load ad list.
+If you want to use offerwall as UIView, you can use **AdOfferwallView**. AdOfferwallView can be used like UIView. You need to call loadData() function to load ad list. Below example is how to add AdOfferwallView to UIViewController and load ad list.
 
 ```swift
 // Swift
@@ -238,7 +235,7 @@ func loadOfferwall() {
 
 #### OfferwallEventListener
 
-you can receive offerwall events using OfferwallEventListener protocol. below is protocol definition.
+You can receive offerwall events using OfferwallEventListener protocol. Below is protocol definition.
 
 ```swift
 
@@ -280,7 +277,7 @@ public protocol OfferwallEventListener : NSObjectProtocol {
 }
 ```
 
-you can set OfferwallEventListener to AdOfferwallView.offerwallListener or AdOfferwallViewController.offerwallListener. see below example.
+You can set OfferwallEventListener to AdOfferwallView.offerwallListener or AdOfferwallViewController.offerwallListener. see below example.
 
 ```swift
 // Swift
@@ -366,7 +363,7 @@ class ViewController: UIViewController, OfferwallEventListener {
 
 ### 2.4 use in SwiftUI
 
-you can use AdOfferwallView in SwiftUI. below is example.
+You can use AdOfferwallView in SwiftUI. below is example.
 
 ```swift
 // SwiftUI
@@ -393,9 +390,9 @@ struct SwiftUIView: View {
 
 ### 3.1 QueryPublishState 
 
-If you stop posting ads in [Post Information] on the Tnk site, the ads will not appear even if the user displays the ads list window.
-Therefore, it is recommended that the charging station button itself is not visible on the screen in case you stop posting ads in the future.
-To this end, it provides a method to inquire the status of the ads posting of the current publishing app.
+If you stop posting ads in [Publisher Information] on the Tnk site, the ads will not appear even if the user displays the ads list window.
+Therefore, it is recommended that the offerwall button itself is not visible on the screen in case you stop posting ads in the future.
+These methods provide a way to inquire the status of the ads posting of the current publishing app.
 
 - func **queryPublishState(completion:@escaping (Int)->Void)**
     - Parameters
@@ -413,7 +410,7 @@ TnkSession.sharedInstance()?.queryPublishState() {
 - func **queryPublishState(target:NSObject, action:Selector)**
     - Parameters
        - target: call action method of this object when query is finished.
-       - action: when query is finished, this method is called. this method should have 1 parameter of NSNumber type. publish state value is passed to this parameter.
+       - action: When query is finished, this method is called. This method should have 1 parameter of NSNumber type. Publish state value is passed to this parameter.
 
 ```swift
 // Swift 
@@ -455,7 +452,7 @@ public class PublisherState : NSObject {
 
 ### 3.2 queryAdvertiseCount
 
-you can check publish state and hide offerwall button if you stop publishing ads. but if you show how many ads user can earn and how many points user can earn, it will attract more users. you can query this information using below api.
+You can check publish state and hide offerwall button if you stop publishing ads. More, if you can show how many ads user can earn and how many points user can earn, it will be more attractive to users. You can query this information using below api.
 
 - func **queryAdvertiseCount(completion:@escaping (Int,Int)->Void)**
     - Parameters
@@ -503,7 +500,7 @@ If the points are managed by the TNK server, you can use the following point che
 
 #### queryPoint
 
-query user point from Tnk server.
+Query user's point from Tnk server.
 
 - func **queryPoint(completion:@escaping (Int)->Void)**
     - Parameters
@@ -548,7 +545,7 @@ func didReceivedPoint(_ point:NSNumber) {
 #### purchaseItem
 
 The TnK server does not provide the ability to manage the list of items.
-However, when a user purchases an item provided by the posting app, you can deduct the corresponding point to the Tnk server.
+However, when a user purchases an item provided by the posting app, you can deduct the corresponding point from the Tnk server.
 
 
 - func **purchaseItem(_ itemId:String, cost:Int, completion:@escaping (Int,Int)->Void)**
@@ -644,7 +641,7 @@ func didReceivedWithdrawPoints(_ point:NSNumber, _ trId:NSNumber) {
 
 ### 3.4 Callback URL
 
-If the user manages the points obtained through ads participation on the developer's server, proceed as follows.
+If the user's point are managed on the developer's server, proceed as follows.
 
 * On the app Information Settings screen, select the 'Point Management' item as 'Manage from your own server' as shown below.
 * In URL entry, enter the URL to receive point accumulation information.
