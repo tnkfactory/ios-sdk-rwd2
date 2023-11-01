@@ -66,7 +66,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 ```  
 
 
-### 1.4 Offerwall Screen Call
+### 1.4 Show Offerwall
 
 If you have completed the above process 1.3, you can expose the ad screen by calling the showOfferWall function of the instance created through the process [1.2](#12-payplus-instance-initialization).
 
