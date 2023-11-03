@@ -148,6 +148,176 @@ SDK 에서는 플레이스먼트뷰에 적합한 몇가지 레이아웃을 제�
 
 #### 리스트
 
+ 
+--- 
+
+# 광고정보 조회 기능
+광고 목록을 UI를 직접 구현하기 위한 기능 지원 
+
+## 광고 목록 조회
+
+#### Method
+
+- AdPlacementView.getAdList() -> \[TnkPlacementAdItem\]
+
+
+#### Description
+
+PlacementView에 로드된 광고 목록을 반환합니다.
+
+#### Parameters
+
+#### Return : \[TnkPlacementAdItem\]
+```swift
+public struct TnkPlacementAdItem : Codable
+{
+    let app_id: Int                // Int 광고 고유 식별값
+    let app_nm: String              // String 광고 제목
+    let img_url: String             // String 이미지 url
+    let pnt_amt: Int               // Int 지급 포인트 (이벤트 진행시 이벤트 배율 적용된 포인트)
+    let org_amt: Int               // Int 배율 이벤트 진행 시 원래의 포인트(이벤트 기간 아닐경우 0)
+    let pnt_unit: String           // String 포인트 재화 단위
+    let prd_price: Int             // Int CPS상품 가격
+    let org_prd_price: Int         // Int CPS상품 할인 전 가격
+    let sale_dc_rate: Int           // Int CPS 상품 할인율
+    let multi_yn: Bool           // Bool 멀티 미션 광고 여부
+    let cmpn_type: Int              // Int 광고 유형코드
+    let cmpn_type_name: String      // String 광고 유형 이름
+    let like_yn: String              // String 즐겨찾기 상품 여부
+}
+```
+
+## 광고 목록 조회(JSON)
+
+### Method
+
+- AdPlacementView.getAdListJson()  -> String?
+
+#### Description
+
+광고 목록 정보를 json으로 반환합니다.
+
+## PlacementView 설정값 조회
+
+#### Method
+
+- AdPlacementView.getPubInfo()  -> TnkPlacementPubInfo
+
+#### Description
+
+PlacementView 설정값을 로드합니다.
+
+#### Parameters
+
+#### Return : TnkPlacementPubInfo
+
+```swift
+public struct TnkPlacementPubInfo : Codable{
+    let ad_type: Int             // 지면에 설정되어 있는 광고 유형(0 : 보상형, 1 : CPS, 2 : 제휴몰, 3 : 뉴스, 4 : 이벤트)
+    let title: String            // 지면 타이틀
+    let more_lbl: String         // 더보기 라벨
+    let cust_data: String        // 매체 설정값
+    let ctype_surl: String       // 캠페인타입 정보 URL (해당 URL 호출시 json 반환) {list_count:int, list:[{cmpn_type:int, cmpn_type_nm:string},….]}
+    let pnt_unit: String         // 매체 포인트 명칭
+    let plcmt_id: String         // 매체 설정 지면 ID
+}
+```
+
+## PlacementView 설정값 조회(JSON)
+
+#### Method
+
+- AdPlacementView.getPubInfoJson() -> String?
+
+#### Description
+
+PlacementView 설정값을 Json으로 반환합니다.
+
+## 광고 클릭 이벤트 처리
+
+#### Method
+
+- AdPlacementView.onItemClick(appId : Int)
+
+#### Description
+
+광고 목록 정보를 가지고 직접 광고 목록을 출력 할 경우 onItemClick 메소드를 통해 광고 클릭 이벤트를 처리합니다.
+광고상세 페이지 랜딩(네이티브), 광고주가 제공한 웹 사이트로 이동 등 각 광고 타입별 액션이 실행됩니다.
+액션 처리가 완료되면 PlacementEventListener protocol의 didAdItemClicked(...) 함수로 이벤트 처리 결과가 반환됩니다.
+
+#### Parameters
+
+| 파라메터 명칭 | 내용                                                         |
+| -------------- | ----------------------------------------------------------- |
+| appId       | 클릭 이벤트를 처리 할 광고의 appId                              |
+
+## 샘플코드 
+
+```swift
+
+import UIKit
+import TnkRwdSdk2
+import AppTrackingTransparency
+
+class ViewController: UIViewController {
+
+  ...
+
+  //플레이스 먼트 세팅
+  func setupPlacementView()
+  {
+      let placementView = AdPlacementView(frame: self.view.frame, viewController: self)
+      placementView.layer.cornerRadius = 20
+      placementView.placementListener = self
+      view.addSubview(placementView)
+      
+      placementView.translatesAutoresizingMaskIntoConstraints = false
+      NSLayoutConstraint.activate([
+          placementView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 20),
+          placementView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -20),
+          placementView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+      ])
+      
+      adPlacementView = placementView
+      adPlacementView?.loadData(placementId: adPlacementId)
+  }
+
+  //광고 상세 노출
+  func showPlacementAdDetail(appId : Int)
+  {
+      adPlacementView?.onItemClick(appId: appId)
+  }
+  
+}
+
+//이벤트 리스너 protocol
+extension ViewController : PlacementEventListener
+{
+  func didAdDataLoaded(placementId: String, customData: String?) {
+    if let adList = self.adPlacementView?.getAdList()
+    {
+        //광고 정보
+    }
+
+    if let jsonList = self.adPlacementView?.getAdListJson()
+    {
+        //광고 정보 - json
+    }
+    
+    if let pub = self.adPlacementView?.getPubInfo()
+    {
+        //placement 설정값
+    }
+
+    if let pubJson = self.adPlacementView?.getPubInfoJson()
+    {
+        //placement 설정값 - json
+    }
+  }
+}
+
+```
+
 
 ## 이벤트 기능
 
