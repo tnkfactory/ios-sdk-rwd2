@@ -30,7 +30,7 @@
 
 ### 1.1 sdk download
 
-**[[iOS Reward SDK2 Download v5.28](./sdk/TnkRewardSDK2_v5.28.zip)]**
+**[[iOS Reward SDK2 Download v5.31](./sdk/TnkRewardSDK2_v5.31.zip)]**
 
 ### 1.2 Add SDK to Project
 
