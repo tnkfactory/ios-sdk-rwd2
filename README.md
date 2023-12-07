@@ -10,6 +10,9 @@
 [혜택플러스 연동 가이드](./PayPlus_guide.md)
 
 ### Update Notice
+* v.5.32 - 2023.12.7
+  * 플레이스먼트 - PlacementFixedSizeFeedViewLayout 추가
+
 * v.5.29 - 2023.11.3
   * 플레이스먼트 즐겨찾기 기능 오류 수정
   * 플레이스먼트 - 약관 동의 팝업 기능 수정
