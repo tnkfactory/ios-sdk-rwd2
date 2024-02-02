@@ -74,7 +74,13 @@ public protocol PlacementEventListener : NSObjectProtocol {
     ///   - appId : 클릭한 광고의 appId
     ///   - appName : 클릭한 광고의 명칭
     func didAdItemClicked(appId:Int, appName:String)
-    
+
+    /// AdPlacementView 의 광고를 닫으면 호출됩니다.
+    ///
+    /// - Parameters:
+    ///   - appId : 클릭한 광고의 appId
+    func didAdItemClosed(placementId:String, appId:Int)
+
     /// 더보기 링크를 클릭하면 호출됩니다. 여기에 오퍼월을 띄우도록 구현합니다.
     func didMoreLinkClicked()
 }
