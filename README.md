@@ -10,6 +10,10 @@
 [혜택플러스 연동 가이드](./PayPlus_guide.md)
 
 ### Update Notice
+* v.5.35 - 2024.2.21
+  * Privacy menifest 추가
+  * SDK 서명
+    
 * v.5.32 - 2023.12.7
   * 플레이스먼트 - PlacementFixedSizeFeedViewLayout 추가
 
