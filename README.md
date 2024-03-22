@@ -11,7 +11,7 @@
 
 ### Update Notice
 * v.5.35 - 2024.2.21
-  * Privacy menifest 추가
+  * Privacy manifest 추가
   * SDK 서명
     
 * v.5.32 - 2023.12.7
