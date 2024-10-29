@@ -11,11 +11,14 @@
 
 ### Update Notice
 
+* v.5.46 - 2024.10.29
+  * 기타 버그 수정
+
 * v.5.38 - 2024.4.25
   * 쇼핑 메뉴 카테고리 필터 기능 추가
   * Privacy manifest 정리 
   * SDK 서명
-  * 
+
 * v.5.35 - 2024.2.21
   * Privacy manifest 추가
   * SDK 서명
