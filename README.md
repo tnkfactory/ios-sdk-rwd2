@@ -9,6 +9,8 @@
 
 [혜택플러스 연동 가이드](./PayPlus_guide.md)
 
+[리워드플러스 연동 가이드](./RwdPlusGuide.md)
+
 ### Update Notice
 
 * v.5.46 - 2024.10.29
