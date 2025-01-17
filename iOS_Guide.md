@@ -30,7 +30,8 @@
    * 3.4 [Callback URL 설정하기](#34-Callback-URL-설정하기)
 4. [디자인 커스터마이징](#4-디자인-커스터마이징)
 5. [플레이스먼트 뷰](#5-플레이스먼트-뷰)
-
+6. [Analytics Report](#6-Analytics-Report)
+   
 ## 1. SDK 설정하기
 
 ### 1.1 라이브러리 다운로드
@@ -716,3 +717,83 @@ else {
 ## 5. 플레이스먼트 뷰
 
 [플레이스먼트 뷰 가이드](./AdPlacementView.md)
+
+
+
+## 6. Analytics Report
+
+Analytics 적용을 위해서는 Tnk 사이트에서 앱 등록 및 프로젝트 상의 SDK 관련 설정이 우선 선행되어야합니다.
+
+[[SDK 설정하기](#1-sdk-설정하기)]의 내용을 우선 확인해주세요.
+
+### 기본 설정 및 TNK SDK 초기화
+
+분석 보고 데이터는 TnkSession초기화와 사용자의 IDFA의 획득이 되어야 정확한 데이터가 측정이 됩니다.
+
+[[앱 추적 동의](#13-앱-추적-동의)] 항목을 참고하여 사용자 IDFA값 획득 권한이 정상 취득이 된것을 확인 후에 분석데이터 적용코드를 적용해주시기 바랍니다.
+
+
+#### TnkSession.applicationStarted()
+
+##### Method
+
+ @objc public func applicationStarted()
+
+##### Description
+
+앱이 실행되고 IDFA획득과 TnkSession초기화가 완료 된 후 앱이 실행되었음을 분석툴로 기록합니다. 분석 툴 과정중 가장 먼저 실행 되어야 합니다.
+
+##### 적용 예시
+
+```swift
+//TNK에서 제공하는 ATT팝업 툴을 이용한 권한 획득
+TnkAlerts.showATTPopup(self) {
+    //권한 획득시
+    //AppID 및 인스턴스 초기화
+    TnkSession.initInstance(appId: "앱 아이디를 입력해주세요.")
+    //Application 시작 알림
+    TnkSession.sharedInstance()?.applicationStarted()
+} denyAction: {
+    //권한 거부시
+    //Do nothing..
+}
+```
+
+### 사용 활동 분석
+
+사용자가 앱을 설치하고 처음 실행했을 때 어떤 행동을 취하는지 분석하고자 할 때 아래의 API를 사용합니다.
+
+예를 들어 로그인, 아이템 구매, 친구 추천 등의 행동이 이루어 질때 해당 행동에 대한 구분자와 함께 호출해주시면 사용자가 어떤 패턴으로 앱을 이용하는지 또는 어떤 단계에서 많이 이탈하는지 등의 분석이 가능해집니다.
+
+
+##### Method
+
+@objc public func actionCompleted(actionName: String)
+
+##### Description
+
+사용자의 특정 액션 발생시 호출합니다.
+
+동일 액션에 대해서는 최초 발생시에만 데이터가 수집됩니다.
+
+##### Parameters : actionName
+
+사용자 액션을 구별하기 위한 문자열 (예를 들어 "user_login" 등) 사용하시는 actionName 들은 모두 Tnk 사이트의 분석보고서 화면에서 등록되어야 합니다.
+
+##### 적용예시
+
+```swift
+// 추가 데이터 다운로드 완료시
+TnkSession.sharedInstance()?.actionCompleted(actionName: "resource_loaded")
+
+// 회원 가입 완료시
+TnkSession.sharedInstance()?.actionCompleted(actionName: "signup_completed")
+
+// 프로필 작성 완료시
+TnkSession.sharedInstance()?.actionCompleted(actionName: "profile_entered")
+
+// 친구 추천시
+TnkSession.sharedInstance()?.actionCompleted(actionName: "friend_invite")
+```
+
+
