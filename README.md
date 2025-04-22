@@ -12,6 +12,11 @@
 [리워드플러스 연동 가이드](./RwdPlusGuide.md)
 
 ### Update Notice
+* v.5.53 - 2025.4.22
+  * 광고 리스트 생략 버그 수정
+  * UI 오류 수정
+  * 하단 인디케이트 관련 오류 수정
+
 * v.5.52 - 2025.3.14
   * privacy manifest - userdefault 관련 값 변경
   * UI 오류 수정
