@@ -331,6 +331,21 @@ TnkStyles 에서 제공하는 스타일 설정 값은 아래와 같으며 AdList
 TnkStyles.shared.adListItem.titleLabel.color = .red
 ```
 
+#### 재화 아이콘 변경 예시
+
+포인트 아이콘 감춤
+```swift
+TnkStyles.shared.adListItem.pointIconImage.imageNormal = nil
+TnkStyles.shared.adListItem.pointIconImage.imageHighlighted = nil
+TnkStyles.shared.adListItem.pointIconImage.imageDisabled = nil
+```
+포인트 아이콘 변경
+```swift
+TnkStyles.shared.adListItem.pointIconImage.imageNormal = UIImage(named: "이미지 명")
+TnkStyles.shared.adListItem.pointIconImage.imageHighlighted = UIImage(named: "이미지 명")
+TnkStyles.shared.adListItem.pointIconImage.imageDisabled = UIImage(named: "이미지 명")
+```
+
 ### TnkLayout
 
 TnkLayout 은 앞서 설명드린바와 같이 layout 설정을 위한 registerItemViewLayout() 함수를 제공합니다. 추가로 아래와 같은 설정 기능을 제공합니다.
