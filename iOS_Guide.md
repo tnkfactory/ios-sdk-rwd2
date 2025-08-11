@@ -31,6 +31,7 @@
 4. [디자인 커스터마이징](#4-디자인-커스터마이징)
 5. [플레이스먼트 뷰](#5-플레이스먼트-뷰)
 6. [Analytics Report](#6-Analytics-Report)
+7. [광고 상세화면 직접 호출](#77-광고-상세화면-직접-호출)
    
 ## 1. SDK 설정하기
 
@@ -795,5 +796,54 @@ TnkSession.sharedInstance()?.actionCompleted(actionName: "profile_entered")
 // 친구 추천시
 TnkSession.sharedInstance()?.actionCompleted(actionName: "friend_invite")
 ```
+
+## 7. 광고 상세화면 직접 호출
+
+TnkSession.initSession 과 setUserName이 완료된 후 광고 ID통해 광고 상세 화면을 직접 호출할수 있습니다.
+
+#### Method - presentAdDetailView
+@objc
+public func presentAdDetailView(_ viewController:UIViewController,
+								appId:Int,
+								fullscreen:Bool,
+								isCpsItem:Bool = false,
+								completion:@escaping (Bool)->Void)
+
+### Descrtiption
+광고 appID를 입력받아 직접 상세 화면을 호출합니다.
+
+#### Parameters
+ ViewController : 상세화면이 부착될 root UIViewController
+ appId : 광고 ID
+ fullscreen : 풀스크린 여부
+ actionId : Int = 0 - 쇼핑형 광고인경우에는 해당 값을 5로 세팅 해야 합니다.(일반 광고일경우에는 해당 파라메터를 생략하셔도 됩니다.)
+ completetion : (Bool) -> Void : 광고 호출 성공 여부를 콜백으로 리턴합니다.
+
+ 
+
+#### Method - adJoin
+@objc
+public func adJoin(_ viewController:UIViewController,
+				   appId:Int,
+				   fullscreen:Bool,
+				   actionId : Int = 0,
+				   completion:@escaping (Bool)->Void)
+
+### Descrtiption
+광고 appID를 입력받아 해당 광고의 참여 액션을 수행합니다.(설치 조회 , 광고 참여 웹페이지 이동 등)
+
+#### Parameters
+ ViewController : 상세화면이 부착될 root UIViewController
+ appId : 광고 ID
+ fullscreen : 풀스크린 여부
+ actionId : Int = 0 - 쇼핑형 광고인경우에는 해당 값을 5로 세팅 해야 합니다.(일반 광고일경우에는 해당 파라메터를 생략하셔도 됩니다.)
+ completetion : (Bool) -> Void : 광고 호출 성공 여부를 콜백으로 리턴합니다.
+
+@objc
+public func adJoin(_ viewController:UIViewController,
+				   appId:Int,
+				   fullscreen:Bool,
+				   actionId : Int = 0,
+				   completion:@escaping (Bool)->Void)
 
 
