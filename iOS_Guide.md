@@ -278,6 +278,13 @@ public protocol OfferwallEventListener : NSObjectProtocol {
     
     /// AdOfferwallView 가 닫히는 경우 호출됩니다.
     func didOfferwallRemoved()
+
+	/// 광고 상세화면이 노출되는 시점에 호출됩니다. (2023.07.26)
+    @objc optional func didDetailViewShow(appId:Int, appName:String)
+    
+    /// 광고 상세화면에서 참여버튼 클릭시 호출됩니다. (2023.07.26)
+    @objc optional func didActionButtonClicked(appId:Int, appName:String)
+
 }
 ```
 
