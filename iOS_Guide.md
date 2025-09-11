@@ -806,7 +806,26 @@ TnkSession.sharedInstance()?.actionCompleted(actionName: "friend_invite")
 
 ## 7. 광고 상세화면 직접 호출
 
+ - Push Notification 을 지원하는 매체는 푸시 동작으로 광고 상세화면을 띄우는데 아래 함수들이 사용됩니다.
+
 TnkSession.initSession 과 setUserName이 완료된 후 광고 ID통해 광고 상세 화면을 직접 호출할수 있습니다.
+
+
+#### Method - presentAdDetailView
+@objc
+public func openPrivacyTermAlert(parentViewController : UIViewController,
+                                     onReturn:@escaping (_ result : Bool)
+
+### Descrtiption
+개인 정보 수입 동의 팝업을 노출합니다.
+> 이미 수집동의 를 수락한경우 onReturn콜백으로 True를 바로 반환합니다.
+> 동의 되지 않은 경우에는 수집동의 여부를 묻는 팝업을 노출합니다. 예 아니오 여부에 따라 onReturn 콜백 결과를 반환합니다. 
+
+#### Parameters
+ parentViewController : 상세화면이 부착될 root UIViewController
+ onReturn : 개인정보 수집동의 결과
+
+
 
 #### Method - presentAdDetailView
 @objc
@@ -852,5 +871,37 @@ public func adJoin(_ viewController:UIViewController,
 				   fullscreen:Bool,
 				   actionId : Int = 0,
 				   completion:@escaping (Bool)->Void)
+
+### Push 프로세스 처리 및 샘플 코드
+1) 푸시에서 수신한 데이터에서 CPS 여부 , 광고 ID 2가지를 발췌합니다.
+2) 개인정보 수집 여부를 체크합니다.
+3) 개인정보 수집에 동의한 경우 발췌한 데이터에 따라 상세 화면을 호출합니다.
+
+
+```swift
+//약관 동의 상태 체크 함수
+TnkSession.shared?.openPrivacyTermAlert(parentViewController: self) { result in
+	if(result)
+	{
+		//약관 동의한 상태 or 팝업에서 약관 동의 한 경우
+		//푸시 수신시 광고아이템 종류(AD or CPS)
+		//광고 아이디
+		let adAppID = 12345
+		let isCPS = false
+		//CPS일경우에는 actionId를 5 그외에는 0으로 설정해야합니다.
+		let actionId = isCPS ? 5 : 0
+		TnkSession.shared?.presentAdDetailView(self,
+											   appId: adAppID,
+											   fullscreen: false,
+											   actionId: actionId) { result in
+			
+		}
+	}else{
+		//동의 취소를 한 경우
+		//Do nothing
+	}
+}
+```
+
 
 
