@@ -806,9 +806,8 @@ TnkSession.sharedInstance()?.actionCompleted(actionName: "friend_invite")
 
 ## 7. 광고 상세화면 직접 호출
 
- - Push Notification 을 지원하는 매체는 푸시 동작으로 광고 상세화면을 띄우는데 아래 함수들이 사용됩니다.
-
-TnkSession.initSession 과 setUserName이 완료된 후 광고 ID통해 광고 상세 화면을 직접 호출할수 있습니다.
+> Push Notification 을 지원하는 매체는 푸시 동작으로 광고 상세화면을 띄우는데 아래 함수들이 사용됩니다.
+> TnkSession.initSession 과 setUserName이 완료된 후 광고 ID통해 광고 상세 화면을 직접 호출할수 있습니다.
 
 
 #### Method - presentAdDetailView
@@ -818,8 +817,8 @@ public func openPrivacyTermAlert(parentViewController : UIViewController,
 
 ### Descrtiption
 개인 정보 수입 동의 팝업을 노출합니다.
-> 이미 수집동의 를 수락한경우 onReturn콜백으로 True를 바로 반환합니다.
-> 동의 되지 않은 경우에는 수집동의 여부를 묻는 팝업을 노출합니다. 예 아니오 여부에 따라 onReturn 콜백 결과를 반환합니다. 
+- 이미 수집동의 를 수락한경우 onReturn콜백으로 True를 바로 반환합니다.
+- 동의 되지 않은 경우에는 수집동의 여부를 묻는 팝업을 노출합니다. 예 아니오 여부에 따라 onReturn 콜백 결과를 반환합니다. 
 
 #### Parameters
  parentViewController : 상세화면이 부착될 root UIViewController
