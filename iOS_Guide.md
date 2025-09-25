@@ -18,6 +18,7 @@
    * 2.1 [사용자 식별값 설정](#21-사용자-식별값-설정)
    * 2.2 [AdOfferwallViewController](#22-AdOfferwallViewController)
    * 2.3 [AdOfferwallView](#23-AdOfferwallVew)
+      * [특정 카테고리 필터 랜딩](#오퍼월-구동시-특정-카테고리-,-필터-랜딩-기능)
       * [OfferwallEventListener](#OfferwallEventListener)
    * 2.4 [SwiftUI 에서 사용하기](#24-SwiftUI-에서-사용하기)
 3. [Publisher API](#3-Publisher-API)
