@@ -215,7 +215,6 @@ func loadOfferwall() {
 
 }
 ```
-
 ```objective-c
 // Objective-C
 #import <TnkRwdSdk2/TnkRwdSdk2.h>
@@ -235,6 +234,34 @@ func loadOfferwall() {
     ]];
     
     [offerwallView loadData];
+}
+```
+#### 오퍼월 구동시 특정 카테고리 , 필터 랜딩 기능
+
+ - 오퍼월 화면 구동시 특정 카테고리와 필터가 선택된 화면으로 설정이 가능합니다.
+ - 카테고리 ID 와 필터 ID는 Tnk Admin 웹페이지를 통해 발췌 가능하며 상세 방법은 (https://vintage-brain-4dd.notion.site/TNK-24283d88d5e0805b81a1cd4f2dbe753d)을 참고해주시길 바랍니다.
+
+AdOfferwallViewController , AdOfferwallView 모두 해당 기능을 지원하며 화면 표시 전 선언된 객체의 'landingData'에  "카테고리ID//필터ID" 를 선언후 해당 객체를 화면에 띄우시면 
+자동으로 지정된 카테고리,필터 화면으로 랜딩 됩니다.
+
+```swift
+// Swift
+import TnkRwdSdk2
+func showOfferwall() {
+
+	//Admin화면을 통해 발급받은 카테고리 ID
+	let categoryId = "4"
+	//FilterID
+	let filterID = "509"
+	
+    let vc = AdOfferwallViewController()
+    vc.title = "TEST Offerwall"
+    vc.landingData = "\(categoryId)//\(filterID)"    
+    let navController = UINavigationController(rootViewController: vc)
+    navController.modalPresentationStyle = .fullScreen
+    navController.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
+
+    self.present(navController, animated: true)
 }
 ```
 
