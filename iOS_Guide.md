@@ -18,7 +18,7 @@
    * 2.1 [사용자 식별값 설정](#21-사용자-식별값-설정)
    * 2.2 [AdOfferwallViewController](#22-AdOfferwallViewController)
    * 2.3 [AdOfferwallView](#23-AdOfferwallVew)
-      * [특정 카테고리 필터 랜딩](#오퍼월-구동시-특정-카테고리-,-필터-랜딩-기능)
+      * [특정 카테고리 필터 랜딩](#오퍼월-구동시-특정-카테고리-랜딩-기능)
       * [OfferwallEventListener](#OfferwallEventListener)
    * 2.4 [SwiftUI 에서 사용하기](#24-SwiftUI-에서-사용하기)
 3. [Publisher API](#3-Publisher-API)
@@ -237,7 +237,7 @@ func loadOfferwall() {
     [offerwallView loadData];
 }
 ```
-#### 오퍼월 구동시 특정 카테고리 , 필터 랜딩 기능
+#### 오퍼월 구동시 특정 카테고리 랜딩 기능
 
  - 오퍼월 화면 구동시 특정 카테고리와 필터가 선택된 화면으로 설정이 가능합니다.
  - 카테고리 ID 와 필터 ID는 Tnk Admin 웹페이지를 통해 발췌 가능하며 상세 방법은 (https://vintage-brain-4dd.notion.site/TNK-24283d88d5e0805b81a1cd4f2dbe753d)을 참고해주시길 바랍니다.
