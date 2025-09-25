@@ -240,7 +240,7 @@ func loadOfferwall() {
 #### 오퍼월 구동시 특정 카테고리 랜딩 기능
 
  - 오퍼월 화면 구동시 특정 카테고리와 필터가 선택된 화면으로 설정이 가능합니다.
- - 카테고리 ID 와 필터 ID는 Tnk Admin 웹페이지를 통해 발췌 가능하며 상세 방법은 (https://vintage-brain-4dd.notion.site/TNK-24283d88d5e0805b81a1cd4f2dbe753d)을 참고해주시길 바랍니다.
+ - 카테고리 ID 와 필터 ID는 Tnk Admin 웹페이지를 통해 발췌 가능하며 상세 방법은 ([https://vintage-brain-4dd.notion.site/TNK-24283d88d5e0805b81a1cd4f2dbe753d](https://vintage-brain-4dd.notion.site/26583d88d5e08025a662f08c7bb0ebc2))을 참고해주시길 바랍니다.
 
 AdOfferwallViewController , AdOfferwallView 모두 해당 기능을 지원하며 화면 표시 전 선언된 객체의 'landingData'에  "카테고리ID//필터ID" 를 선언후 해당 객체를 화면에 띄우시면 
 자동으로 지정된 카테고리,필터 화면으로 랜딩 됩니다.
