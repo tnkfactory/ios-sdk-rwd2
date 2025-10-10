@@ -13,7 +13,7 @@
 ![offerwall_ui_cps2](./img/offerwall_ui_cps2.jpg)
 
 ## 목차
-
+- [포인트 아이콘 변경](#!포인트-아이콘-변경)
 1. [기본 광고 목록](#1-기본-광고-목록)
    * [DefaultAdListItemView](#DefaultAdListItemView)
    * [AdListItemViewLayout](#AdListItemViewLayout)
@@ -30,6 +30,20 @@
     * [AlertControl](#AlertControl)
     * [LoadingIndicator](#LoadingIndicator)
  4. [새로운 Layout 구현하기](#4-새로운-Layout-구현하기)
+
+## !포인트 아이콘 변경
+
+OfferWall 화면 진입전 아래 예시 코드와 같이 UIImage로 이미지 변경이 가능합니다.
+ - AppDelegate(or SceneDeleagte)에서 앱 실행시 1회만 호출드리는 것을 권장합니다.
+ - 앱 아이콘 Size는 16 x 16으로 기본 설정되어 있으며 해당 사이즈를 사용하시는 것을 권장합니다.
+
+```swift
+//아이콘 처리 영역 - 별도의 포인트 아이콘을 UIImage로 대입해주세요.
+TnkStyles.shared.adListItem.pointIconImage.imageNormal = UIImage(systemName: "star")
+TnkStyles.shared.adListItem.pointIconImage.imageDisabled = UIImage(systemName: "star")
+TnkStyles.shared.adListItem.pointIconImage.imageHighlighted = UIImage(systemName: "star.fill")
+```
+
  
 ## 1. 기본 광고 목록
 
