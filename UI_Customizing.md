@@ -13,7 +13,7 @@
 ![offerwall_ui_cps2](./img/offerwall_ui_cps2.jpg)
 
 ## 목차
-- [포인트 아이콘 변경](#!포인트-아이콘-변경)
+- [포인트 아이콘 변경](#포인트-아이콘-변경)
 1. [기본 광고 목록](#1-기본-광고-목록)
    * [DefaultAdListItemView](#DefaultAdListItemView)
    * [AdListItemViewLayout](#AdListItemViewLayout)
@@ -31,7 +31,7 @@
     * [LoadingIndicator](#LoadingIndicator)
  4. [새로운 Layout 구현하기](#4-새로운-Layout-구현하기)
 
-## !포인트 아이콘 변경
+## 포인트 아이콘 변경
 
 OfferWall 화면 진입전 아래 예시 코드와 같이 UIImage로 이미지 변경이 가능합니다.
  - AppDelegate(or SceneDeleagte)에서 앱 실행시 1회만 호출드리는 것을 권장합니다.
