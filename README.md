@@ -13,6 +13,9 @@
 
 ### Update Notice
 
+* v.5.90 - 2026.8.18
+  * static framework 추가
+
 * v.5.89 - 2026.8.6
   * 월 1회 참여 옵션 추가 
 
