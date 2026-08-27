@@ -13,6 +13,9 @@
 
 ### Update Notice
 
+* v.5.92 - 2026.8.27
+  * 중복 호출 제어 추가
+
 * v.5.90 - 2026.8.18
   * static framework 추가
 
