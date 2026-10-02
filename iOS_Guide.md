@@ -29,7 +29,9 @@
 	  *  [포인트 사용 - purchaseItem](#포인트-사용---purchaseItem)
 	  *  [포인트 전체 인출 - withdrawPoints](#포인트-전체-인출---withdrawPoints)
    * 3.4 [Callback URL 설정하기](#34-Callback-URL-설정하기)
+   * 3.5 [개인정보 수집동의 해제 통보](#35-개인정보-수집동의-해제-통보)
 4. [디자인 커스터마이징](#4-디자인-커스터마이징)
+   * 4.1 [오퍼월 테마 지정 (다크모드)](#41-오퍼월-테마-지정-다크모드)
 5. [플레이스먼트 뷰](#5-플레이스먼트-뷰)
 6. [Analytics Report](#6-Analytics-Report)
 7. [광고 상세화면 직접 호출](#7-광고-상세화면-직접-호출)
@@ -38,7 +40,7 @@
 
 ### 1.1 라이브러리 다운로드
 
-**[[iOS Reward SDK2 Download v5.93](./sdk/TnkRwdSdk2.v.5.93.zip)]**
+**[[iOS Reward SDK2 Download v5.95](./sdk/TnkRwdSdk2.v.5.95.zip)]**
 
 ### 1.2 라이브러리 등록
 
@@ -748,9 +750,98 @@ else {
 ```
 
 
+### 3.5 개인정보 수집동의 해제 통보
+
+(5.95 부터) 사용자가 오퍼월의 "내 정보" 화면에서 개인정보 수집동의를 철회(해제)하면 매체 앱이 통보받을 수 있습니다.
+
+`TnkSession.setPrivacyAgreementListener(_:)` 로 `TnkPrivacyAgreementListener` 프로토콜을 구현한 객체를 등록하세요. `nil` 을 넣으면 등록이 해제됩니다.
+수집동의가 해제되면 `didPrivacyAgreementRevoked()` 가 **메인 스레드**에서 호출됩니다.
+
+```swift
+// Swift
+import TnkRwdSdk2
+
+class ViewController: UIViewController, TnkPrivacyAgreementListener {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        TnkSession.sharedInstance()?.setPrivacyAgreementListener(self)
+    }
+
+    // 수집동의가 해제되면 메인 스레드에서 호출됩니다.
+    func didPrivacyAgreementRevoked() {
+        // 수집동의가 해제되었습니다. 매체 앱의 상태를 갱신하세요.
+    }
+}
+```
+
+```objective-c
+// Objective-C
+#import <TnkRwdSdk2/TnkRwdSdk2.h>
+
+@interface ViewController () <TnkPrivacyAgreementListener>
+@end
+
+@implementation ViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [[TnkSession sharedInstance] setPrivacyAgreementListener:self];
+}
+
+// 수집동의가 해제되면 메인 스레드에서 호출됩니다.
+- (void)didPrivacyAgreementRevoked {
+    // 수집동의가 해제되었습니다. 매체 앱의 상태를 갱신하세요.
+}
+
+@end
+```
+
+- 수집동의 상태에서 해제 상태로 **바뀌는 순간에만 한 번** 호출됩니다. 이미 해제된 상태에서 다시 해제 처리가 일어나도 호출되지 않습니다.
+- **리스너는 weak 로 참조됩니다.** 등록한 객체를 매체 앱이 계속 보관해야 합니다. 지역 변수나 임시 객체를 넘기면 바로 해제되어 콜백을 받을 수 없습니다.
+- **"재동의" 콜백은 없습니다.** 철회한 직후 오퍼월이 수집동의 창을 다시 띄우므로, 사용자가 그 창에서 다시 동의하면 해제 상태는 되돌아갑니다.
+  따라서 이 콜백은 "방금 해제되었다"는 신호로만 사용하시고, 해제 상태가 계속 유지된다고 가정하지 마세요.
+- `@objc` 프로토콜이므로 Objective-C 에서도 사용할 수 있습니다.
+
 ## 4. 디자인 커스터마이징
 
 [UI 커스터마이징 가이드](./UI_Customizing.md)
+
+### 4.1 오퍼월 테마 지정 (다크모드)
+
+(5.95 부터) 오퍼월 화면의 테마를 라이트 또는 다크로 고정할 수 있습니다.
+오퍼월을 띄우기 전에 (일반적으로 앱 시작 시점의 SDK 초기화 직후) **한 번만** 설정하세요.
+
+```swift
+// Swift
+TnkStyles.offerwallTheme = .dark
+```
+
+```objective-c
+// Objective-C
+TnkStyles.offerwallTheme = TnkOfferwallThemeDark;
+```
+
+| 값 | Objective-C | 동작 |
+| --- | --- | --- |
+| `.light` | `TnkOfferwallThemeLight` | 단말 설정과 무관하게 라이트 테마로 고정합니다. |
+| `.dark` | `TnkOfferwallThemeDark` | 단말 설정과 무관하게 다크 테마로 고정합니다. |
+| `.system` | `TnkOfferwallThemeSystem` | 단말 설정을 따릅니다. **iOS 에서는 `.unspecified` 와 똑같이 동작합니다. (아래 참고)** |
+| `.unspecified` | `TnkOfferwallThemeUnspecified` | SDK 가 테마에 관여하지 않습니다. **기본값**이며, 이 값을 설정하지 않았을 때와 동작이 같습니다. |
+
+현재 설정된 값은 `TnkStyles.offerwallTheme` 을 읽어서 확인할 수 있습니다. 설정하지 않았다면 `.unspecified` 입니다.
+
+> ### ⚠️ `.system` 은 iOS 에서 `.unspecified` 와 같습니다
+>
+> iOS 의 `UIUserInterfaceStyle` 에는 "시스템 설정을 따른다"는 값이 따로 없어서, `.system` 을 지정하면 SDK 는 화면의 테마를 건드리지 않습니다.
+> 그 결과 오퍼월은 **매체 앱의 설정을 그대로 물려받습니다.** 매체 앱이 Info.plist 의 `UIUserInterfaceStyle` 등으로 라이트/다크를 고정해 두었다면,
+> `.system` 을 지정해도 단말 설정이 아니라 **앱에 고정된 값**을 따릅니다.
+>
+> Android SDK 의 `SYSTEM` 과는 동작이 다르므로, 같은 앱을 두 플랫폼에 함께 적용하는 경우 유의하세요.
+> iOS 에서 반드시 라이트 또는 다크로 보여주려면 `.light` / `.dark` 를 지정하세요.
+
+**적용 범위** : 오퍼월 목록 화면, 광고 상세 웹뷰, 이벤트 웹뷰, 다이얼로그와 상태바 아이콘의 명암까지 지정한 테마로 맞춰집니다.
+웹 페이지 내부의 색상은 웹이 결정하므로, 다크 스타일을 갖춘 페이지는 설정에 따라 바뀌고 다크 스타일이 없는 페이지는 그대로 표시됩니다.
 
 ## 5. 플레이스먼트 뷰
 

@@ -22,7 +22,9 @@
        *  [purchaseItem](#purchaseitem)
        *  [withdrawPoints](#withdrawpoints)
     * 3.4 [Callback URL](#34-callback-url)
+    * 3.5 [Privacy agreement revoked notification](#35-privacy-agreement-revoked-notification)
 4. [disign customization](#4-disign-customization)
+    * 4.1 [Offerwall theme (dark mode)](#41-offerwall-theme-dark-mode)
 5. [placement view](#5-placement-view)
 
 
@@ -30,7 +32,7 @@
 
 ### 1.1 sdk download
 
-**[[iOS Reward SDK2 Download v5.93](./sdk/TnkRwdSdk2.v.5.93.zip)]**
+**[[iOS Reward SDK2 Download v5.95](./sdk/TnkRwdSdk2.v.5.95.zip)]**
 
 ### 1.2 Add SDK to Project
 
@@ -714,9 +716,98 @@ class TnkCallbackListener {
 }
 ```
 
+### 3.5 Privacy agreement revoked notification
+
+(Since 5.95) When a user withdraws the consent to personal information collection on the "My info" screen of the offerwall, your app can be notified.
+
+Register an object that implements the `TnkPrivacyAgreementListener` protocol with `TnkSession.setPrivacyAgreementListener(_:)`. Pass `nil` to unregister.
+When the consent is revoked, `didPrivacyAgreementRevoked()` is called on the **main thread**.
+
+```swift
+// Swift
+import TnkRwdSdk2
+
+class ViewController: UIViewController, TnkPrivacyAgreementListener {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        TnkSession.sharedInstance()?.setPrivacyAgreementListener(self)
+    }
+
+    // Called on the main thread when the consent is revoked.
+    func didPrivacyAgreementRevoked() {
+        // The consent has been revoked. Update the state of your app.
+    }
+}
+```
+
+```objective-c
+// Objective-C
+#import <TnkRwdSdk2/TnkRwdSdk2.h>
+
+@interface ViewController () <TnkPrivacyAgreementListener>
+@end
+
+@implementation ViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [[TnkSession sharedInstance] setPrivacyAgreementListener:self];
+}
+
+// Called on the main thread when the consent is revoked.
+- (void)didPrivacyAgreementRevoked {
+    // The consent has been revoked. Update the state of your app.
+}
+
+@end
+```
+
+- It is called **only once, at the moment the state changes from agreed to revoked.** It is not called again if the revoke is processed while the consent is already revoked.
+- **The listener is referenced weakly.** Your app must keep the registered object alive. If you pass a local variable or a temporary object, it is released immediately and you will not receive the callback.
+- **There is no "agreed again" callback.** Right after the user revokes, the offerwall shows the consent window again, and if the user agrees there the revoked state is reverted.
+  Use this callback only as a signal that "the consent has just been revoked", and do not assume the revoked state persists.
+- It is an `@objc` protocol, so it can also be used from Objective-C.
+
 ## 4. disign customization
 
 [UI customization guide](./UI_Customizing.md)
+
+### 4.1 Offerwall theme (dark mode)
+
+(Since 5.95) You can fix the theme of the offerwall screens to light or dark.
+Set it **once**, before showing the offerwall (usually right after the SDK initialization at app launch).
+
+```swift
+// Swift
+TnkStyles.offerwallTheme = .dark
+```
+
+```objective-c
+// Objective-C
+TnkStyles.offerwallTheme = TnkOfferwallThemeDark;
+```
+
+| Value | Objective-C | Behavior |
+| --- | --- | --- |
+| `.light` | `TnkOfferwallThemeLight` | Fixed to the light theme regardless of the device setting. |
+| `.dark` | `TnkOfferwallThemeDark` | Fixed to the dark theme regardless of the device setting. |
+| `.system` | `TnkOfferwallThemeSystem` | Follows the device setting. **On iOS it behaves exactly like `.unspecified`. (See below)** |
+| `.unspecified` | `TnkOfferwallThemeUnspecified` | The SDK does not touch the theme. **Default**, same as not setting this value at all. |
+
+You can read the current value from `TnkStyles.offerwallTheme`. It is `.unspecified` unless you set it.
+
+> ### ⚠️ `.system` is the same as `.unspecified` on iOS
+>
+> `UIUserInterfaceStyle` on iOS has no value that means "follow the system", so when you set `.system` the SDK does not override the theme of the screens.
+> As a result, the offerwall **inherits the setting of your app.** If your app fixes light or dark mode, for example with `UIUserInterfaceStyle` in Info.plist,
+> the offerwall follows **the value fixed in your app**, not the device setting, even if you set `.system`.
+>
+> This differs from `SYSTEM` of the Android SDK, so keep it in mind when you apply the same app to both platforms.
+> To always show light or dark on iOS, set `.light` / `.dark`.
+
+**Scope** : The offerwall list screen, the ad detail web view, the event web view, dialogs, and even the status bar icon contrast follow the theme you set.
+The colors inside a web page are decided by the web page itself, so a page with a dark style changes according to the setting and a page without one is displayed as is.
 
 ## 5. placement view
 

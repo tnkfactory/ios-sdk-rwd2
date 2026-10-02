@@ -13,6 +13,11 @@
 
 ### Update Notice
 
+* v.5.95 - 2026.10.02
+  * 오퍼월 테마 지정 기능 추가 : TnkStyles.offerwallTheme (.light / .dark / .system / .unspecified, iOS 에서 .system 은 .unspecified 와 같게 동작)
+  * 개인정보 수집동의 해제 통보 추가 : TnkSession.setPrivacyAgreementListener(_:) / TnkPrivacyAgreementListener (리스너는 weak 로 보관되므로 매체 앱에서 강한 참조를 유지해야 함)
+  * static 설치용 TnkRwdSdk2.bundle 이미지 최신화 및 Reve 레이아웃 nib 포함 (static 사용 시 TnkRwdSdk2.xcframework 와 TnkRwdSdk2.bundle 을 함께 교체해야 함)
+
 * v.5.93 - 2026.8.28
   * 상세 페이지 직접 호출 오류 수정
 
