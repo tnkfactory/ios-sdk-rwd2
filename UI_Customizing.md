@@ -85,7 +85,7 @@ titleLabel, descLabel, descPointLabel, pointAmountLabel, pointUnitLabel 은 UILa
 class LabelAttribute {
     var width:CGFloat = -2          // 라벨의 너비, 음수로 지정하면 text 에 맞춰진다.
     var height:CGFloat = 10                            // 라벨의 높이
-    var font:UIFont = TnkFonts.getFont(ofSize: 14)     // 라벨의 text 에 사용되는 폰트
+    var font:UIFont = TnkFonts.shared.fontManager.getFont(ofSize: 14) // 라벨의 text 에 사용되는 폰트
     var color:UIColor = .clear                         // 라벨의 text 에 사용되는 색상
     var backgroundColor:UIColor = .clear               // 라벨의 배경색
     var cornerRadius:CGFloat = 0                       // 라벨의 코너 라운드 처리를 위한 반지름 값
@@ -94,6 +94,9 @@ class LabelAttribute {
     var interSpace:CGFloat = 0                         // 위에 있는 구성 요소와의 간격
     var leadingSpace:CGFloat = 0                       // 앞에 있는 구성 요소와의 간격
     var numberOfLines:Int = 1                          // 라벨의 numberOfLines 값
+    var lineBreakMode:NSLineBreakMode = .byTruncatingTail  // 라벨의 lineBreakMode 값
+    var text:String = ""                               // 라벨 문구 초기값
+    var textAlignment:NSTextAlignment = .natural       // 라벨 정렬 초기값
 }
 ```
 
@@ -114,8 +117,8 @@ class AdListItemViewLayout  {
     var itemStrokeColor:UIColor = .clear   // AdListItemView 의 테두리 색상
     var itemStrokeWidth:CGFloat = 0        // AdListItemView 의 테두리 두께
     
-    var itemBackgroundColor:UIColor = .white   // AdLisItemview 의 배경색
-    var itemHighlightedColor:UIColor = UIColor(argb: 0xa0f8f8f8)   // AdListItemView 가 눌렸을 때의 배경색
+    var itemBackgroundColor:UIColor = TnkColor.MAIN_BACKGROUND_COLOR   // AdListItemView 의 배경색 (라이트 #FFFFFF / 다크 #151515)
+    var itemHighlightedColor:UIColor = TnkColor.semantic(argb1: 0xa0f8f8f8, argb2: 0xff252525)   // AdListItemView 가 눌렸을 때의 배경색
     
     // AdListItemView 내부의 Inset 값
     var itemInset:UIEdgeInsets = UIEdgeInsets(top: 6, left: 10, bottom: 7, right: 10)
@@ -123,15 +126,16 @@ class AdListItemViewLayout  {
     var itemSpace:CGFloat = 0      // AdListItemView 들의 좌우 사이 간격
 
     var pointUnitVisible:Bool = true  // pointUnitLabel 을 보여줄지 여부 설정
-    var pointAmountDisabledColor:UIColor = .gray // 적립완료 등 참여 불가인 경우 표시문구 색상
-    var pointAmountConfirmColor:UIColor = .blue // 설치확인 문구 색상
+    var pointAmountDisabledColor:UIColor = TnkColor.argb(0xff969696) // 적립완료 등 참여 불가인 경우 표시문구 색상
+    var pointAmountConfirmColor:UIColor = TnkColor.PRIMARY_COLOR // 설치확인 문구 색상 (라이트 #4572EF / 다크 #77A5FF)
 
     // 구분선(divider)
     var dividerHeight:CGFloat = 1	                     // 구분선 두께
-    var dividerColor:UIColor = UIColor(argb: 0xfff2f2f2) // 구분선 색상
-    var dividerLeadingSpace:CGFloat = 20 + 72 + 12       // 구분선 앞의 여백
-    var dividerTrailingSpace:CGFloat = 20                // 구분선 뒤의 여백
+    var dividerColor:UIColor = TnkColor.semantic(argb1: 0xfff2f2f2, argb2: 0xff353535) // 구분선 색상
+    var dividerLeadingSpace:CGFloat = 10 + 72 + 12       // 구분선 앞의 여백 (itemInset.left + 아이콘 크기 + 아이콘 leadingSpace)
+    var dividerTrailingSpace:CGFloat = 10                // 구분선 뒤의 여백 (itemInset.right)
     var dividerHiddenAtLastItem:Bool = true              // 맨 밑에 있는 아이템의 divider 는 숨기기
+}
 ```
 ### 레이아웃 등록하기
 
@@ -209,7 +213,7 @@ func onClickOfferwall1() {
     viewLayout.dividerLeadingSpace = 10
     viewLayout.dividerTrailingSpace = 10
     
-    // RightIconAdListView 를 기본 광고 목록으로 설정
+    // RightIconAdListItemView 를 기본 광고 목록으로 설정
     TnkLayout.shared.registerItemViewLayout(type: .normal, viewClass: RightIconAdListItemView.self, 
                                             viewLayout: viewLayout)
      
@@ -240,7 +244,7 @@ class FeedAdItemScrollViewLayout: AdListItemViewLayout {
         
         itemDirection = 1  // 아이템 배치 순서를 위에서 아래 방향으로 설정
         
-        orthogonalScrolling = .continuous. // .paging 또는 .groupPaging 설정 가능
+        orthogonalScrolling = .continuous // .paging 또는 .groupPaging 설정 가능
         
         // ...
    }
@@ -253,6 +257,7 @@ class FeedAdItemScrollViewLayout: AdListItemViewLayout {
             return [1,0]   // 광고 갯수가 3개 이하인 경우는 1줄로 표시
         }
     }
+}
 ```
 
 아래는 SDK 가 제공하는 FeedAdListItemView 와 FeedAdItemScrollViewLayout 을 사용하여 기본목록을 횡스크롤 피드형태로 표시하는 Layout 설정 예시입니다.
@@ -270,7 +275,7 @@ TnkLayout.shared.registerItemViewLayout(type: .normal, viewClass: FeedAdListItem
 
 ### 큐레이션 Layout 설정
 
-큐레이션의 Layout 설정은 기본 광고 목록의 Layout 설정과 동일합니다. TnkLayout 의 registerViewLayout 의 첫번째 파라메터로 설정하고 싶은 큐레이션의 LayoutType 을 지정하면 됩니다. [LayoutType 보기](./Layout_Type.md)
+큐레이션의 Layout 설정은 기본 광고 목록의 Layout 설정과 동일합니다. TnkLayout 의 registerItemViewLayout 의 첫번째 파라메터(type)로 설정하고 싶은 큐레이션의 LayoutType 을 지정하면 됩니다. [LayoutType 보기](./Layout_Type.md)
 
 아래의 예시는 신규 광고 큐레이션을 RightIconAdListItemView 를 사용하여 페이징으로 표시하도록 설정하는 예시입니다.
 
@@ -285,7 +290,7 @@ SDK 가 제공하는 AdListItemView 와 AdListItemViewLayout 클래스의 전체
 
 ### CpsBoxItemView
 
-구매형 광고 목록을 위하여 CpsBoxItemView 가 기본적으로 사용됩니다. CpsBoxItemView 는 아래와 같은 배치를 가지고 있으며 productPricelLabel, discountRateLabel, favoriteButton 의 추가적인 구성요소를 가지고 있습니다.
+구매형 광고 목록을 위하여 CpsBoxItemView 가 기본적으로 사용됩니다. CpsBoxItemView 는 아래와 같은 배치를 가지고 있으며 productPriceLabel, discountRateLabel, favoriteButton 의 추가적인 구성요소를 가지고 있습니다.
 
 ![cps_adlistitemview](./img/cps_adlistitemview.jpg)
 
@@ -297,7 +302,7 @@ productPriceLabel 과 discountRateLabel 은 UILabel 이 사용되며 [LabelAttri
 class ButtonAttribute {
     var width:CGFloat = 10             // 버튼의 너비
     var height:CGFloat = 10            // 버튼의 높이
-    var font:UIFont = TnkFonts.getFont(ofSize: 15) // 버튼 title 에 사용되는 폰트
+    var font:UIFont = TnkFonts.shared.fontManager.getFont(ofSize: 15) // 버튼 title 에 사용되는 폰트
     var colorNormal:UIColor = .blue                // 버튼 title 에 사용되는 색상
     var colorHighlighted:UIColor = .black          // highlighted 상태에서의 title 색상
     var colorSelected:UIColor = .black             // selected 상태에서의 title 색상
@@ -309,12 +314,16 @@ class ButtonAttribute {
     var backgroundNormal:Any? = nil                // 배경색 또는 배경 이미지
     var backgroundHighlighted:Any? = nil           // highlighted 상태에서의 배경색 또는 이미지
     var backgroundSelected:Any? = nil              // selected 상태애서의 배경색 또는 이미지
+    var backgroundDisable:Any? = nil               // disabled 상태에서의 배경색 또는 이미지
     var inset:UIEdgeInsets = UIEdgeInsets.zero     // 버튼 내부 inset
     var iconImage:UIImage? = nil                   // 버튼 아이콘
+    var strokeColorSelected:UIColor = .clear       // selected 상태에서의 테두리 색상 (메뉴 버튼에만 적용)
+    var strokeWidthSelected:CGFloat = 0            // selected 상태에서의 테두리 두께 (메뉴 버튼에만 적용)
+    var fontSelected:UIFont? = nil                 // selected 상태에서의 title 폰트 (메뉴 버튼에만 적용)
 }
 ```
 
-구매형 광고 목록의 Layout 설정은 앞서 설명드린 일반광고의 Layout 설정과 동일합니다. TnkLayout 의 registerViewLayout 의 첫번째 파라메터로 구매형 기본 목록 (.cpslist) 이나 구매형 큐레이션의 LayoutType 을 지정하면 됩니다. [LayoutType 보기](./Layout_Type.md)
+구매형 광고 목록의 Layout 설정은 앞서 설명드린 일반광고의 Layout 설정과 동일합니다. TnkLayout 의 registerItemViewLayout 의 첫번째 파라메터로 구매형 기본 목록 (.cpslist) 이나 구매형 큐레이션의 LayoutType 을 지정하면 됩니다. [LayoutType 보기](./Layout_Type.md)
 
 SDK 가 기본적으로 제공하는 구매형 광고 표시용 AdListItemView 의 구현 클래스에는 CpsBoxItemView, CpsListItemView, CpsFeedItemView 가 있으며 이를 사용하는 AdListItemViewLayout 역시 다수 제공하고 있습니다. 전체 클래스 목록과 기본 설정값은 여기를 참고하세요. &rightarrow; [Laytout 클래스 목록](./Layout_Classes.md)
 
@@ -323,7 +332,7 @@ SDK 가 기본적으로 제공하는 구매형 광고 표시용 AdListItemView �
 ### TnkStyles
 
 앞서 설명드린 AdListItemViewLayout 의 속성 값을 변경함으로써 원하는 형태의 UI 를 설정할 수 있습니다. 하지만 전체적으로 타이틀 색상이나 폰트를 변경하고자 한다면 모든 큐레이션에 설정된 Layout 을 다 수정해야하는 번거로움이 있습니다. 
-이를 위하여 일괄적으로 UI 스타일을 변경할 수 있도록 ThkStyles 클래스를 제공합니다.
+이를 위하여 일괄적으로 UI 스타일을 변경할 수 있도록 TnkStyles 클래스를 제공합니다.
 
 TnkStyles 에서 제공하는 스타일 설정 값은 아래와 같으며 AdListItemViewLayout 에서 사용되는 속성값과 의미는 일치합니다. 스타일 변경은 Layout 을 설정하기 이전에 선행되어야 합니다.
 
@@ -364,18 +373,18 @@ TnkStyles.shared.adListItem.pointIconImage.imageDisabled = UIImage(named: "이�
 
 TnkLayout 은 앞서 설명드린바와 같이 layout 설정을 위한 registerItemViewLayout() 함수를 제공합니다. 추가로 아래와 같은 설정 기능을 제공합니다.
 
-- leftBarButtonItem : AdOfferwallViewController 를 UINavigationController 와 함께 사용할 때 왼쪽의 BarButton 을 지정합니다. .none, .close, .help 의 값을 가질 수 있습니다. (기본값 .close)
+- leftBarButtonItem : AdOfferwallViewController 를 UINavigationController 와 함께 사용할 때 왼쪽의 BarButton 을 지정합니다. .none, .close, .help, .helpWithBadge, .info, .back 의 값을 가질 수 있습니다. (기본값 .close)
 - rightBarButtonItem : 오른쪽의 BarButton 을 지정합니다. (기본값 .none)
 - closeBarButtonImage : BarButton 이 닫기일 때 사용할 UIImage 를 지정합니다. (기본값 nil)
 - closeBarButtonTitle: BarButton 이 닫기일 때 사용할 String 을 지정합니다. (기본값 '닫기')
 - helpBarButtonNormalImage : BarButton 이 help 일 때 사용할 UIImage 를 지정합니다.
 - helpBarButtonBadgeImage: help 버튼에 badge 표시를 할 때 사용할 UIImage 를 지정합니다.
 - helpBarButtonTitle: help 버튼에 표시할 String 지정합니다. (기본값 '문의하기')
-- menuPinToVisibleBounds : 상단의 메뉴와 필터의 스크롤 고정여부를 지정합니다. .all, .menu, .filter, .none 의 값을 가질 수 있습니다. (기본값 .all)
+- menuPinToVisibleBounds : 상단의 메뉴와 필터의 스크롤 고정여부를 지정합니다. .all, .menu, .filter, .none 의 값을 가질 수 있습니다. (기본값 .none) 메뉴 영역에 추천 영역(.recommend)이 포함된 기본 구성에서는 설정값과 관계없이 .none 으로 동작합니다.
 - listViewTopMargin : 광고 목록 상단의 여백 높이를 지정합니다. (기본값 8)
 - listViewBottomMargin : 광고 목록 하단의 여백 높이를 지정합니다. (기본값 16)
 - listViewMaxWidth : 광고 목록의 최대 너비를 지정합니다. 기기가 테블릿이나 가로 상태일때에 적용됩니다. (기본값 440)
-- listViewBackgroundColor : 광고 목록의 배경색을 지정합니다. (기본값 UIColor.white)
+- 광고 목록의 배경색은 TnkLayout 이 아니라 TnkStyles.shared.adListItem.listViewBackgroundColor 로 지정합니다. (기본값 TnkColor.MAIN_BACKGROUND_COLOR, 라이트 모드에서 흰색)
 - listViewTopButtonImage : 광고 목록 하단에 상단으로 스크롤시키는 버튼(TopButton)이 나타납니다. 이 버튼의 이미지를 설정합니다. nil 로 설정하면 버튼은 나타나지 않습니다.
 - listViewTopButtonSize : TopButton 의 크기(CGSize)를 지정합니다. 기본값 CGSize(width: 50, height: 50)
 
@@ -386,15 +395,15 @@ TnkLayout 은 앞서 설명드린바와 같이 layout 설정을 위한 registerI
 ```swift
 class AdListMenuViewLayout {
 
-    var menuBackgroundColor:UIColor = .white
+    var menuBackgroundColor:UIColor = .clear
     var menuInset:UIEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10) // 메뉴뷰의 inset
 
     var itemButton = ButtonAttribute(width: TnkLayout.wrapContent,
                                      height: 45,
-                                     font: TnkFonts.getBoldFont(ofSize: 18),
-                                     colorNormal: UIColor(argb: 0xffaaaaaa),
-                                     colorHighlighted: .black,
-                                     colorSelected: .black,
+                                     font: TnkFonts.shared.fontManager.getBoldFont(ofSize: 18),
+                                     colorNormal: TnkColor.semantic(argb1: 0xffaaaaaa, argb2: 0xff969696),
+                                     colorHighlighted: TnkColor.semantic(argb1: 0xff000000, argb2: 0xffffffff),
+                                     colorSelected: TnkColor.semantic(argb1: 0xff000000, argb2: 0xffffffff),
                                      cornerRadius: 0,
                                      strokeColor: .clear,
                                      strokeWidth: 0,
@@ -405,7 +414,7 @@ class AdListMenuViewLayout {
         
     var itemSpace:CGFloat = 0  // 메뉴 아이템 사이 간격
 
-    \\ ...
+    // ...
 }
 
 class AdListFilterViewLayout : AdListMenuViewLayout {
@@ -417,21 +426,21 @@ class AdListFilterViewLayout : AdListMenuViewLayout {
         
         self.itemButton = ButtonAttribute(width: TnkLayout.wrapContent,
                                           height: 36,
-                                          font: TnkFonts.getBoldFont(ofSize: 14),
-                                          colorNormal: UIColor(argb: 0xff505050),
-                                          colorHighlighted: .white,
-                                          colorSelected: .white,
+                                          font: TnkFonts.shared.fontManager.getBoldFont(ofSize: 14),
+                                          colorNormal: TnkColor.semantic(argb1: 0xff505050, argb2: 0xffe8e8e8),
+                                          colorHighlighted: TnkColor.UI_DEFAULT_COLOR,
+                                          colorSelected: TnkColor.UI_DEFAULT_COLOR,
                                           cornerRadius: 18,
-                                          strokeColor: UIColor(argb: 0x90e0e0e0),
+                                          strokeColor: TnkColor.semantic(argb1: 0x90e0e0e0, argb2: 0xff505050),
                                           strokeWidth: 1,
-                                          backgroundNormal: UIColor.white,
-                                          backgroundHighlighted: UIColor(argb: 0xff4572ef),
-                                          backgroundSelected: UIColor(argb: 0xff4572ef),
+                                          backgroundNormal: TnkColor.UI_DEFAULT_COLOR,
+                                          backgroundHighlighted: TnkColor.PRIMARY_COLOR,
+                                          backgroundSelected: TnkColor.PRIMARY_COLOR,
                                           inset: UIEdgeInsets(top: 7, left: 12, bottom: 7, right: 12))
         
         self.itemSpace = 4  // 메뉴 아이템 사이 간격
         
-        \\ ...
+        // ...
     }
 }
 ```

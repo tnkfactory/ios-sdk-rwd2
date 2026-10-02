@@ -27,7 +27,7 @@
 let plusInstance = LgRwdPlus.initSession(appId: "App ID") //SDK 초기화
     .setUserName("{{유저 식별 값}}") //유저 식별값 설정
     .setCOPPA(false) // COPPA 설정
-plusInstance.offerwallListener = self
+plusInstance.offerwallListener = self // self 는 OfferwallEventListener 프로토콜을 구현해야 합니다
 plusInstance.showOfferwall(self) //광고 목록 출력
 ```
 

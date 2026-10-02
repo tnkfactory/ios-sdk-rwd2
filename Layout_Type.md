@@ -1,7 +1,7 @@
 ## LayoutType
 
 ```swift
-public enum LayoutType : Int {
+@objc public enum LayoutType : Int {
     // 일반광고
     case normal = 0
     case promotion = 1  // 소진 큐레이션
@@ -18,7 +18,12 @@ public enum LayoutType : Int {
     case newitem = 14       // 구매형 신규상품
     case recommend = 15     // 구매형 운영자 등록
     case search = 16        // 검색 + CPS My메뉴 아이템
-    case nocps = 19         // CPS 상품 없을때 SDK가 생성하는 추천 광고 큐레이션
+    case cps_newitem_B = 20 // 구매형 신규상품 (B 타입)
+    case nocps = 5000       // CPS 상품 없을때 SDK가 생성하는 추천 광고 큐레이션
+    
+    // 상단 추천 영역
+    case top_recommend_ad = 2500    // 상단 추천 영역 (일반광고)
+    case top_recommend_cps = 2501   // 상단 추천 영역 (구매형)
     
     // 배너
     case topbanner = 21     // 상단 배너
@@ -27,5 +32,11 @@ public enum LayoutType : Int {
     
     // 컨텐츠
     case newslist = 31      // 뉴스(컨텐츠) 기본 목록
+    case quiz_list = 32     // 퀴즈 큐레이션 (목록형)
+    case quiz_feed = 33     // 퀴즈 큐레이션 (피드형)
+    
+    // SDK 내부 생성
+    case empty = 5001       // 광고 데이터가 없을때
+    case storeList = 5100   // 포인트 스토어 기본 목록
 }
 ```

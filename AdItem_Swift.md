@@ -38,6 +38,7 @@ public class AdInfoItem : AdItem {
     public let pointText:String // pointValue 를 포매팅한 문자열
     public var multiReward:Bool // 멀티 리워드 캠페인 여부
     public var favorite:Bool    // CPS 상품의 경우 즐겨찾기 여부
+    public var state:AdState    // 현재 광고 상태 (아래 AdState 참고)
     
     // ...
 }
@@ -59,8 +60,6 @@ public class AdListItem : AdInfoItem {
     public let productPriceText:String    // 상품 가격을 포매팅한 문자열
     public let discountPercent:String     // 할인율
     
-    public var state:AdState        // 현재 광고 상태 (아래 AdState 참고)
-
     // ...
 }
 

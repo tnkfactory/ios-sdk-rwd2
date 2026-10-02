@@ -31,7 +31,7 @@ let kakaoPlus = KaKaoTnkRwdPlus.initSession(appId: "your-app-id-from-tnk-site")
 ### 1.3 Scheme Callback Function Integration
 
 You need to process the scheme after the login is completed from the Kakao Pay app in order to receive the data. The code that processes the received scheme url is as follows.
-(If the result of the proceedUrlDelegate function below is false, it is not a PayPlus url.)
+(If the result of the proceedUrlAppDelegate / proceedUrlSceneDelegate function below is false, it is not a PayPlus url.)
 
 * Use AppDelegate
 
@@ -68,7 +68,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 ### 1.4 Show Offerwall
 
-If you have completed the above process 1.3, you can expose the ad screen by calling the showOfferWall function of the instance created through the process [1.2](#12-payplus-instance-initialization).
+If you have completed the above process 1.3, you can expose the ad screen by calling the showOfferwall function of the instance created through the process [1.2](#12-payplus-instance-initialization).
 
 ```swift
 import TnkRwdSdk2

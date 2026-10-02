@@ -1,5 +1,7 @@
 ## AdListItemView.swift
 
+광고 목록 아이템 뷰의 기본 클래스 `AdListItemView` 의 구현이다. 매체는 이 클래스를 상속해 `open` 으로 선언된 메소드만 재정의할 수 있다. 접근 제어자가 없는 선언(`AdItemDelegate` 프로토콜, `adItemDelegate`, `adItemKey`, `applyViewLayout`, `updateFavoriteButton`, `loadImageIcon`, `loadImageFeed`)과 `TnkImageCache.shared` 는 SDK 내부용이므로 매체 코드에서 사용할 수 없다. 이미지는 SDK 가 `setData()` 호출 후 `useImageIcon()` / `useImageFeed()` 가 true 인 경우 비동기로 로딩해 `setImageIcon()` / `setImageFeed()` 로 전달하며, 기본 구현은 `getIconImageView()` / `getFeedImageView()` 가 반환한 뷰에 이미지를 설정한다.
+
 ```swift
 import UIKit
 
@@ -12,7 +14,7 @@ protocol AdItemDelegate : NSObjectProtocol {
 // 광고 목록의 아이템 표시를 위한 최상위 클래스
 // 하위 클래스가 구현해야할 메소드를 정의하였으며, 이미지 로딩 기능이 구현되어 있다.
 // 매체사에서 커스마이징을 원할 경우 이 클래스의 하위 클래스를 구현한다.
-public class AdListItemView : UICollectionViewCell {
+open class AdListItemView : UICollectionViewCell {
     weak var adItemDelegate:AdItemDelegate?
     
     private var didLayout:Bool = false  // 내부 UI 구현이 완료되었는지 여부 저장용 (생성자에서 UI 구현을 하지 않고 applyLayout() 사용해서 구현함)
@@ -23,11 +25,11 @@ public class AdListItemView : UICollectionViewCell {
     // View 가 표시하고 있는 광고를 식별하기 위하여 내부적으로 사용한다. (아이콘 이미지 로딩 후 적용여부를 판단하기 위한 용도이다.)
     var adItemKey:Int = 0
     
-    override init(frame:CGRect) {
+    override public init(frame:CGRect) {
         super.init(frame:frame)
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -40,7 +42,7 @@ public class AdListItemView : UICollectionViewCell {
     }
     
     // UI 구성 요소들의 속성값과 LayoutConstraint 등의 설정을 구현한다.
-    public func applyLayout(_ viewLayout:AdListItemViewLayout) {
+    open func applyLayout(_ viewLayout:AdListItemViewLayout) {
         // 하위 클래스에서 applyLayout 구현시 이 함수를 먼저 호출해야한다.
         useIconImage = viewLayout.useIconImage
         useFeedImage = viewLayout.useFeedImage
@@ -63,26 +65,26 @@ public class AdListItemView : UICollectionViewCell {
     // itemsPerPage: 페이지당 아이템 갯수
     // itemIndex : 섹션내에 표시되는 전체 아이템 중에서 몇번째 아이템인지 알려줌 (페이징 처리되는 경우 indexPath.row 값과는 다르다)
     // numberOfItems : 섹션 내에 표시되는 전체 아이템 갯수
-    public func setData(_ adItem:AdItem?, row:Int, itemsPerPage:Int, itemIndex:Int, numberOfItems:Int) {
+    open func setData(_ adItem:AdItem?, row:Int, itemsPerPage:Int, itemIndex:Int, numberOfItems:Int) {
         // 하위 클래스에서 구현한다.
     }
     
     // 아이콘 이미지 표시 여부를 반환한다.
-    public func useImageIcon() -> Bool {
+    open func useImageIcon() -> Bool {
         return useIconImage
     }
     
-    public func setImageIcon(_ image:UIImage?) {
+    open func setImageIcon(_ image:UIImage?) {
         getIconImageView()?.image = image
     }
     
     // 피드 이미지 표시 여부를 반환한다.
-    public func useImageFeed() -> Bool {
+    open func useImageFeed() -> Bool {
         return useFeedImage
     }
 
     // 피드이미지 설정 함수이다. 하위 클래스에서 구현한다.
-    public func setImageFeed(_ image:UIImage?) {
+    open func setImageFeed(_ image:UIImage?) {
         getFeedImageView()?.image = image
     }
     
@@ -90,49 +92,49 @@ public class AdListItemView : UICollectionViewCell {
     // MARK: 커스터마이징을 위한 UI 컨트롤의 Bind 함수들
     //
     
-    public func getIconImageView() -> UIImageView? {
+    open func getIconImageView() -> UIImageView? {
         return nil
     }
     
-    public func getFeedImageView() -> UIImageView? {
+    open func getFeedImageView() -> UIImageView? {
         return nil
     }
     
-    public func getTitleLabel() -> UILabel? {
+    open func getTitleLabel() -> UILabel? {
         return nil
     }
     
-    public func getDescLabel() -> UILabel? {
+    open func getDescLabel() -> UILabel? {
         return nil
     }
     
-    public func getPointAmountLabel() -> UILabel? {
+    open func getPointAmountLabel() -> UILabel? {
         return nil
     }
 
-    public func getPointUnitLabel() -> UILabel? {
+    open func getPointUnitLabel() -> UILabel? {
         return nil
     }
     
-    public func getPointImageView() -> UIImageView? {
+    open func getPointImageView() -> UIImageView? {
         return nil
     }
     
-    public func getDividerLineView() -> UIView? {
+    open func getDividerLineView() -> UIView? {
         return nil
     }
     
     // CPS 용 추가 컨트롤
     
-    public func getProductPriceLabel() -> UILabel? {
+    open func getProductPriceLabel() -> UILabel? {
         return nil
     }
 
-    public func getDiscountRateLabel() -> UILabel? {
+    open func getDiscountRateLabel() -> UILabel? {
         return nil
     }
     
-    public func getFavoriteButton() -> UIButton? {
+    open func getFavoriteButton() -> UIButton? {
         return nil
     }
     

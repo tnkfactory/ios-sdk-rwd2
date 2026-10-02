@@ -17,12 +17,12 @@
 2. [오퍼월 띄우기](#2-오퍼월-띄우기)
    * 2.1 [사용자 식별값 설정](#21-사용자-식별값-설정)
    * 2.2 [AdOfferwallViewController](#22-AdOfferwallViewController)
-   * 2.3 [AdOfferwallView](#23-AdOfferwallVew)
+   * 2.3 [AdOfferwallView](#23-AdOfferwallView)
       * [특정 카테고리 필터 랜딩](#오퍼월-구동시-특정-카테고리-랜딩-기능)
       * [OfferwallEventListener](#OfferwallEventListener)
    * 2.4 [SwiftUI 에서 사용하기](#24-SwiftUI-에서-사용하기)
 3. [Publisher API](#3-Publisher-API)
-   * 3.1 [광고 상태 조회 - QueryPublishState](#31-광고-상태-조회---QueryPublishState)
+   * 3.1 [광고 상태 조회 - queryPublishState](#31-광고-상태-조회---queryPublishState)
    * 3.2 [적립가능한 포인트 조회 - queryAdvertiseCount](#32-적립가능한-포인트-조회---queryAdvertiseCount)
    * 3.3 [포인트 조회 및 인출](#33-포인트-조회-및-인출)
 	  *  [포인트 조회 - queryPoint](#포인트-조회---queryPoint) 
@@ -46,7 +46,7 @@
 
 다운로드 받은 SDK 압축파일을 풀면 dynamic, static 폴더가 생성됩니다. 
 dynamic 폴더의 TnkRwdSdk2.xcframework 폴더를 XCode 내에 마우스로 드래그합니다. 이후 XCode -> Target -> General -> Frameworks, Libraries, and Embedded Content 항목에 TnkRwdSdk2.xcframework 가 있는 것을 확인하시고 Embed 설정을 Embed & Sign 으로 변경합니다.
-static 폴더의 TnkRwdSdk2.xcframework, TnkRwdSdk2.bundle 를 Xcode 내에 마우스로 드래그 합니다.
+static 라이브러리를 사용하시려면 dynamic 폴더 대신 static 폴더의 TnkRwdSdk2.xcframework, TnkRwdSdk2.bundle 를 Xcode 내에 마우스로 드래그 합니다. (dynamic 과 static 중 하나만 추가합니다.)
 
 아래의 이미지를 참고하세요.
 
@@ -127,7 +127,7 @@ TnkSession.initInstance(appId: "your-app-id-from-tnk-site")
 
 #### info.plist 파일에 등록하기
 
-XCode 프로젝트의 info.plist 파일내에 아래와 같이 `tnkad_app_id` 항목을 추가하고 **APP-ID** 값을 설정합니다. 이곳에 설정해두면 TnkSession 객체가 처음 사용되는 시점에 해당 **APP-ID** 값을 사용하여 자동으로 초기화됩니다.
+XCode 프로젝트의 info.plist 파일내에 아래와 같이 `tnkad_app_id` 항목을 추가하고 **APP-ID** 값을 설정합니다. 이곳에 설정해두면 `TnkSession.sharedInstance()` 가 처음 호출되는 시점에 해당 **APP-ID** 값을 사용하여 자동으로 초기화됩니다. (`TnkSession.shared` 프로퍼티는 자동으로 초기화되지 않으므로 `sharedInstance()` 를 사용해주세요.)
 
 ![appid_info_plist](./img/appid_info_plist.jpg)
 
@@ -247,7 +247,7 @@ func loadOfferwall() {
  - 카테고리 ID 와 필터 ID는 Tnk Admin 웹페이지를 통해 발췌 가능하며 상세 방법은 ([https://vintage-brain-4dd.notion.site/TNK-24283d88d5e0805b81a1cd4f2dbe753d](https://vintage-brain-4dd.notion.site/26583d88d5e08025a662f08c7bb0ebc2))을 참고해주시길 바랍니다.
 
 AdOfferwallViewController , AdOfferwallView 모두 해당 기능을 지원하며 화면 표시 전 선언된 객체의 'landingData'에  "카테고리ID//필터ID" 를 선언후 해당 객체를 화면에 띄우시면 
-자동으로 지정된 카테고리,필터 화면으로 랜딩 됩니다.
+자동으로 지정된 카테고리,필터 화면으로 랜딩 됩니다. (`landingData` 는 Swift 에서만 사용할 수 있으며 Objective-C 에는 노출되지 않습니다.)
 
 ```swift
 // Swift
@@ -278,19 +278,27 @@ func showOfferwall() {
 
 /// 오퍼월 내의 특정 이벤트들을 받아서 처리하기 위하여 사용됩니다.
 /// AdOfferwallView 객체의 offerwallListener 에 설정합니다.
+@objc
 public protocol OfferwallEventListener : NSObjectProtocol {
 
     /// AdOfferwallView 에 광고가 로딩되는 시점에 호출됩니다.
     ///
     /// - Parameters:
-    ///   - headerMessage: Tnk 사이트에서 상단 메시지를 설정할 수 있습니다. 설정된 메시지가 전달됩니다.
+    ///   - headerMessage: 사용자가 참여중인 멀티 리워드 캠페인이 있는 경우 상단 말풍선에 표시되는 이어하기 안내 문구가 전달됩니다. 없으면 nil 이 전달됩니다. (Tnk 사이트에서 설정한 상단 메시지는 didOfferwallTitleChanged(title:) 로 전달됩니다.)
     ///   - totalPoint: 적립 가능한 총 포인트가 전달됩니다.
     ///   - totalCount : 적립 가능한 총 광고 수가 전달됩니다.
     ///   - multiRewardPoint: 사용자가 참여중인 멀티 리워드 캠페인이 있는 경우 적립 받을 수 있는 잔여 포인트가 전달됩니다.
     ///   - multiRewardCount: 사용자가 참여중인 멀티 리워드 캠페인이 있는 경우 참여 중인 멀티 리워드 캠페인 수가 전달됩니다.
-    func didAdDataLoaded(headerMessage:String?,
-                         totalPoint:Int, totalCount:Int,
-                         multiRewardPoint:Int, multiRewardCount:Int)
+    @objc optional func didAdDataLoaded(headerMessage:String?,
+                                        totalPoint:Int, totalCount:Int,
+                                        multiRewardPoint:Int, multiRewardCount:Int)
+    
+    /// AdOfferwallView 에 광고가 로딩되는 시점에 호출됩니다.
+    ///
+    /// - Parameters:
+    ///   - title: Tnk 사이트에서 상단 타이틀을 설정할 수 있습니다. 설정된 메시지가 전달됩니다.
+    ///   (AdOfferwallViewController 를 사용하는 경우에는 offerwallListener 로 전달되지 않고 화면 타이틀에 자동으로 적용됩니다.)
+    @objc optional func didOfferwallTitleChanged(title:String?)
     
     /// AdOfferwallView 의 메뉴 또는 필터를 클릭하는 경우 호출됩니다.
     ///
@@ -299,17 +307,17 @@ public protocol OfferwallEventListener : NSObjectProtocol {
     ///   - menuName : 클릭한 메뉴의 이름
     ///   - filterId: 클릭한 필터의 ID
     ///   - filterName: 클릭한 필터의 이름
-    func didMenuSelected(menuId:Int, menuName:String, filterId:Int, filterName:String)
+    @objc optional func didMenuSelected(menuId:Int, menuName:String, filterId:Int, filterName:String)
     
     /// AdOfferwallView 의 광고를 클릭하면 호출됩니다.
     ///
     /// - Parameters:
     ///   - appId : 클릭한 광고의 appId
     ///   - appName : 클릭한 광고의 명칭
-    func didAdItemClicked(appId:Int, appName:String)
+    @objc optional func didAdItemClicked(appId:Int, appName:String)
     
     /// AdOfferwallView 가 닫히는 경우 호출됩니다.
-    func didOfferwallRemoved()
+    @objc optional func didOfferwallRemoved()
 
 	/// 광고 상세화면이 노출되는 시점에 호출됩니다. (2023.07.26)
     @objc optional func didDetailViewShow(appId:Int, appName:String)
@@ -324,6 +332,7 @@ AdOfferwallView.offerwallListener 또는 AdOfferwallViewController.offerwallList
 
 ```swift
 // Swift
+import UIKit
 import TnkRwdSdk2
 
 class ViewController: UIViewController, OfferwallEventListener {
@@ -359,10 +368,12 @@ class ViewController: UIViewController, OfferwallEventListener {
     func didOfferwallRemoved() {
         print("### offerwall removed")
     }
+}
 ```
 
 ```objective-c
 // Objective-C
+#import <UIKit/UIKit.h>
 #import <TnkRwdSdk2/TnkRwdSdk2.h>
 
 @interface ViewController : UIViewController <OfferwallEventListener>
@@ -402,6 +413,8 @@ class ViewController: UIViewController, OfferwallEventListener {
 - (void)didOfferwallRemoved {
     NSLog(@"### offerwall removed");
 }
+
+@end
 ```
 
 ### 2.4 SwiftUI 에서 사용하기
@@ -410,6 +423,8 @@ SwiftUI 에서 오퍼월을 사용하실 수 있습니다. 아래의 예시 코�
 
 ```swift
 // SwiftUI
+import SwiftUI
+import TnkRwdSdk2
 
 struct OfferwallViewController : UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> AdOfferwallViewController {
@@ -431,7 +446,7 @@ struct SwiftUIView: View {
 
 ## 3. Publisher API
 
-### 3.1 광고 상태 조회 - QueryPublishState
+### 3.1 광고 상태 조회 - queryPublishState
 
 Tnk 사이트의 [게시정보]에서 광고 게시 중지를 하게 되면 이후에는 사용자가 오퍼월 창을 띄워도 광고들이 나타나지 않습니다. 그러므로 향후 광고 게시를 중지할 경우를 대비하여 화면에 충전소 버튼 자체를 보이지 않게 하는 기능을 갖추는 것이 바람직합니다. 이를 위하여 현재 게시앱의 광고게시 상태를 조회하는 기능을 제공합니다.
 
@@ -589,7 +604,7 @@ TnK 서버에서는 별도로 아이템 목록을 관리하는 기능을 제공�
 	- Parameters
 		- itemId: 구매하는 아이템의 ID 값으로 앱에서 부여합니다. Tnk 사이트에서 제공하는 구매 리스트 화면에서 함께 보여줍니다.
 		- cost: 차감할 포인트입니다.
-		- completion: 결과를 받으면 호출됩니다. 차감 후 잔여 포인트(Int)와 고유한 거래 ID 값(Int)이 파라메터로 전달됩니다. 포인트 부족 또는 네트워크/시스템 오류로 인해 구매가 수행되지 못한 경우에는 두번째 파라메터 값으로 음수가 전달됩니다.
+		- completion: 결과를 받으면 호출됩니다. 차감 후 잔여 포인트(Int)와 고유한 거래 ID 값(Int)이 파라메터로 전달됩니다. 포인트 부족 등으로 구매가 수행되지 못한 경우에는 두번째 파라메터 값으로 음수가 전달되고, 네트워크 오류 등으로 결과를 받지 못한 경우에는 두 파라메터 모두 0 이 전달됩니다. 거래 ID 가 0 보다 큰 경우에만 구매가 완료된 것으로 처리하세요.
 	- 사용예시
 
 ```swift
@@ -605,7 +620,7 @@ TnkSession.sharedInstance()?.purchaseItem("광고제거", cost: 1000) {
 		-  itemId: 구매하는 아이템의 ID 값으로 앱에서 부여합니다. Tnk 사이트에서 제공하는 구매 리스트 화면에서 함께 보여줍니다.
 		- cost: 차감할 포인트입니다.
 		- target: 결과를 받으면 이 객체의 action 메소드가 호출됩니다.
-		- action: 결과를 받으면 호출되는 메소드입니다. 해당 메소드는 NSNumber 타입의 파라메터 2개를 가져야하며, 차감 후 잔여 포인트(Int)와 고유한 거래 ID 값(Int)이 파라메터로 전달됩니다. 포인트 부족 또는 네트워크/시스템 오류로 인해 구매가 수행되지 못한 경우에는 두번째 파라메터 값으로 음수가 전달됩니다.
+		- action: 결과를 받으면 호출되는 메소드입니다. 해당 메소드는 NSNumber 타입의 파라메터 2개를 가져야하며, 차감 후 잔여 포인트(Int)와 고유한 거래 ID 값(Int)이 파라메터로 전달됩니다. 포인트 부족 등으로 구매가 수행되지 못한 경우에는 두번째 파라메터 값으로 음수가 전달되고, 네트워크 오류 등으로 결과를 받지 못한 경우에는 두 파라메터 모두 0 이 전달됩니다.
 	- 사용예시
 
 ```swift
@@ -637,7 +652,7 @@ Tnk 서버에서 관리되는 사용자 포인트 전체를 한번에 인출하�
 - func **withdrawPoints(_ desc:String, completion:@escaping (Int,Int)->Void)**
 	- Parameters
 		- desc: 인출과 관련된 설명 등을 넣어줍니다. Tnk 사이트의 보고서 페이지에서 함께 보여줍니다.
-		- completion: 결과를 받으면 호출됩니다. 인출된 포인트(Int)와 고유한 거래 ID 값(Int)이 파라메터로 전달됩니다.
+		- completion: 결과를 받으면 호출됩니다. 인출된 포인트(Int)와 고유한 거래 ID 값(Int)이 파라메터로 전달됩니다. 인출할 포인트가 없는 등으로 인출이 수행되지 못한 경우에는 두번째 파라메터 값으로 음수가 전달되고, 네트워크 오류 등으로 결과를 받지 못한 경우에는 두 파라메터 모두 0 이 전달됩니다.
 	- 사용예시
 
 ```swift
@@ -652,7 +667,7 @@ TnkSession.sharedInstance()?.withdrawPoints("전체인출") {
 	- Parameters
 		- desc: 인출과 관련된 설명 등을 넣어줍니다. Tnk 사이트의 보고서 페이지에서 함께 보여줍니다.
 		- target: 결과를 받으면 이 객체의 action 메소드가 호출됩니다.
-		- action: 결과를 받으면 호출되는 메소드입니다. 해당 메소드는 NSNumber 타입의 파라메터 2개를 가져야하며, 인출된 포인트(Int)와 고유한 거래 ID 값(Int)이 파라메터로 전달됩니다.
+		- action: 결과를 받으면 호출되는 메소드입니다. 해당 메소드는 NSNumber 타입의 파라메터 2개를 가져야하며, 인출된 포인트(Int)와 고유한 거래 ID 값(Int)이 파라메터로 전달됩니다. 인출할 포인트가 없는 등으로 인출이 수행되지 못한 경우에는 두번째 파라메터 값으로 음수가 전달되고, 네트워크 오류 등으로 결과를 받지 못한 경우에는 두 파라메터 모두 0 이 전달됩니다.
 	- 사용예시
 
 ```swift
@@ -731,7 +746,7 @@ String appKey = "d2bbd...........19c86c8b021";
 // 유효성을 검증하기 위하여 아래와 같이 verifyCode를 생성한다. DigestUtils는 Apache의 commons-codec.jar 이 필요하다. 다른 md5 해시함수가 있다면 그것을 사용해도 무방하다.
 String verifyCode = DigestUtils.md5Hex(appKey + mdUserName + seqId);
 
-// 생성한 verifyCode와 chk_cd 파라메터 값이 일치하지 않으면 잘못된 요청이다.
+// 생성한 verifyCode와 md_chk 파라메터 값이 일치하지 않으면 잘못된 요청이다.
 if (checkCode == null || !checkCode.equals(verifyCode)) {
 
     // 오류
@@ -759,6 +774,7 @@ else {
 
 ```swift
 // Swift
+import UIKit
 import TnkRwdSdk2
 
 class ViewController: UIViewController, TnkPrivacyAgreementListener {
@@ -841,6 +857,7 @@ TnkStyles.offerwallTheme = TnkOfferwallThemeDark;
 > iOS 에서 반드시 라이트 또는 다크로 보여주려면 `.light` / `.dark` 를 지정하세요.
 
 **적용 범위** : 오퍼월 목록 화면, 광고 상세 웹뷰, 이벤트 웹뷰, 다이얼로그와 상태바 아이콘의 명암까지 지정한 테마로 맞춰집니다.
+`AdOfferwallView` 를 매체의 뷰컨트롤러에 직접 추가한 경우(2.3)에는 목록 자체는 매체 뷰컨트롤러의 스타일을 따르고, 광고 상세 등 목록에서 띄우는 화면은 지정한 테마를 따릅니다.
 웹 페이지 내부의 색상은 웹이 결정하므로, 다크 스타일을 갖춘 페이지는 설정에 따라 바뀌고 다크 스타일이 없는 페이지는 그대로 표시됩니다.
 
 ## 5. 플레이스먼트 뷰
@@ -928,21 +945,23 @@ TnkSession.sharedInstance()?.actionCompleted(actionName: "friend_invite")
 ## 7. 광고 상세화면 직접 호출
 
 > Push Notification 을 지원하는 매체는 푸시 동작으로 광고 상세화면을 띄우는데 아래 함수들이 사용됩니다.
-> TnkSession.initSession 과 setUserName이 완료된 후 광고 ID통해 광고 상세 화면을 직접 호출할수 있습니다.
+> TnkSession.initInstance 와 setUserName이 완료된 후 광고 ID통해 광고 상세 화면을 직접 호출할수 있습니다.
 
 
-#### Method - presentAdDetailView
-@objc
+#### Method - openPrivacyTermAlert
 public func openPrivacyTermAlert(parentViewController : UIViewController,
-                                     onReturn:@escaping (_ result : Bool)
+                                     onReturn:@escaping (_ result : Bool) -> ())
+
+(Swift 전용 API 이며 Objective-C 에서는 호출할 수 없습니다.)
 
 ### Descrtiption
 개인 정보 수입 동의 팝업을 노출합니다.
+- setUserName() 으로 사용자 식별값을 설정하지 않은 경우에는 팝업 없이 onReturn 콜백으로 False를 바로 반환합니다.
 - 이미 수집동의 를 수락한경우 onReturn콜백으로 True를 바로 반환합니다.
 - 동의 되지 않은 경우에는 수집동의 여부를 묻는 팝업을 노출합니다. 예 아니오 여부에 따라 onReturn 콜백 결과를 반환합니다. 
 
 #### Parameters
- parentViewController : 상세화면이 부착될 root UIViewController
+ parentViewController : 수집동의 팝업을 띄울 UIViewController
  onReturn : 개인정보 수집동의 결과
 
 
@@ -951,9 +970,14 @@ public func openPrivacyTermAlert(parentViewController : UIViewController,
 @objc
 public func presentAdDetailView(_ viewController:UIViewController,
 								appId:Int,
-								fullscreen:Bool,
-								isCpsItem:Bool = false,
-								completion:@escaping (Bool)->Void)
+								subAppId:String? = nil,
+								navigationPush:Bool = false,
+								pageAnimated:Bool = true,
+								fullscreen:Bool = false,
+								actionId:Int = 0,
+								completion:@escaping (Bool, Error?)->Void,
+								apiStartCompletion:(()->Void)? = nil,
+								apiEndCompletion:(()->Void)? = nil)
 
 ### Descrtiption
 광고 appID를 입력받아 직접 상세 화면을 호출합니다.
@@ -963,7 +987,8 @@ public func presentAdDetailView(_ viewController:UIViewController,
  appId : 광고 ID
  fullscreen : 풀스크린 여부
  actionId : Int = 0 - 쇼핑형 광고인경우에는 해당 값을 5로 세팅 해야 합니다.(일반 광고일경우에는 해당 파라메터를 생략하셔도 됩니다.)
- completetion : (Bool) -> Void : 광고 호출 성공 여부를 콜백으로 리턴합니다.
+ completion : (Bool, Error?) -> Void : 광고 호출 성공 여부를 콜백으로 리턴합니다. 실패한 경우 두번째 파라메터로 오류가 전달됩니다.
+ subAppId, navigationPush, pageAnimated, apiStartCompletion, apiEndCompletion : 기본값이 있으므로 생략할 수 있습니다.
 
  
 
@@ -971,9 +996,15 @@ public func presentAdDetailView(_ viewController:UIViewController,
 @objc
 public func adJoin(_ viewController:UIViewController,
 				   appId:Int,
-				   fullscreen:Bool,
+				   subAppId:String? = nil,
+				   navigationPush:Bool = false,
+				   pageAnimated:Bool = true,
+				   fullscreen:Bool = false,
 				   actionId : Int = 0,
-				   completion:@escaping (Bool)->Void)
+				   completion:@escaping (Bool, Error?)->Void,
+				   outActionCompletion:(()->Void)? = nil,
+				   apiStartCompletion:(()->Void)? = nil,
+				   apiEndCompletion:(()->Void)? = nil)
 
 ### Descrtiption
 광고 appID를 입력받아 해당 광고의 참여 액션을 수행합니다.(설치 조회 , 광고 참여 웹페이지 이동 등)
@@ -983,14 +1014,8 @@ public func adJoin(_ viewController:UIViewController,
  appId : 광고 ID
  fullscreen : 풀스크린 여부
  actionId : Int = 0 - 쇼핑형 광고인경우에는 해당 값을 5로 세팅 해야 합니다.(일반 광고일경우에는 해당 파라메터를 생략하셔도 됩니다.)
- completetion : (Bool) -> Void : 광고 호출 성공 여부를 콜백으로 리턴합니다.
-
-@objc
-public func adJoin(_ viewController:UIViewController,
-				   appId:Int,
-				   fullscreen:Bool,
-				   actionId : Int = 0,
-				   completion:@escaping (Bool)->Void)
+ completion : (Bool, Error?) -> Void : 광고 호출 성공 여부를 콜백으로 리턴합니다. 실패한 경우 두번째 파라메터로 오류가 전달됩니다.
+ subAppId, navigationPush, pageAnimated, outActionCompletion, apiStartCompletion, apiEndCompletion : 기본값이 있으므로 생략할 수 있습니다.
 
 ### Push 프로세스 처리 및 샘플 코드
 1) 푸시에서 수신한 데이터에서 CPS 여부 , 광고 ID 2가지를 발췌합니다.
@@ -1000,7 +1025,7 @@ public func adJoin(_ viewController:UIViewController,
 
 ```swift
 //약관 동의 상태 체크 함수
-TnkSession.shared?.openPrivacyTermAlert(parentViewController: self) { result in
+TnkSession.sharedInstance()?.openPrivacyTermAlert(parentViewController: self) { result in
 	if(result)
 	{
 		//약관 동의한 상태 or 팝업에서 약관 동의 한 경우
@@ -1010,10 +1035,10 @@ TnkSession.shared?.openPrivacyTermAlert(parentViewController: self) { result in
 		let isCPS = false
 		//CPS일경우에는 actionId를 5 그외에는 0으로 설정해야합니다.
 		let actionId = isCPS ? 5 : 0
-		TnkSession.shared?.presentAdDetailView(self,
+		TnkSession.sharedInstance()?.presentAdDetailView(self,
 											   appId: adAppID,
 											   fullscreen: false,
-											   actionId: actionId) { result in
+											   actionId: actionId) { result, error in
 			
 		}
 	}else{

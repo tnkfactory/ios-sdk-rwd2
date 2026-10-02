@@ -71,7 +71,7 @@
   * 혜택 플러스 콜백 수신 버그 수정
   * UI 오류 수정
   * 캐러셀 배너 디자인 타입 추가
-  * AdOfferViewcontroller 카테고리 필터 랜딩 기능 추가
+  * AdOfferwallViewController 카테고리 필터 랜딩 기능 추가
   
 * v.5.47 - 2024.11.11
   * 혜택 플러스 콜백 수신 버그 수정
@@ -128,7 +128,7 @@
 * v.5.11 - 2023.05.22
   * UI 커스터마이징을 위한 내부 기능 수정
 * v.5.10 - 2023.05.15
-  * TnkAlerts.showATTPopup() iOS13 미만에서 오류 수정
+  * TnkAlerts.showATTPopup iOS13 미만에서 오류 수정
   * OfferwallEventListener, PlacementEventListener 함수들 optional 로 변경
 * v.5.09 - 2023.05.09
   * 뉴스광고 적립 방식 변경
@@ -137,7 +137,7 @@
   * 다크모드 색상 적용 : 다크모드 적용시 TnkColor.enableDarkMode = true
   * AdPlacementView 기능 추가 (가이드 참고) 
 * v.5.06 - 2023.02.28
-  * OfferwallListener 수정
+  * OfferwallEventListener 수정
 * v.5.05 - 2023.02.27
   * 최초 출시 
 

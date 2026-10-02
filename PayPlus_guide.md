@@ -31,7 +31,7 @@ let kakaoPlus = KaKaoTnkRwdPlus.initSession(appId: "your-app-id-from-tnk-site")
 ### 1.3 스키마 콜백 함수 연동
 
 카카오 페이앱으로 부터 로그인이 완료된 후 데이터를 넘겨받기 위한 스키마 처리 작업을 진행해야 합니다. 넘겨 받은 스키마 url을 처리하는 코드는 아래와 같습니다.
-(아래 proceedUrlDelegate 함수의 결과가 false일 경우는 혜택플러스 url이 아닌 경우입니다.)
+(아래 proceedUrlAppDelegate / proceedUrlSceneDelegate 함수의 결과가 false일 경우는 혜택플러스 url이 아닌 경우입니다.)
 
 * AppDelegate 를 사용하는 경우
   
@@ -66,7 +66,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 ### 1.4 오퍼월 화면 호출
 
-위 1.3 과정까지 모두 진행하셨다면 [1.2](#12-혜택플러스-인스턴스-초기화)의 과정을 통해 만든 인스턴스의 showOfferWall함수를 호출하시면 광고 화면을 노출할 수 있습니다.
+위 1.3 과정까지 모두 진행하셨다면 [1.2](#12-혜택플러스-인스턴스-초기화)의 과정을 통해 만든 인스턴스의 showOfferwall 함수를 호출하시면 광고 화면을 노출할 수 있습니다.
 
 ```swift
 import TnkRwdSdk2

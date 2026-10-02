@@ -48,41 +48,46 @@ func loadPlacementView() {
 
 AdPlacementView 의 loadData() 를 호출하면 전달된 placement_id 에 설정된 값에 따라서 광고를 로딩합니다. 광고 로딩이 완료되면 PlacementEventListener 의 didAdDataLoaded() 가 호출됩니다.
 
-아래는 PlacementEventListener 의 protocol 규약입니다.
+아래는 PlacementEventListener 의 protocol 규약입니다. 모든 메소드는 선택(`@objc optional`) 메소드이므로 필요한 것만 구현하면 됩니다. 메소드 이름이나 인자 라벨이 아래와 다르면 컴파일 오류 없이 호출되지 않으니 주의하세요.
 
 ```swift
 /// AdPlacementView 내의 특정 이벤트들을 받아서처리 하기 위하여 사용됩니다.
 /// AdPlacementView 객체의 placementListener 에 설정합니다.
-public protocol PlacementEventListener : NSObjectProtocol {
+@objc public protocol PlacementEventListener : NSObjectProtocol {
 
     /// AdPlacementView 에 광고가 로딩되는 시점에 호출됩니다. 여기에 광고를 표시하는 로직을 구현합니다.
     ///
     /// - Parameters:
     ///    - placementId: 광고 로딩을 요청한 placement Id 값
     ///    - customData : 플레이스먼트 설정시 customData 항목에 입력한 값
-    func didAdDataLoaded(placementId:String, customData:String?)
+    @objc optional func didAdDataLoaded(placementId:String, customData:String?)
     
     /// AdPlacementView 에 광고 로딩이 실패하는 시점에 호출됩니다.
     ///
     /// - Parameters:
     ///   - placementId: 광고 로딩을 요청한 placement Id 값
-    func didFailedToLoad(placementId:String)
+    @objc optional func didFailedToLoad(placementId:String)
     
     /// AdPlacementView 의 광고를 클릭하면 호출됩니다.
     ///
     /// - Parameters:
+    ///   - placementId: 광고를 클릭한 placement Id 값
     ///   - appId : 클릭한 광고의 appId
     ///   - appName : 클릭한 광고의 명칭
-    func didAdItemClicked(appId:Int, appName:String)
+    @objc optional func didAdItemClicked(placementId:String, appId:Int, appName:String)
 
     /// AdPlacementView 의 광고를 닫으면 호출됩니다.
     ///
     /// - Parameters:
-    ///   - appId : 클릭한 광고의 appId
-    func didAdItemClosed(placementId:String, appId:Int)
+    ///   - placementId: 광고를 닫은 placement Id 값
+    ///   - appId : 닫은 광고의 appId
+    @objc optional func didAdItemClosed(placementId:String, appId:Int)
 
     /// 더보기 링크를 클릭하면 호출됩니다. 여기에 오퍼월을 띄우도록 구현합니다.
-    func didMoreLinkClicked()
+    ///
+    /// - Parameters:
+    ///   - placementId: 더보기 링크를 클릭한 placement Id 값
+    @objc optional func didMoreLinkClicked(placementId:String)
 }
 ```
 
@@ -148,11 +153,19 @@ SDK 에서는 플레이스먼트뷰에 적합한 몇가지 레이아웃을 제�
 
 #### 피드
 
+- viewClass: `FeedAdListItemView`, viewLayout: `PlacementFeedViewLayout` (레이아웃을 등록하지 않은 플레이스먼트의 기본값)
+
 #### 피드 (이미지만 표시)
+
+- viewClass: `FeedOnlyAdListItemView`, viewLayout: `PlacementFeedOnlyViewLayout`
 
 #### 아이콘
 
+- viewClass: `IconOnlyAdListItemView`, viewLayout: `PlacementIconViewLayout`
+
 #### 리스트
+
+- viewClass: `DefaultAdListItemView`, viewLayout: `PlacementListViewLayout`
 
  
 --- 
@@ -169,17 +182,21 @@ SDK 에서는 플레이스먼트뷰에 적합한 몇가지 레이아웃을 제�
 
 #### Description
 
-PlacementView에 로드된 광고 목록을 반환합니다.
+PlacementView에 로드된 광고 목록을 반환합니다. 이벤트 지면(ad_type 4)의 항목은 반환되지 않습니다.
 
 #### Parameters
 
 #### Return : \[TnkPlacementAdItem\]
+
+TnkPlacementAdItem 의 각 필드는 앱 코드에서 직접 접근할 수 없습니다. 아래 필드는 getAdListJson() 이 반환하는 JSON 의 키로 확인하세요.
+
 ```swift
 public struct TnkPlacementAdItem : Codable
 {
     let app_id: Int                // Int 광고 고유 식별값
     let app_nm: String              // String 광고 제목
     let img_url: String             // String 이미지 url
+    let icon_url: String            // String 아이콘 url
     let pnt_amt: Int               // Int 지급 포인트 (이벤트 진행시 이벤트 배율 적용된 포인트)
     let org_amt: Int               // Int 배율 이벤트 진행 시 원래의 포인트(이벤트 기간 아닐경우 0)
     let pnt_unit: String           // String 포인트 재화 단위
@@ -189,7 +206,8 @@ public struct TnkPlacementAdItem : Codable
     let multi_yn: Bool           // Bool 멀티 미션 광고 여부
     let cmpn_type: Int              // Int 광고 유형코드
     let cmpn_type_name: String      // String 광고 유형 이름
-    let like_yn: String              // String 즐겨찾기 상품 여부
+    let like_yn: String              // String 즐겨찾기 상품 여부 ("Y"/"N")
+    let filterID: Int               // Int 필터 아이디
 }
 ```
 
@@ -217,6 +235,8 @@ PlacementView 설정값을 로드합니다.
 
 #### Return : TnkPlacementPubInfo
 
+TnkPlacementPubInfo 의 각 필드는 앱 코드에서 직접 접근할 수 없습니다. 아래 필드는 getPubInfoJson() 이 반환하는 JSON 의 키로 확인하세요.
+
 ```swift
 public struct TnkPlacementPubInfo : Codable{
     let ad_type: Int             // 지면에 설정되어 있는 광고 유형(0 : 보상형, 1 : CPS, 2 : 제휴몰, 3 : 뉴스, 4 : 이벤트)
@@ -243,19 +263,20 @@ PlacementView 설정값을 Json으로 반환합니다.
 
 #### Method
 
-- AdPlacementView.onItemClick(appId : Int)
+- AdPlacementView.onItemClick(appId : Int, completion : @escaping (Bool, TnkError?) -> ())
 
 #### Description
 
 광고 목록 정보를 가지고 직접 광고 목록을 출력 할 경우 onItemClick 메소드를 통해 광고 클릭 이벤트를 처리합니다.
 광고상세 페이지 랜딩(네이티브), 광고주가 제공한 웹 사이트로 이동 등 각 광고 타입별 액션이 실행됩니다.
-액션 처리가 완료되면 PlacementEventListener protocol의 didAdItemClicked(...) 함수로 이벤트 처리 결과가 반환됩니다.
+액션 처리 결과는 completion 클로저로 전달됩니다(성공 여부, 실패 시 TnkError). 단, 개인정보 수집 동의 전(동의 팝업이 먼저 표시됨)이거나 목록에 없는 appId 를 전달한 경우처럼 액션이 시작되지 않으면 completion 은 호출되지 않습니다. 클릭 시점에는 PlacementEventListener protocol의 didAdItemClicked(placementId:appId:appName:) 함수도 호출됩니다.
 
 #### Parameters
 
 | 파라메터 명칭 | 내용                                                         |
 | -------------- | ----------------------------------------------------------- |
 | appId       | 클릭 이벤트를 처리 할 광고의 appId                              |
+| completion  | 액션 처리 결과를 전달받는 클로저 (성공 여부, 실패 시 TnkError)     |
 
 ## 샘플코드 
 
@@ -291,7 +312,9 @@ class ViewController: UIViewController {
   //광고 상세 노출
   func showPlacementAdDetail(appId : Int)
   {
-      adPlacementView?.onItemClick(appId: appId)
+      adPlacementView?.onItemClick(appId: appId) { success, error in
+          // 처리 결과 (success: 성공 여부, error: 실패 시 TnkError)
+      }
   }
   
 }

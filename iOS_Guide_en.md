@@ -15,7 +15,7 @@
        * [OfferwallEventListener](#offerwalleventlistener)
     * 2.4 [use in SwiftUI](#24-use-in-swiftui)
 3. [Publisher API](#3-publisher-api)
-    * 3.1 [QueryPublishState](#31-querypublishstate)
+    * 3.1 [queryPublishState](#31-querypublishstate)
     * 3.2 [queryAdvertiseCount](#32-queryadvertisecount)
     * 3.3 [Point check and withdrawal](#33-point-check-and-withdrawal)
        *  [queryPoint](#querypoint)
@@ -36,9 +36,10 @@
 
 ### 1.2 Add SDK to Project
 
-When you unpack the downloaded SDK file, the TnkRwdSdk.2xcframework folder is created. Move the folder to the XCode project folder you want to apply.
+When you unpack the downloaded SDK file, `dynamic` and `static` folders are created.
 
-TnkRwdSDK if you moved the folder. Drag the xcframework folder into the XCode. After that verify that TnkRwdSdk2.xcframework is present in the XCode -> Target -> General -> Frames, Libraries, and Embedded Content entries, and change the Embedded setting to Embedded & Sign.
+To use the dynamic framework, drag the TnkRwdSdk2.xcframework folder in the `dynamic` folder into the XCode. After that verify that TnkRwdSdk2.xcframework is present in the XCode -> Target -> General -> Frameworks, Libraries, and Embedded Content entries, and change the Embed setting to Embed & Sign.
+To use the static framework, drag both TnkRwdSdk2.xcframework and TnkRwdSdk2.bundle in the `static` folder into the XCode instead. (Add only one of the `dynamic` and `static` frameworks.)
 
 Please refer to the image below.
 
@@ -120,7 +121,7 @@ TnkSession.initInstance(appId: "your-app-id-from-tnk-site")
 
 #### add 'tnkad app id' to info.plist file
 
-add `tnkad_app_id` item to info.plist file. set your **APP-ID** value to this item. if you set **APP-ID** value to this item, TnkSession object will be initialized automatically when TnkSession object is used first time.
+add `tnkad_app_id` item to info.plist file. set your **APP-ID** value to this item. if you set **APP-ID** value to this item, TnkSession object will be initialized automatically when `TnkSession.sharedInstance()` is called for the first time. (The `TnkSession.shared` property is not initialized automatically, so please use `sharedInstance()`.)
 
 ![appid_info_plist](./img/appid_info_plist.jpg)
 
@@ -130,7 +131,7 @@ add `tnkad_app_id` item to info.plist file. set your **APP-ID** value to this it
 
 To show offerwall, you need to set user name to SDK. User name is usually user's login id. If user name is phone number or email, we recommend to use a hash function like SHA256.
 
-You must set user name. If you don't set user name, offerwall will not be shown. User name is passed to callback url when user earns point. 
+You must set user name. If you don't set user name, no ads will be shown in the offerwall. User name is passed to callback url when user earns point. 
 Add below code to set user name.
 
 ```swift
@@ -243,19 +244,26 @@ You can receive offerwall events using OfferwallEventListener protocol. Below is
 
 /// OfferwallEventListener is used to receive offerwall events.
 /// OfferwallEventListener is set to offerwallListener property of AdOfferwallView or AdOfferwallViewController.
-public protocol OfferwallEventListener : NSObjectProtocol {
+@objc public protocol OfferwallEventListener : NSObjectProtocol {
 
     /// This method is called when ad list is loaded.
     ///
     /// - Parameters:
-    ///   - headerMessage: header message from Tnk site. this message is optional.
+    ///   - headerMessage: if user is participating in multi reward campaign, the message shown in the header balloon is passed. otherwise nil is passed. (the header message set on Tnk site is passed to didOfferwallTitleChanged(title:).)
     ///   - totalPoint: total point that user can earn.
     ///   - totalCount : total count of ads that user can earn.
     ///   - multiRewardPoint: if user is participating in multi reward campaign, this value is remaining point of multi reward campaign.
     ///   - multiRewardCount: if user is participating in multi reward campaign, this value is count of multi reward campaign.
-    func didAdDataLoaded(headerMessage:String?,
+    @objc optional func didAdDataLoaded(headerMessage:String?,
                          totalPoint:Int, totalCount:Int,
                          multiRewardPoint:Int, multiRewardCount:Int)
+    
+    /// This method is called when ad list is loaded.
+    ///
+    /// - Parameters:
+    ///   - title: offerwall title set on Tnk site.
+    ///   (When AdOfferwallViewController is used, this method is not passed to its offerwallListener. The title is applied to the screen title automatically.)
+    @objc optional func didOfferwallTitleChanged(title:String?)
     
     /// This method is called when menu or filter is selected.
     ///
@@ -264,17 +272,23 @@ public protocol OfferwallEventListener : NSObjectProtocol {
     ///   - menuName : name of selected menu.
     ///   - filterId: id of selected filter.
     ///   - filterName: name of selected filter.
-    func didMenuSelected(menuId:Int, menuName:String, filterId:Int, filterName:String)
+    @objc optional func didMenuSelected(menuId:Int, menuName:String, filterId:Int, filterName:String)
     
     /// This method is called when ad is clicked.
     ///
     /// - Parameters:
     ///   - appId : id of clicked ad.
     ///   - appName : name of clicked ad.
-    func didAdItemClicked(appId:Int, appName:String)
+    @objc optional func didAdItemClicked(appId:Int, appName:String)
     
     /// This method is called when offerwall is closed.
-    func didOfferwallRemoved()
+    @objc optional func didOfferwallRemoved()
+    
+    /// This method is called when ad detail view is shown.
+    @objc optional func didDetailViewShow(appId:Int, appName:String)
+    
+    /// This method is called when action button is clicked in ad detail view.
+    @objc optional func didActionButtonClicked(appId:Int, appName:String)
     
 }
 ```
@@ -283,6 +297,7 @@ You can set OfferwallEventListener to AdOfferwallView.offerwallListener or AdOff
 
 ```swift
 // Swift
+import UIKit
 import TnkRwdSdk2
 
 class ViewController: UIViewController, OfferwallEventListener {
@@ -290,7 +305,7 @@ class ViewController: UIViewController, OfferwallEventListener {
     func loadOfferwall() {
         
         let offerwallView = AdOfferwallView(frame:view.frame, viewController: self)
-        offerwallView.offerwallListener = self  // Listener 설정
+        offerwallView.offerwallListener = self  // set listener
     
         // ...
         
@@ -318,10 +333,12 @@ class ViewController: UIViewController, OfferwallEventListener {
     func didOfferwallRemoved() {
         print("### offerwall removed")
     }
+}
 ```
 
 ```objective-c
 // Objective-C
+#import <UIKit/UIKit.h>
 #import <TnkRwdSdk2/TnkRwdSdk2.h>
 
 @interface ViewController : UIViewController <OfferwallEventListener>
@@ -332,7 +349,7 @@ class ViewController: UIViewController, OfferwallEventListener {
 
 - (void)loadOfferwall {
     AdOfferwallView *offerwallView = [[AdOfferwallView alloc] initWithFrame:self.view.frame viewController:self];
-    offerwallView.offerwallListener = self;  // Listener 설정
+    offerwallView.offerwallListener = self;  // set listener
     
     // ...
     
@@ -361,14 +378,18 @@ class ViewController: UIViewController, OfferwallEventListener {
 - (void)didOfferwallRemoved {
     NSLog(@"### offerwall removed");
 }
+
+@end
 ```
 
 ### 2.4 use in SwiftUI
 
-You can use AdOfferwallView in SwiftUI. below is example.
+You can use AdOfferwallViewController in SwiftUI. below is example.
 
 ```swift
 // SwiftUI
+import SwiftUI
+import TnkRwdSdk2
 
 struct OfferwallViewController : UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> AdOfferwallViewController {
@@ -390,7 +411,7 @@ struct SwiftUIView: View {
 
 ## 3. Publisher API
 
-### 3.1 QueryPublishState 
+### 3.1 queryPublishState 
 
 If you stop posting ads in [Publisher Information] on the Tnk site, the ads will not appear even if the user displays the ads list window.
 Therefore, it is recommended that the offerwall button itself is not visible on the screen in case you stop posting ads in the future.
@@ -554,7 +575,7 @@ However, when a user purchases an item provided by the posting app, you can dedu
     - Parameters
         - itemId: id of item to purchase. you can set any value to this parameter. this value is shown in purchase list page of Tnk site.
         - cost: Points to be deducted
-        - completion: call back function. this function is called when purchase is finished. remaining point and transaction id are passed to this function. if purchase is failed, remaining point is negative value.
+        - completion: call back function. this function is called when purchase is finished. remaining point and transaction id are passed to this function. if the purchase is not performed due to a lack of points, a negative value is passed as the transaction id (second parameter). if a network/system error occurs, 0 is passed for both values.
     - example
 
 ```swift
@@ -570,7 +591,7 @@ TnkSession.sharedInstance()?.purchaseItem("remove ad", cost: 1000) {
         - itemId: id of item to purchase. you can set any value to this parameter. this value is shown in purchase list page of Tnk site.
         - cost: Points to be deducted
         - target: call action method of this object when purchase is finished.
-        - action: Specifies the method to be called when the result is received. Two NSNumber objects are received as parameters, and the remaining point values after deduction are delivered to the first parameter, and the unique transaction Id value is delivered to the second parameter. If the purchase is not performed due to a lack of points or a network/system error, a negative number is transmitted to the second parameter value.
+        - action: Specifies the method to be called when the result is received. Two NSNumber objects are received as parameters, and the remaining point values after deduction are delivered to the first parameter, and the unique transaction Id value is delivered to the second parameter. If the purchase is not performed due to a lack of points, a negative number is transmitted to the second parameter value. If a network/system error occurs, 0 is transmitted to both parameters.
     - example
 
 ```swift
@@ -602,7 +623,7 @@ Ability to withdraw all managed user points from the Tnk server
 - func **withdrawPoints(_ desc:String, completion:@escaping (Int,Int)->Void)**
     - Parameters
         - desc: description of withdrawal. this value is shown in report page of Tnk site.
-        - completion: call back function. this function is called when withdrawal is finished. withdrawn point and transaction id are passed to this function.
+        - completion: call back function. this function is called when withdrawal is finished. withdrawn point and transaction id are passed to this function. if the withdrawal is not performed (e.g. there are no points to withdraw), a negative value is passed as the transaction id (second parameter). if a network/system error occurs, 0 is passed for both values.
     - example
 
 ```swift
@@ -618,7 +639,7 @@ TnkSession.sharedInstance()?.withdrawPoints("전체인출") {
     - Parameters
         - desc: description of withdrawal. this value is shown in report page of Tnk site.
         - target: call action method of this object when withdrawal is finished.
-        - action: when withdrawal is finished, this method is called. this method should have 2 parameters of NSNumber type. withdrawn point and transaction id are passed to these parameters.
+        - action: when withdrawal is finished, this method is called. this method should have 2 parameters of NSNumber type. withdrawn point and transaction id are passed to these parameters. If the withdrawal is not performed (e.g. there are no points to withdraw), a negative number is passed to the second parameter. If a network/system error occurs, 0 is passed to both parameters.
     - example
 ```swift
 // Swift 
@@ -699,7 +720,7 @@ class TnkCallbackListener {
         // To create verifycode as the order to verify the validity.The DigestUtils는 apache commons - codec.jar this necessary. If safe to use it. There is a different hash method for the md2
         String verifyCode = DigestUtils.md5Hex(appKey + mdUserName + seqId);
 
-        // If the generated verifyCode and chk_cd parameter values do not match, this is an invalid request
+        // If the generated verifyCode and md_chk parameter values do not match, this is an invalid request
         if (checkCode == null || !checkCode.equals(verifyCode)) {
 
             // error
@@ -725,6 +746,7 @@ When the consent is revoked, `didPrivacyAgreementRevoked()` is called on the **m
 
 ```swift
 // Swift
+import UIKit
 import TnkRwdSdk2
 
 class ViewController: UIViewController, TnkPrivacyAgreementListener {
@@ -807,6 +829,7 @@ You can read the current value from `TnkStyles.offerwallTheme`. It is `.unspecif
 > To always show light or dark on iOS, set `.light` / `.dark`.
 
 **Scope** : The offerwall list screen, the ad detail web view, the event web view, dialogs, and even the status bar icon contrast follow the theme you set.
+If you add `AdOfferwallView` directly to your own view controller (2.3), the list itself follows the style of your view controller. Screens opened from it, such as the ad detail, follow the theme.
 The colors inside a web page are decided by the web page itself, so a page with a dark style changes according to the setting and a page without one is displayed as is.
 
 ## 5. placement view
