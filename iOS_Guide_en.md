@@ -32,7 +32,7 @@
 
 ### 1.1 sdk download
 
-**[[iOS Reward SDK2 Download v5.95](./sdk/TnkRwdSdk2.v.5.95.zip)]**
+**[[iOS Reward SDK2 Download v5.96](./sdk/TnkRwdSdk2.v.5.96.zip)]**
 
 ### 1.2 Add SDK to Project
 

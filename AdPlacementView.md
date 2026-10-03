@@ -188,26 +188,26 @@ PlacementView에 로드된 광고 목록을 반환합니다. 이벤트 지면(ad
 
 #### Return : \[TnkPlacementAdItem\]
 
-TnkPlacementAdItem 의 각 필드는 앱 코드에서 직접 접근할 수 없습니다. 아래 필드는 getAdListJson() 이 반환하는 JSON 의 키로 확인하세요.
+(5.96 부터) TnkPlacementAdItem 의 각 필드를 앱 코드에서 직접 읽을 수 있습니다. 5.95 이하 버전에서는 필드에 접근할 수 없으므로 getAdListJson() 이 반환하는 JSON 의 키로 확인하세요. 필드 이름과 JSON 키는 같습니다.
 
 ```swift
 public struct TnkPlacementAdItem : Codable
 {
-    let app_id: Int                // Int 광고 고유 식별값
-    let app_nm: String              // String 광고 제목
-    let img_url: String             // String 이미지 url
-    let icon_url: String            // String 아이콘 url
-    let pnt_amt: Int               // Int 지급 포인트 (이벤트 진행시 이벤트 배율 적용된 포인트)
-    let org_amt: Int               // Int 배율 이벤트 진행 시 원래의 포인트(이벤트 기간 아닐경우 0)
-    let pnt_unit: String           // String 포인트 재화 단위
-    let prd_price: Int             // Int CPS상품 가격
-    let org_prd_price: Int         // Int CPS상품 할인 전 가격
-    let sale_dc_rate: Int           // Int CPS 상품 할인율
-    let multi_yn: Bool           // Bool 멀티 미션 광고 여부
-    let cmpn_type: Int              // Int 광고 유형코드
-    let cmpn_type_name: String      // String 광고 유형 이름
-    let like_yn: String              // String 즐겨찾기 상품 여부 ("Y"/"N")
-    let filterID: Int               // Int 필터 아이디
+    public let app_id: Int                // Int 광고 고유 식별값
+    public let app_nm: String              // String 광고 제목
+    public let img_url: String             // String 이미지 url
+    public let icon_url: String            // String 아이콘 url
+    public let pnt_amt: Int               // Int 지급 포인트 (이벤트 진행시 이벤트 배율 적용된 포인트)
+    public let org_amt: Int               // Int 배율 이벤트 진행 시 원래의 포인트(이벤트 기간 아닐경우 0)
+    public let pnt_unit: String           // String 포인트 재화 단위
+    public let prd_price: Int             // Int CPS상품 가격
+    public let org_prd_price: Int         // Int CPS상품 할인 전 가격
+    public let sale_dc_rate: Int           // Int CPS 상품 할인율
+    public let multi_yn: Bool           // Bool 멀티 미션 광고 여부
+    public let cmpn_type: Int              // Int 광고 유형코드
+    public let cmpn_type_name: String      // String 광고 유형 이름
+    public let like_yn: String              // String 즐겨찾기 상품 여부 ("Y"/"N")
+    public let filterID: Int               // Int 필터 아이디
 }
 ```
 
@@ -235,17 +235,17 @@ PlacementView 설정값을 로드합니다.
 
 #### Return : TnkPlacementPubInfo
 
-TnkPlacementPubInfo 의 각 필드는 앱 코드에서 직접 접근할 수 없습니다. 아래 필드는 getPubInfoJson() 이 반환하는 JSON 의 키로 확인하세요.
+(5.96 부터) TnkPlacementPubInfo 의 각 필드를 앱 코드에서 직접 읽을 수 있습니다. 5.95 이하 버전에서는 필드에 접근할 수 없으므로 getPubInfoJson() 이 반환하는 JSON 의 키로 확인하세요. 필드 이름과 JSON 키는 같습니다.
 
 ```swift
 public struct TnkPlacementPubInfo : Codable{
-    let ad_type: Int             // 지면에 설정되어 있는 광고 유형(0 : 보상형, 1 : CPS, 2 : 제휴몰, 3 : 뉴스, 4 : 이벤트)
-    let title: String            // 지면 타이틀
-    let more_lbl: String         // 더보기 라벨
-    let cust_data: String        // 매체 설정값
-    let ctype_surl: String       // 캠페인타입 정보 URL (해당 URL 호출시 json 반환) {list_count:int, list:[{cmpn_type:int, cmpn_type_nm:string},….]}
-    let pnt_unit: String         // 매체 포인트 명칭
-    let plcmt_id: String         // 매체 설정 지면 ID
+    public let ad_type: Int             // 지면에 설정되어 있는 광고 유형(0 : 보상형, 1 : CPS, 2 : 제휴몰, 3 : 뉴스, 4 : 이벤트)
+    public let title: String            // 지면 타이틀
+    public let more_lbl: String         // 더보기 라벨
+    public let cust_data: String        // 매체 설정값
+    public let ctype_surl: String       // 캠페인타입 정보 URL (해당 URL 호출시 json 반환) {list_count:int, list:[{cmpn_type:int, cmpn_type_nm:string},….]}
+    public let pnt_unit: String         // 매체 포인트 명칭
+    public let plcmt_id: String         // 매체 설정 지면 ID
 }
 ```
 
@@ -269,7 +269,10 @@ PlacementView 설정값을 Json으로 반환합니다.
 
 광고 목록 정보를 가지고 직접 광고 목록을 출력 할 경우 onItemClick 메소드를 통해 광고 클릭 이벤트를 처리합니다.
 광고상세 페이지 랜딩(네이티브), 광고주가 제공한 웹 사이트로 이동 등 각 광고 타입별 액션이 실행됩니다.
-액션 처리 결과는 completion 클로저로 전달됩니다(성공 여부, 실패 시 TnkError). 단, 개인정보 수집 동의 전(동의 팝업이 먼저 표시됨)이거나 목록에 없는 appId 를 전달한 경우처럼 액션이 시작되지 않으면 completion 은 호출되지 않습니다. 클릭 시점에는 PlacementEventListener protocol의 didAdItemClicked(placementId:appId:appName:) 함수도 호출됩니다.
+액션 처리 결과는 completion 클로저로 전달됩니다(성공 여부, 실패 시 TnkError).
+(5.96 부터) completion 은 성공·실패·사용자 취소를 포함한 **모든 경우에 한 번** 호출됩니다. 5.95 이하에서는 개인정보 수집 동의 팝업이 먼저 표시되는 경우나 목록에 없는 appId 를 전달한 경우처럼 액션이 시작되지 않으면 completion 이 호출되지 않아, 결과를 기다리는 코드가 계속 대기할 수 있었습니다.
+개인정보 수집에 동의한 상태에서 클릭 처리가 시작되면 PlacementEventListener protocol의 didAdItemClicked(placementId:appId:appName:) 함수도 호출됩니다.
+completion 은 onItemClick 을 호출한 경우에만 전달됩니다. 플레이스먼트 뷰 화면에서 사용자가 광고를 직접 누른 결과는 completion 으로 전달되지 않습니다.
 
 #### Parameters
 
@@ -277,6 +280,53 @@ PlacementView 설정값을 Json으로 반환합니다.
 | -------------- | ----------------------------------------------------------- |
 | appId       | 클릭 이벤트를 처리 할 광고의 appId                              |
 | completion  | 액션 처리 결과를 전달받는 클로저 (성공 여부, 실패 시 TnkError)     |
+
+#### completion 결과와 에러 코드 (5.96 부터)
+
+실패한 경우 TnkError 의 `errorCode`(Int)로 원인을 구분할 수 있습니다. `TnkCode` 의 `rawValue` 와 비교하세요.
+
+| 경우 | 성공 여부 | errorCode |
+| ---- | --------- | --------- |
+| 광고 상세 화면 표시, 광고주 웹 페이지 이동 등 액션 처리 성공 (뉴스·이벤트 항목은 화면을 띄우거나 URL 을 열면 성공) | `true` | - |
+| 목록에 없는 appId 를 전달 | `false` | 1003 `adNotFound` |
+| 개인정보 수집 동의 창에서 동의하지 않음 | `false` | 1001 `userCanceled` |
+| 추적 허용 안내 창에서 취소 | `false` | 1001 `userCanceled` |
+| 안내 창을 띄울 수 없음 (viewController 가 화면에 표시되어 있지 않거나 다른 화면을 띄우는 중) | `false` | 1002 `cannotPresent` |
+| 이전 요청을 처리하는 중에 다시 호출 | `false` (새 호출) | 1004 `duplicateCall` |
+| SDK 세션이 없음 (초기화 전에는 광고 목록이 로딩되지 않으므로 보통 1003 `adNotFound` 가 먼저 전달됩니다) | `false` | 1101 `sdkNotInitialized` |
+| 매체 앱의 로그인이 필요함 (`TnkRwdPlusLoginDelegate` 로 로그인 처리를 매체 앱에 넘기는 경우) | `false` | 1102 `loginRequired` |
+| 추적 허용(IDFA)이 필요한 광고인데 허용되지 않음 | `false` | 1103 `trackingNotAllowed` |
+| 이미 설치된 앱 등 참여할 수 없는 상태의 광고 | `false` | 99 `systemFailure` |
+| 이동할 URL 이 잘못되었거나 열 수 없음 | `false` | 109 `invalidUrl` |
+| 네트워크 오류 등 서버 호출 실패 | `false` | 200 `invocationError` |
+| 서버가 참여를 거절 (종료된 광고, 이미 적립된 광고 등) | `false` | 서버 응답 코드 (예: 2 `invalidAdv`, 4 `alreadyPaid`, 12 `notToday`) |
+| 뉴스 항목: 이미 참여함 / 콘텐츠 URL 을 열 수 없음 | `false` | 4 `alreadyPaid` / 113 `noContentsUrl` |
+
+- **1001 `userCanceled` 는 오류가 아니라 사용자가 직접 선택한 결과입니다.** 별도의 오류 안내를 띄우지 말고 무시하는 것을 권장합니다.
+- 이전 요청을 처리하는 중에 다시 호출하면 새 호출의 completion 에 1004 가 전달되고, 먼저 시작된 요청은 그대로 진행됩니다. 단, 20초가 넘도록 끝나지 않은 요청이 있으면 그 요청의 completion 에 1004 를 전달하고 새 요청을 처리합니다.
+- 1001 ~ 1004 는 Android SDK 의 오류 코드와 번호와 의미가 같습니다. 1101 ~ 1103 은 iOS SDK 에만 있습니다.
+- 5.96 에서 `TnkCode` 에 1001 ~ 1004, 1101 ~ 1103 의 7개 값이 추가되었습니다. `TnkCode` 를 `switch` 로 분기하고 있다면 `default` 를 두어야 컴파일 오류가 나지 않습니다.
+
+```swift
+adPlacementView?.onItemClick(appId: appId) { success, error in
+    if success { return }
+    guard let error = error else { return }
+
+    switch error.errorCode {
+    case TnkCode.userCanceled.rawValue:
+        // 사용자가 직접 취소한 경우입니다. 별도 안내 없이 무시합니다.
+        break
+    case TnkCode.adNotFound.rawValue:
+        // 광고 목록에 없는 appId 입니다. 목록을 다시 로딩하세요.
+        print("ad not found: \(error.errorMessage)")
+    case TnkCode.duplicateCall.rawValue:
+        // 이전 클릭을 처리 중입니다. 잠시 후 다시 시도하게 하세요.
+        break
+    default:
+        print("onItemClick failed: \(error.errorCode) \(error.errorMessage)")
+    }
+}
+```
 
 ## 샘플코드 
 
@@ -325,7 +375,10 @@ extension ViewController : PlacementEventListener
   func didAdDataLoaded(placementId: String, customData: String?) {
     if let adList = self.adPlacementView?.getAdList()
     {
-        //광고 정보
+        //광고 정보 (5.96 부터 각 필드를 직접 읽을 수 있습니다)
+        for ad in adList {
+            print("\(ad.app_id) \(ad.app_nm) \(ad.pnt_amt)\(ad.pnt_unit)")
+        }
     }
 
     if let jsonList = self.adPlacementView?.getAdListJson()
@@ -335,7 +388,8 @@ extension ViewController : PlacementEventListener
     
     if let pub = self.adPlacementView?.getPubInfo()
     {
-        //placement 설정값
+        //placement 설정값 (5.96 부터 각 필드를 직접 읽을 수 있습니다)
+        print("\(pub.plcmt_id) \(pub.title) \(pub.ad_type)")
     }
 
     if let pubJson = self.adPlacementView?.getPubInfoJson()

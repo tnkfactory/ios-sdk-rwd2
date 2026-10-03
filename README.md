@@ -13,6 +13,13 @@
 
 ### Update Notice
 
+* v.5.96 - 2026.10.03
+  * 플레이스먼트 광고 정보 필드 공개 : TnkPlacementAdItem(getAdList(), getADInfo(appId:)), TnkPlacementPubInfo(getPubInfo()) 의 필드를 앱 코드에서 직접 읽을 수 있음 (5.95 이하에서는 getAdListJson() / getPubInfoJson() 의 JSON 으로만 확인 가능)
+  * AdPlacementView.onItemClick(appId:completion:) 의 completion 이 모든 경우에 한 번 호출됨 : 실패 시 TnkError 전달, TnkCode 에 에러 코드 7개 추가 (1001 ~ 1004, 1101 ~ 1103). Swift 에서 TnkCode 를 switch 할 때는 default 가 필요함
+  * 폴더블·iPad·가로 화면에서 오퍼월이 앱이 지정한 폭 전체를 사용 (TnkLayout.listViewMaxWidth 는 오퍼월 목록에 적용되지 않음), 접기/펼치기·창 크기 변경 시 추천 카드·피드형 이미지 크기 재계산, 노치가 있는 iPhone 가로 화면에서는 좌우 safe area 안쪽에 표시
+  * 기기 회전 관련 수정 : 카테고리 메뉴를 누른 뒤 회전하면 오퍼월 목록이 위로 밀리던 문제, 가로 화면에서 내비게이션 바 아래에 빈 띠가 생기던 문제
+  * AdPlacementView.onItemClick(appId:completion:) 으로 광고에 참여할 때 이동할 URL 이 잘못되었거나 열 수 없으면 completion 이 false (TnkCode.invalidUrl) 로 전달됨 (5.95 이하에서는 true)
+
 * v.5.95 - 2026.10.02
   * 오퍼월 테마 지정 기능 추가 : TnkStyles.offerwallTheme (.light / .dark / .system / .unspecified, iOS 에서 .system 은 .unspecified 와 같게 동작)
   * 개인정보 수집동의 해제 통보 추가 : TnkSession.setPrivacyAgreementListener(_:) / TnkPrivacyAgreementListener (리스너는 weak 로 보관되므로 매체 앱에서 강한 참조를 유지해야 함)
