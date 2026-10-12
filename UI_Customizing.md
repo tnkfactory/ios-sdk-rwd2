@@ -383,9 +383,10 @@ TnkLayout 은 앞서 설명드린바와 같이 layout 설정을 위한 registerI
 - menuPinToVisibleBounds : 상단의 메뉴와 필터의 스크롤 고정여부를 지정합니다. .all, .menu, .filter, .none 의 값을 가질 수 있습니다. (기본값 .none) 메뉴 영역에 추천 영역(.recommend)이 포함된 기본 구성에서는 설정값과 관계없이 .none 으로 동작합니다.
 - listViewTopMargin : 광고 목록 상단의 여백 높이를 지정합니다. (기본값 8)
 - listViewBottomMargin : 광고 목록 하단의 여백 높이를 지정합니다. (기본값 16)
-- listViewMaxWidth : 광고 상세, 마이메뉴, 검색, 포인트 스토어 등 화면의 최대 너비를 지정합니다. 기기가 테블릿이나 가로 상태일때에 적용됩니다. (기본값 440)
-  - 5.96 부터는 오퍼월 광고 목록(AdOfferwallView, AdOfferwallViewController)에는 적용되지 않습니다. 오퍼월은 앱이 지정한 폭 전체를 사용하며, 노치가 있는 iPhone 의 가로 화면에서는 좌우 safe area 안쪽 폭을 사용합니다. 폴더블 기기를 펼치거나 iPad 에서 창 크기가 바뀌면 폭 변화에 맞춰 상단 추천 카드와 피드형 이미지의 크기도 다시 계산됩니다. 5.95 이하에서는 오퍼월 목록에도 이 값이 적용되어 가로 화면이나 테블릿에서 가운데 정렬된 좁은 폭으로 표시되었습니다.
-  - 오퍼월의 폭을 제한하고 싶다면 오퍼월을 담는 뷰(컨테이너)의 폭을 앱에서 제한하세요.
+- listViewMaxWidth, listViewMinWidth : 5.97 부터 사용하지 않습니다(deprecated). 값을 지정하는 코드는 경고만 표시되고 그대로 빌드되지만 화면에는 영향이 없습니다.
+  - 5.97 부터 오퍼월 목록, 광고 상세, 마이메뉴, 검색, 포인트 스토어 등 SDK 화면은 폭 상한 없이 화면 전체 폭을 사용합니다. 노치가 있는 iPhone 의 가로 화면에서는 좌우 safe area 안쪽 폭을 사용합니다. 폴더블 기기를 접거나 펼칠 때, 기기를 회전할 때, iPad 에서 창 크기가 바뀔 때에는 바뀐 폭에 맞춰 화면이 다시 표시됩니다.
+  - 5.96 이하에서는 listViewMaxWidth(기본값 440) 가 광고 상세, 마이메뉴, 검색, 포인트 스토어 화면의 최대 너비로 적용되어 태블릿이나 가로 화면에서 가운데 정렬된 좁은 폭으로 표시되었습니다. 오퍼월 목록(AdOfferwallView, AdOfferwallViewController)에는 5.95 이하에서만 적용되었습니다.
+  - 오퍼월의 폭을 제한하고 싶다면 오퍼월을 담는 뷰(컨테이너)의 폭을 앱에서 제한하세요. SDK 가 직접 띄우는 광고 상세, 마이메뉴, 검색, 포인트 스토어 화면의 폭은 지정할 수 없습니다.
 - 광고 목록의 배경색은 TnkLayout 이 아니라 TnkStyles.shared.adListItem.listViewBackgroundColor 로 지정합니다. (기본값 TnkColor.MAIN_BACKGROUND_COLOR, 라이트 모드에서 흰색)
 - listViewTopButtonImage : 광고 목록 하단에 상단으로 스크롤시키는 버튼(TopButton)이 나타납니다. 이 버튼의 이미지를 설정합니다. nil 로 설정하면 버튼은 나타나지 않습니다.
 - listViewTopButtonSize : TopButton 의 크기(CGSize)를 지정합니다. 기본값 CGSize(width: 50, height: 50)

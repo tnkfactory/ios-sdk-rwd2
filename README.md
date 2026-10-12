@@ -13,6 +13,11 @@
 
 ### Update Notice
 
+* v.5.97 - 2026.10.12
+  * 폴더블·iPad·가로 화면에서 광고 상세(네이티브·웹), 마이메뉴, CPS 검색, 포인트 스토어 화면이 가운데 440pt 고정 폭 대신 화면(safe area) 전체 폭을 사용. iPad 나 가로 화면을 지원하는 앱은 이 화면들이 넓어지고, 상세의 이미지·동영상 영역과 CPS 검색 결과 칸(2열 고정)도 폭에 비례해 커짐
+  * 화면을 연 채로 접기/펼치기·회전·창 크기 변경으로 폭이 바뀌면 새 폭에 맞춰 다시 표시 : 네이티브 상세는 보던 위치를 유지한 채 다시 그려지며(상세 안에서 재생 중이던 동영상은 정지 상태로 돌아가고, 전체화면 재생 중에는 전체화면을 닫은 뒤에 다시 그림), 웹 상세는 페이지를 다시 불러오지 않고 폭만 바뀌며, 목록 셀·이미지 크기는 다시 계산됨
+  * TnkLayout.listViewMaxWidth, TnkLayout.listViewMinWidth deprecated : 더 이상 사용하지 않음. 값을 지정하는 코드는 경고만 표시되고 그대로 빌드되지만 화면에는 영향이 없음
+
 * v.5.96 - 2026.10.03
   * 플레이스먼트 광고 정보 필드 공개 : TnkPlacementAdItem(getAdList(), getADInfo(appId:)), TnkPlacementPubInfo(getPubInfo()) 의 필드를 앱 코드에서 직접 읽을 수 있음 (5.95 이하에서는 getAdListJson() / getPubInfoJson() 의 JSON 으로만 확인 가능)
   * AdPlacementView.onItemClick(appId:completion:) 의 completion 이 모든 경우에 한 번 호출됨 : 실패 시 TnkError 전달, TnkCode 에 에러 코드 7개 추가 (1001 ~ 1004, 1101 ~ 1103). Swift 에서 TnkCode 를 switch 할 때는 default 가 필요함
