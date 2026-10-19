@@ -22,7 +22,7 @@
        *  [purchaseItem](#purchaseitem)
        *  [withdrawPoints](#withdrawpoints)
     * 3.4 [Callback URL](#34-callback-url)
-    * 3.5 [Privacy agreement revoked notification](#35-privacy-agreement-revoked-notification)
+    * 3.5 [Privacy agreement revoked / agreed notification](#35-privacy-agreement-revoked--agreed-notification)
 4. [disign customization](#4-disign-customization)
     * 4.1 [Offerwall theme (dark mode)](#41-offerwall-theme-dark-mode)
 5. [placement view](#5-placement-view)
@@ -737,12 +737,15 @@ class TnkCallbackListener {
 }
 ```
 
-### 3.5 Privacy agreement revoked notification
+### 3.5 Privacy agreement revoked / agreed notification
 
-(Since 5.95) When a user withdraws the consent to personal information collection on the "My info" screen of the offerwall, your app can be notified.
+Your app can be notified when a user withdraws (revokes) or gives the consent to personal information collection.
+
+- Revoked notification `didPrivacyAgreementRevoked()`: since 5.95. A typical case is the user withdrawing the consent on the "My info" screen of the offerwall.
+- Agreed notification `didPrivacyAgreementAgreed()`: since 5.99. Called when the user agrees, for example in the consent window of the offerwall.
 
 Register an object that implements the `TnkPrivacyAgreementListener` protocol with `TnkSession.setPrivacyAgreementListener(_:)`. Pass `nil` to unregister.
-When the consent is revoked, `didPrivacyAgreementRevoked()` is called on the **main thread**.
+Both callbacks are called on the **main thread**.
 
 ```swift
 // Swift
@@ -759,6 +762,11 @@ class ViewController: UIViewController, TnkPrivacyAgreementListener {
     // Called on the main thread when the consent is revoked.
     func didPrivacyAgreementRevoked() {
         // The consent has been revoked. Update the state of your app.
+    }
+
+    // (Since 5.99) Called on the main thread when the consent is given. Implementing it is optional.
+    func didPrivacyAgreementAgreed() {
+        // The consent has been given. Update the state of your app.
     }
 }
 ```
@@ -782,13 +790,20 @@ class ViewController: UIViewController, TnkPrivacyAgreementListener {
     // The consent has been revoked. Update the state of your app.
 }
 
+// (Since 5.99) Called on the main thread when the consent is given. Implementing it is optional.
+- (void)didPrivacyAgreementAgreed {
+    // The consent has been given. Update the state of your app.
+}
+
 @end
 ```
 
-- It is called **only once, at the moment the state changes from agreed to revoked.** It is not called again if the revoke is processed while the consent is already revoked.
+- The revoked notification is called **only once, at the moment the state changes from agreed to revoked.** It is not called again if the revoke is processed while the consent is already revoked.
+- The agreed notification is called **only once, at the moment the stored value changes from revoked (or not stored) to agreed.** It is not called when the user agrees again while already agreed.
+- `didPrivacyAgreementAgreed()` is `@objc optional`, so you do not have to implement it. Code written before 5.99 that implements only `didPrivacyAgreementRevoked()` builds without any change.
+- Right after the user revokes, the offerwall shows the consent window again. If the user agrees there, `didPrivacyAgreementAgreed()` is called since 5.99. Versions 5.98 and below have no agreed notification, so do not assume the revoked state persists.
+- The consent your app passes with `setAgreePrivacyPolicy(_:)` is not a target of these notifications.
 - **The listener is referenced weakly.** Your app must keep the registered object alive. If you pass a local variable or a temporary object, it is released immediately and you will not receive the callback.
-- **There is no "agreed again" callback.** Right after the user revokes, the offerwall shows the consent window again, and if the user agrees there the revoked state is reverted.
-  Use this callback only as a signal that "the consent has just been revoked", and do not assume the revoked state persists.
 - It is an `@objc` protocol, so it can also be used from Objective-C.
 
 ## 4. disign customization
